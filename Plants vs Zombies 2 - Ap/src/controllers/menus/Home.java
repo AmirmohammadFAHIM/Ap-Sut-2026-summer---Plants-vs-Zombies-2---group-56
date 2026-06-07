@@ -5,4 +5,10 @@ public class Home implements Menu{
     public void ChangeMenu() {
 
     }
+
+
+
+    public void LogOut(){
+
+    };
 }

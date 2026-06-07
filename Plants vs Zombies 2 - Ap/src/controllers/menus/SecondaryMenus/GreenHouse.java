@@ -1,4 +1,4 @@
 package controllers.menus.SecondaryMenus;
 
-public class GameMenu {
+public class GreenHouse {
 }

@@ -1,4 +1,4 @@
-package models.game;
+package models.gamePanes;
 
 public class Chapter {
 

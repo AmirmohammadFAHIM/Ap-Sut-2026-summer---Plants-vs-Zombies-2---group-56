@@ -4,9 +4,9 @@
 
 *Gropu name* : **Low Cortisol**
 
-- Amirmohammad Fahimi
-- Shayan Rashidian
-- Mehrshad Amani
+- Amirmohammad Fahimi *404106174*
+- Shayan Rashidian *404105864*
+- Mehrshad Amani *404105507*
 
 
 ****

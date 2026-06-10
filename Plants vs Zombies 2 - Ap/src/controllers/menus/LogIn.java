@@ -5,4 +5,8 @@ public class LogIn implements Menu{
     public void ChangeMenu() {
 
     }
+
+    public void login(){
+    }
+
 }

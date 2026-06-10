@@ -5,4 +5,9 @@ public class SignUp implements Menu{
     public void ChangeMenu() {
 
     }
+
+    public void register(){
+    }
+
+
 }

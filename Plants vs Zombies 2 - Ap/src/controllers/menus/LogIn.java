@@ -9,4 +9,7 @@ public class LogIn implements Menu{
     public void login(){
     }
 
+    public void resetPassword(){
+    }
+
 }

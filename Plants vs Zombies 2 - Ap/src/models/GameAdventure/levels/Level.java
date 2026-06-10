@@ -1,4 +1,4 @@
-package models.gamePanes;
+package models.GameAdventure.levels;
 
 public class Level {
     private boolean unlocked = false;

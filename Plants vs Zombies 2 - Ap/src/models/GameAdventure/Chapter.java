@@ -1,4 +1,6 @@
-package models.gamePanes;
+package models.GameAdventure;
+
+import models.GameAdventure.levels.Level;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,7 @@
 package models.npc;
 
-import java.lang.reflect.Array;
+import models.factory.zombies.observers.Armor;
+
 import java.util.ArrayList;
 
 public class Zombie {
@@ -12,6 +13,8 @@ public class Zombie {
     private float velocityX;
     private float velocityY;
     private int cost;
+    private int hp;
+    private Zombie imp;
 
     public void drop(){}
 

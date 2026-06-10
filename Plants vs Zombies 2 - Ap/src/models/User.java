@@ -1,7 +1,7 @@
 package models;
 
-import models.gamePanes.Chapter;
-import models.gamePanes.Level;
+import models.GameAdventure.Chapter;
+import models.GameAdventure.levels.Level;
 import models.npc.Plant;
 import models.npc.Zombie;
 
@@ -21,4 +21,6 @@ public class User {
         this.name = name;
         this.email = email;
     }
+
+    public void updateProgress(){}
 }

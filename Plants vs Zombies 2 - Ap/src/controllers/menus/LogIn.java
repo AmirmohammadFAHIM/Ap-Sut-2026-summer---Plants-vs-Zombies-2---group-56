@@ -12,4 +12,8 @@ public class LogIn implements Menu{
     public void resetPassword(){
     }
 
+    public void stayLoggedIn(){}
+
+
+
 }

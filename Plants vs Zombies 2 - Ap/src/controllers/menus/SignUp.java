@@ -9,5 +9,7 @@ public class SignUp implements Menu{
     public void register(){
     }
 
+    public void pickQuestion(){
+    }
 
 }

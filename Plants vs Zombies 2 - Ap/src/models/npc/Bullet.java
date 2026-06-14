@@ -84,4 +84,9 @@ public class Bullet {
     public void setProved(boolean proved) {
         this.proved = proved;
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return (Bullet) super.clone();
+    }
 }

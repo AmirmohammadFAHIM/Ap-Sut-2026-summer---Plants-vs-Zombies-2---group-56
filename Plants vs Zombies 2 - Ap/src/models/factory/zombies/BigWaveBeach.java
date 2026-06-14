@@ -1,6 +1,6 @@
 package models.factory.zombies;
 
-import models.factory.plants.Skill;
+import models.factory.plantSkills.Skill;
 import models.games.Game;
 import models.npc.Plant;
 

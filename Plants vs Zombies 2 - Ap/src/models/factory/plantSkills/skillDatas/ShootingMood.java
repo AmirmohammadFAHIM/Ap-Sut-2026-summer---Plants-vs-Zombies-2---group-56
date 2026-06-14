@@ -1,4 +1,4 @@
-package models.factory.plants.skillDatas;
+package models.factory.plantSkills.skillDatas;
 
 public enum ShootingMood {
 
@@ -10,5 +10,9 @@ public enum ShootingMood {
 
     Front_Back,
 
-    Random;
+    Random,
+
+    Diagonal,
+
+    Star;
 }

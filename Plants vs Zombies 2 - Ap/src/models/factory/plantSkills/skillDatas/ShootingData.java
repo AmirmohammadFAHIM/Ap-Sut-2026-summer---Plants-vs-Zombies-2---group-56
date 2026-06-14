@@ -1,9 +1,12 @@
-package models.factory.plants.skillDatas;
+package models.factory.plantSkills.skillDatas;
 
 import models.npc.Bullet;
 
 public class ShootingData {
     private Bullet bullet;
+    private ShootingMood mood;
+    private int bulletNumber;
+
 
     public Bullet getBullet() {
         return bullet;
@@ -29,7 +32,5 @@ public class ShootingData {
         this.bulletNumber = bulletNumber;
     }
 
-    private ShootingMood mood;
-    private int bulletNumber;
 
 }

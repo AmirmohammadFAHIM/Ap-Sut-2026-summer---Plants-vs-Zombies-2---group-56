@@ -21,5 +21,7 @@ public enum BulletType {
 
     PEA,
 
+    ONION,
+
     CACTUS;
 }

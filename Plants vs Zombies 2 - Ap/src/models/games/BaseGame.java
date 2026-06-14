@@ -5,6 +5,7 @@ import models.gamePanes.Field;
 import models.gamePanes.Wave;
 import models.npc.Bullet;
 import models.npc.Plant;
+import models.npc.Sun;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ public class BaseGame implements Game {
     private SunBuilder sunBuilder;
     private Wave currentWave;
     private ArrayList<Bullet>  bullets;
+    private ArrayList<Sun> suns;
 
     public int getSunCount() {
         return sunCount;
@@ -64,7 +66,9 @@ public class BaseGame implements Game {
         return bullets;
     }
 
-
+    public ArrayList<Sun> getSuns() {
+        return suns;
+    }
 
     //  public void plant(){}
 

@@ -14,5 +14,21 @@ public class Plant {
     private ArrayList<PlantTags> tags;
     private boolean frozen = false;
     private boolean cat = false;
+    private Graphic graphic;
     public void boost(){}
+
+    public PlantType getPlantType() {
+        return plantType;
+    }
+
+    public Graphic getGraphic() {
+        return graphic;
+    }
+
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
 }

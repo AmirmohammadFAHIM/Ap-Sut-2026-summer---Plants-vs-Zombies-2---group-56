@@ -8,4 +8,5 @@ public interface SpecialGame {
 
     public ArrayList<Plant> filterPlants();
 
+    public void attack();
 }

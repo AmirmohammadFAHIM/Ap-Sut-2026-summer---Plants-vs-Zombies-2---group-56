@@ -7,6 +7,7 @@ public class Seed {
     private Plant plant;
     private float growthRate;
 
+
     public Seed(Plant plant, boolean isRandom) {
         if(isRandom) {
             RandomSeed();

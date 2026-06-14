@@ -3,6 +3,7 @@ package models.gamePanes;
 import models.npc.Zombie;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Wave {
     private ArrayList<Zombie> zombies;
@@ -22,6 +23,11 @@ public class Wave {
 
     public void updateWave(){
 
+       try {
+           TimeUnit.SECONDS.sleep(5);
+       }catch (InterruptedException e){
+           e.printStackTrace();
+       }
     };
 
 

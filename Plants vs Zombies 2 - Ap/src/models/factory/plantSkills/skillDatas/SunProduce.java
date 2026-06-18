@@ -12,12 +12,12 @@ public class SunProduce implements Skill {
 
     @Override
     public void baseskill(Plant producer, BaseGame game) {
-
+        produce(producer , normalData , game);
     }
 
     @Override
     public void plantFoodSkill(Plant producer, BaseGame game) {
-
+        produce(producer , plantFoodData , game);
     }
 
     private void produce(Plant producer,SunProduceData data , BaseGame game) {

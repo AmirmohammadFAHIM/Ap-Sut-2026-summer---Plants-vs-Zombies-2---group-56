@@ -31,6 +31,7 @@ public class Wave {
     };
 
 
-
-
+    public ArrayList<Zombie> getZombies() {
+        return zombies;
+    }
 }

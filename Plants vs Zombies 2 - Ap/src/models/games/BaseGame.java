@@ -70,6 +70,10 @@ public class BaseGame implements Game {
         return suns;
     }
 
+    public Wave getCurrentWave() {
+        return currentWave;
+    }
+
     //  public void plant(){}
 
   //  public void pluck(){}

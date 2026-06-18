@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class Zombie {
     private String type;
     private ArrayList<Armor> armors;
-    private int x;
-    private int y;
+    private float x;
+    private float y;
     private int line;
     private float velocityX;
     private float velocityY;
@@ -19,4 +19,11 @@ public class Zombie {
     public void drop(){}
 
 
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
 }

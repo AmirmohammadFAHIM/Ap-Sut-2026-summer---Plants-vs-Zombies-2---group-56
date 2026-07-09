@@ -1,5 +1,7 @@
 package models.npc;
 
+import models.factory.plantSkills.Skill;
+
 import java.util.ArrayList;
 
 public class Plant {
@@ -12,6 +14,8 @@ public class Plant {
     private int cost;
     private PlantType plantType;
     private ArrayList<PlantTags> tags;
+    private Skill baseSkill;
+    private Skill plantfoodSkill;
     private boolean frozen = false;
     private boolean cat = false;
     private Graphic graphic;
@@ -30,5 +34,9 @@ public class Plant {
     }
     public int getY() {
         return y;
+    }
+
+    public ArrayList<PlantTags> getTags() {
+        return tags;
     }
 }

@@ -1,7 +1,9 @@
 package models.factory.plantSkills;
 
 import models.games.BaseGame;
+import models.npc.Bullet;
 import models.npc.Plant;
+import models.npc.PlantTags;
 import models.npc.Zombie;
 
 import java.awt.geom.Point2D;
@@ -10,12 +12,32 @@ import java.util.Random;
 
 public class Homing implements Skill{
     private boolean random;
+    private Bullet bullet;
+
     @Override
-    public void baseskill(Plant plant, BaseGame game) {
+    public void baseSkill(Plant plant, BaseGame game) {
+        if (random) {
+            bullet.setToLockIn(randomZombie(game));
+        } else {
+            bullet.setToLockIn(closestZombie(
+                    plant, game
+            ));
+        }
+
+        bullet = new Bullet();
+        bullet.setX(plant.getX());
+        bullet.setY(plant.getY());
+        bullet.setHoming(true); /// when a bullet is homing , It knows where to go because It has the
+        /// zombie to lock in.(We don't need to set the velocity here , in the next frames the bullet
+        /// does it itself).
+        if(plant.getTags().contains(PlantTags.MAGICAL)) bullet.setMagical(true);
+        if(plant.getTags().contains(PlantTags.POISON)) bullet.setMagical(true);
+        if(plant.getTags().contains(PlantTags.ICE)) bullet.setIce(true);
+        else if(plant.getTags().contains(PlantTags.FIRE)) bullet.setFire(true);
 
     }
 
-    @Override
+
     public void plantFoodSkill(Plant plant, BaseGame game) {
 
     }

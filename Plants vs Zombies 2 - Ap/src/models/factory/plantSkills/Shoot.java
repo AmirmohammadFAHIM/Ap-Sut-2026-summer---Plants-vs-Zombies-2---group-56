@@ -12,7 +12,7 @@ public class Shoot implements Skill {
     ShootingData PlantFoodData;
 
     @Override
-    public void baseskill(Plant shooter ,  BaseGame game) {
+    public void baseSkill(Plant shooter , BaseGame game) {
 
         try {
             shoot(shooter , normalData , game);

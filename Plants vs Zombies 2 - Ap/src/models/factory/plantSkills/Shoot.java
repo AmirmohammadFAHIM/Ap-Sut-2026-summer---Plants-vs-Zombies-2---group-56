@@ -1,18 +1,26 @@
 package models.factory.plantSkills;
 
+import models.Constants;
 import models.factory.plantSkills.skillDatas.ShootingData;
+import models.factory.plantSkills.skillDatas.ShootingMood;
 import models.gamePanes.Tile;
 import models.games.BaseGame;
 import models.npc.Bullet;
 import models.npc.Plant;
+import models.npc.Zombie;
+
+import java.util.ArrayList;
 
 
 public class Shoot implements Skill {
     ShootingData normalData;
     ShootingData PlantFoodData;
 
+    public Shoot(ShootingData data){
+        normalData = data;
+    }
     @Override
-    public void baseSkill(Plant shooter , BaseGame game) {
+    public void do_skill(Plant shooter , BaseGame game) {
 
         try {
             shoot(shooter , normalData , game);
@@ -20,6 +28,8 @@ public class Shoot implements Skill {
             System.out.println(e.getMessage());
         }
     }
+
+
 
     @Override
     public void plantFoodSkill(Plant shooter , BaseGame game) {
@@ -103,5 +113,56 @@ public class Shoot implements Skill {
         game.getBullets().add(bullet4);
     }
 
+
+    private void short_range(Plant shooter , BaseGame game){
+
+    }
+
+    private void lobber(Plant shooter , BaseGame game){
+        Zombie target = null;
+        for (Zombie z : game.getZombies()) {
+            if(z.getLine() == shooter.getLine()){
+                if(target == null){
+                    target = z;
+                }
+                else if(target.getTileInex() > z.getTileInex()){
+                    target = z;
+                }
+            }
+        }
+
+       if(target != null) game.getBullets().add(lobber_shoot(shooter , target));
+    }
+    private Bullet lobber_shoot(Plant shooter , Zombie target){
+        Bullet bullet = new Bullet(shooter.getX(), shooter.getY() , normalData.getBullet());
+        bullet.setVelocityX(Constants.LobberBulletVelocityX);
+        float t = (target.getX() - shooter.getX()) / (bullet.getVelocityX() + target.getVelocityX());
+        float Vy = Constants.gravity * t / 2;
+        bullet.setVelocityY(Vy);
+        return  bullet;
+    }
+
+
+
+    @Override
+    public ArrayList<Zombie> random(Plant plant, BaseGame game, int numbers) {
+        ArrayList<Zombie> targets = Skill.super.random(plant, game, normalData.getRandomCount());
+        if(normalData.getMood() == ShootingMood.LOBBER){
+            for (Zombie z : targets) {
+                game.getBullets().add(lobber_shoot(plant, z));
+            }
+        }
+        return targets;
+    }
+
+    @Override
+    public void all(Plant plant, BaseGame game) {
+        if(normalData.getMood() == ShootingMood.LOBBER){
+            for (Zombie z : game.getZombies()) {
+                game.getBullets().add(lobber_shoot(plant, z));
+            }
+        }
+
+    }
 
 }

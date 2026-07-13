@@ -1,18 +1,27 @@
 package models.factory.plantSkills.skillDatas;
 
-import models.npc.Bullet;
+import models.npc.BulletType;
 
 public class ShootingData {
-    private Bullet bullet;
+    private BulletType bullet;
     private ShootingMood mood;
     private int bulletNumber;
+    private int randomCount;
 
+    public ShootingData(BulletType type , ShootingMood mood ,  int bulletNumber) {
+        this.bulletNumber = bulletNumber;
+        this.mood = mood;
+        bullet = type;
+    }
 
-    public Bullet getBullet() {
+    public ShootingData(){
+
+    }
+    public BulletType getBullet() {
         return bullet;
     }
 
-    public void setBullet(Bullet bullet) {
+    public void setBullet(BulletType bullet) {
         this.bullet = bullet;
     }
 
@@ -32,5 +41,11 @@ public class ShootingData {
         this.bulletNumber = bulletNumber;
     }
 
+    public int getRandomCount() {
+        return randomCount;
+    }
 
+    public void setRandomCount(int randomCount) {
+        this.randomCount = randomCount;
+    }
 }

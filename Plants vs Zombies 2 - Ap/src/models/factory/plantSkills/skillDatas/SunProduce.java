@@ -11,7 +11,7 @@ public class SunProduce implements Skill {
 
 
     @Override
-    public void baseSkill(Plant producer, BaseGame game) {
+    public void do_skill(Plant producer, BaseGame game) {
         produce(producer , normalData , game);
     }
 

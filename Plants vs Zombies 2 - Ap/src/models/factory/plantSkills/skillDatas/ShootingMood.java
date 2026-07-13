@@ -14,5 +14,7 @@ public enum ShootingMood {
 
     Diagonal,
 
+    LOBBER,
+
     Star;
 }

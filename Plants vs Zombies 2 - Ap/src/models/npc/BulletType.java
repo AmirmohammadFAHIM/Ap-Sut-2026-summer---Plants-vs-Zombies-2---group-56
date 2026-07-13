@@ -1,11 +1,12 @@
 package models.npc;
 
 public enum BulletType {
-    FIRE,
 
-    ICE,
 
+
+    /// these two are for : Citron
     PLASMA,
+    HEAVY_BULLET,
 
     POISON,
 
@@ -20,6 +21,8 @@ public enum BulletType {
     CORN,
 
     PEA,
+
+    GIANT_PEA, /// for repeater && split pod 's plant food skill
 
     ONION,
 

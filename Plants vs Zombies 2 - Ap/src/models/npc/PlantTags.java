@@ -2,6 +2,8 @@ package models.npc;
 
 public enum PlantTags {
 
+    ONCE_USAGE,
+
     MAGICAL,
 
     FIRE,
@@ -17,6 +19,8 @@ public enum PlantTags {
     SHROOM,
 
     WRAP_UP,
+
+    TRAP,
 
     SUN;
 }

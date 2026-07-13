@@ -15,7 +15,7 @@ public class Homing implements Skill{
     private Bullet bullet;
 
     @Override
-    public void baseSkill(Plant plant, BaseGame game) {
+    public void do_skill(Plant plant, BaseGame game) {
         if (random) {
             bullet.setToLockIn(randomZombie(game));
         } else {

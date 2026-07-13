@@ -6,6 +6,7 @@ import models.gamePanes.Wave;
 import models.npc.Bullet;
 import models.npc.Plant;
 import models.npc.Sun;
+import models.npc.Zombie;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,8 @@ public class BaseGame implements Game {
     private ArrayList<Plant> plants;
     private SunBuilder sunBuilder;
     private Wave currentWave;
+    private Wave previousWave;
+    private ArrayList<Zombie> zombies; ///combination of current wave and next wave
     private ArrayList<Bullet>  bullets;
     private ArrayList<Sun> suns;
 
@@ -72,6 +75,66 @@ public class BaseGame implements Game {
 
     public Wave getCurrentWave() {
         return currentWave;
+    }
+
+    public Field getField() {
+        return field;
+    }
+
+    public void setField(Field field) {
+        this.field = field;
+    }
+
+    public ArrayList<Wave> getWaves() {
+        return waves;
+    }
+
+    public void setWaves(ArrayList<Wave> waves) {
+        this.waves = waves;
+    }
+
+    public ArrayList<Plant> getPlants() {
+        return plants;
+    }
+
+    public void setPlants(ArrayList<Plant> plants) {
+        this.plants = plants;
+    }
+
+    public SunBuilder getSunBuilder() {
+        return sunBuilder;
+    }
+
+    public void setSunBuilder(SunBuilder sunBuilder) {
+        this.sunBuilder = sunBuilder;
+    }
+
+    public void setCurrentWave(Wave currentWave) {
+        this.currentWave = currentWave;
+    }
+
+    public Wave getPreviousWave() {
+        return previousWave;
+    }
+
+    public void setPreviousWave(Wave previousWave) {
+        this.previousWave = previousWave;
+    }
+
+    public void setBullets(ArrayList<Bullet> bullets) {
+        this.bullets = bullets;
+    }
+
+    public void setSuns(ArrayList<Sun> suns) {
+        this.suns = suns;
+    }
+
+    public ArrayList<Zombie> getZombies() {
+        return zombies;
+    }
+
+    public void setZombies(ArrayList<Zombie> zombies) {
+        this.zombies = zombies;
     }
 
     //  public void plant(){}

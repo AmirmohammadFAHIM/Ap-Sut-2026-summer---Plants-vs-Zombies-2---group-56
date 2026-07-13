@@ -1,6 +1,9 @@
 package models.npc;
 
+import java.util.ArrayList;
+
 public class Bullet {
+    private BulletType type;
     private float velocityX;
     private float velocityY;
     private float destinationX;
@@ -9,12 +12,9 @@ public class Bullet {
     private float x;
     private float y;
     /// ------------BOOLEANS------------
+    public enum Tag{MAGICAL,ICE,FIRE,POISON,HOMING}
+    ArrayList<Tag> tags;
     private boolean proved = false;
-    private boolean magical = false;
-    private boolean ice = false;
-    private boolean fire = false;
-    private boolean poison = false;
-    private boolean homing = false;
     /// for homing plants of course!
     private Zombie toLockIn;
 
@@ -25,9 +25,10 @@ public class Bullet {
         this.velocityY = velocityY;
     }
 
-    public Bullet(float x, float y) {
+    public Bullet(float x, float y , BulletType bulletType) {
         this.x = x;
         this.y = y;
+        this.type = bulletType;
     }
 
     public Bullet(){
@@ -110,45 +111,6 @@ public class Bullet {
         this.toLockIn = toLockIn;
     }
 
-    public boolean isMagical() {
-        return magical;
-    }
-
-    public void setMagical(boolean magical) {
-        this.magical = magical;
-    }
-
-    public boolean isIce() {
-        return ice;
-    }
-
-    public void setIce(boolean ice) {
-        this.ice = ice;
-    }
-
-    public boolean isFire() {
-        return fire;
-    }
-
-    public void setFire(boolean fire) {
-        this.fire = fire;
-    }
-
-    public boolean isPoison() {
-        return poison;
-    }
-
-    public void setPoison(boolean poison) {
-        this.poison = poison;
-    }
-
-    public boolean isHoming() {
-        return homing;
-    }
-
-    public void setHoming(boolean homing) {
-        this.homing = homing;
-    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {

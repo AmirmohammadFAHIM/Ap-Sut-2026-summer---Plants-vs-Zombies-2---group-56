@@ -1,42 +1,119 @@
 package models.npc;
 
 import models.factory.plantSkills.Skill;
+import models.games.BaseGame;
 
 import java.util.ArrayList;
 
-public class Plant {
-
-
+public class Plant extends Entity {
     private int Damage;
-    private int hp;
-    private int x;
-    private int y;
     private int cost;
+    private final float ActionInterval;
+    private float t;
     private PlantType plantType;
     private ArrayList<PlantTags> tags;
     private Skill baseSkill;
     private Skill plantfoodSkill;
     private boolean frozen = false;
     private boolean cat = false;
-    private Graphic graphic;
+    private float lifeTime;
+
+    public Plant(float actionInterval) {
+        ActionInterval = actionInterval;
+    }
+
     public void boost(){}
 
     public PlantType getPlantType() {
         return plantType;
     }
 
-    public Graphic getGraphic() {
-        return graphic;
-    }
-
-    public int getX() {
-        return x;
-    }
-    public int getY() {
-        return y;
-    }
-
     public ArrayList<PlantTags> getTags() {
         return tags;
     }
+
+    public int getDamage() {
+        return Damage;
+    }
+
+    public void setDamage(int damage) {
+        Damage = damage;
+    }
+
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    public void setPlantType(PlantType plantType) {
+        this.plantType = plantType;
+    }
+
+    public void setTags(ArrayList<PlantTags> tags) {
+        this.tags = tags;
+    }
+
+    public Skill getBaseSkill() {
+        return baseSkill;
+    }
+
+    public void setBaseSkill(Skill baseSkill) {
+        this.baseSkill = baseSkill;
+    }
+
+    public Skill getPlantfoodSkill() {
+        return plantfoodSkill;
+    }
+
+    public void setPlantfoodSkill(Skill plantfoodSkill) {
+        this.plantfoodSkill = plantfoodSkill;
+    }
+
+    public boolean isFrozen() {
+        return frozen;
+    }
+
+    public void setFrozen(boolean frozen) {
+        this.frozen = frozen;
+    }
+
+    public boolean isCat() {
+        return cat;
+    }
+
+    public void setCat(boolean cat) {
+        this.cat = cat;
+    }
+
+    public void update(float delta , BaseGame game){
+        if(t <= 0){
+            t = ActionInterval;
+            baseSkill.do_skill(this , game);
+            if(tags.contains(PlantTags.ONCE_USAGE)){
+                removeSelf(game);
+            }
+        }
+        else{
+            t -= delta;
+        }
+
+        if(lifeTime <= 0 && lifeTime >= -1){
+            removeSelf(game);
+        }
+        else if(lifeTime > 0) lifeTime -= delta;
+    }
+
+
+    private void removeSelf(BaseGame game){
+        game.getPlants().remove(this);
+    }
+
+    public void setPlantFood(boolean plantFood , BaseGame game) {
+        plantfoodSkill.do_skill(this , game);
+    }
 }
+

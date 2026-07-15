@@ -6,5 +6,7 @@ public class Constants {
     public final static float BulletVelocityX = 120;
     public final static float MagicalBulletVelocity = 120;
     public final static float Tall_WallNut_Height = 250;
+    public final static int DeadLine_TileIndex = 3;
+    public final static int LYP_Count = 5;
 
 }

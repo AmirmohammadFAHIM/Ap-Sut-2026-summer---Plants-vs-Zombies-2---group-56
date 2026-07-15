@@ -3,32 +3,40 @@ package models.gamePanes;
 import models.entity.Zombie;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Wave {
-    private ArrayList<Zombie> zombies;
+    private ArrayList<Zombie> zombies = new ArrayList<>();
     private boolean finished = false;
     private int zombieCount = 0;
-    private int zombiesHP;
+    private float zombiesHP;
     private int id;
-    private int hardness;
+    private int cost;
 
-    public void initWave(){
+    Random rand = new Random();
+    public void initWave(ArrayList<Zombie> available){
+        if(cost == 0) return;
+        int index = rand.nextInt(available.size());
+        zombies.add(available.get(index));
+        zombieCount++;
+        zombiesHP += zombies.getLast().getHp();
+        cost -= zombies.getLast().getCost();
+        initWave(available);
+    }
 
-    };
-
-    public void isFinished(){
-
-    };
+    public boolean isFinished(){
+        float totalHp = 0;
+        for (Zombie z : zombies) {
+            totalHp += z.getHp();
+        }
+        return totalHp <= 0.75f * zombiesHP;
+    }
 
     public void updateWave(){
 
-       try {
-           TimeUnit.SECONDS.sleep(5);
-       }catch (InterruptedException e){
-           e.printStackTrace();
-       }
-    };
+
+    }
 
 
     public ArrayList<Zombie> getZombies() {

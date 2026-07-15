@@ -11,16 +11,18 @@ import models.entity.Zombie;
 import java.util.ArrayList;
 
 public class BaseGame implements Game {
-    private int sunCount = 0;
-    private Field field ;
-    private ArrayList<Wave> waves;
-    private ArrayList<Plant> plants;
-    private SunBuilder sunBuilder;
-    private Wave currentWave;
-    private Wave previousWave;
-    private ArrayList<Zombie> zombies; ///combination of current wave and next wave
-    private ArrayList<Bullet>  bullets;
-    private ArrayList<Sun> suns;
+    public enum GameState{STARTING , PLAYING , PAUSE , END}
+
+    protected int sunCount = 0;
+    protected Field field ;
+    protected ArrayList<Wave> waves;
+    protected ArrayList<Plant> plants;
+    protected SunBuilder sunBuilder;
+    protected Wave currentWave;
+    protected Wave previousWave;
+    protected ArrayList<Zombie> zombies; ///combination of current wave and next wave
+    protected ArrayList<Bullet>  bullets;
+    protected ArrayList<Sun> suns;
 
     public int getSunCount() {
         return sunCount;
@@ -62,6 +64,24 @@ public class BaseGame implements Game {
 
     @Override
     public void plant() {
+
+    }
+
+    @Override
+    public void dePlant() {
+
+    }
+
+    @Override
+    public boolean check_endGame() {
+        for (Zombie z : zombies) {
+            if(z.getX() <= 0) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void endGame() {
 
     }
 

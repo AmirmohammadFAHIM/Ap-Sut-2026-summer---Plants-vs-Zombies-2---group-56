@@ -92,10 +92,13 @@ public class Plant extends Entity {
     public void update(float delta , BaseGame game){
         if(t <= 0){
             t = ActionInterval;
-            baseSkill.do_skill(this , game);
-            if(tags.contains(PlantTags.ONCE_USAGE)){
-                dispose(game);
-            }
+           if(Trap(game)) {
+               baseSkill.do_skill(this , game);
+               if(tags.contains(PlantTags.ONCE_USAGE)){
+                   dispose(game);
+               }
+           }
+
         }
         else{
             t -= delta;
@@ -107,12 +110,23 @@ public class Plant extends Entity {
         else if(lifeTime > 0) lifeTime -= delta;
     }
 
+    private boolean Trap(BaseGame game){
+        if(!this.tags.contains(PlantTags.TRAP)){
+            return true;
+        }
 
+        for (Zombie x : game.getZombies()) {
+            if(Math.abs(x.getX() - this.x) < 20){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void dispose(BaseGame game){
         game.getPlants().remove(this);
 
-        /// TO DO: Check for two tags : 1-Explosive , 2-MoveZombies
+        /// TO DO: Check for two tags : 1-Explosive , 2-MoveZombies: for each in skills , see if theirs disposable or no
     }
 
     public void setPlantFood(boolean plantFood , BaseGame game) {

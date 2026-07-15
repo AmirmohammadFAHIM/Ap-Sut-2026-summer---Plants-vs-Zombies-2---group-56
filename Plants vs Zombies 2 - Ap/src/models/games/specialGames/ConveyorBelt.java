@@ -35,4 +35,14 @@ public class ConveyorBelt extends BaseGame implements SpecialGame {
     public ArrayList<Plant> filterPlants() {
         return null;
     }
+
+    @Override
+    public void attack() {
+
+    }
+
+    @Override
+    public boolean check_endGame() {
+        return super.check_endGame();
+    }
 }

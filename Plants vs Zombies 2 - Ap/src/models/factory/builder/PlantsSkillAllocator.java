@@ -1,10 +1,11 @@
 package models.factory.builder;
 
-import models.factory.plantSkills.Shoot;
+import models.factory.plantSkills.*;
+import models.factory.plantSkills.skillDatas.ExplosionData;
 import models.factory.plantSkills.skillDatas.ShootingData;
 import models.factory.plantSkills.skillDatas.ShootingMood;
-import models.npc.BulletType;
-import models.npc.Plant;
+import models.entity.BulletType;
+import models.entity.Plant;
 
 public enum PlantsSkillAllocator {
     /// ---------SHOOTERS----------
@@ -13,6 +14,8 @@ public enum PlantsSkillAllocator {
         Plant allocateSkill(Plant plant) {
             ShootingData data = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 1);
             plant.setBaseSkill(new Shoot(data));
+            ShootingData pf = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 30);
+            plant.getPlantfoodSkill().add(new Shoot(pf));
             return super.allocateSkill(plant);
         }
     },
@@ -21,6 +24,8 @@ public enum PlantsSkillAllocator {
         Plant allocateSkill(Plant plant) {
             ShootingData data = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 2);
             plant.setBaseSkill(new Shoot(data));
+            ShootingData pf = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 52);
+            plant.getPlantfoodSkill().add(new Shoot(pf));
             return super.allocateSkill(plant);
         }
     },
@@ -29,6 +34,8 @@ public enum PlantsSkillAllocator {
         Plant allocateSkill(Plant plant) {
             ShootingData data = new ShootingData(BulletType.PEA , ShootingMood.ThreeLine , 3);
             plant.setBaseSkill(new Shoot(data));
+            ShootingData pf = new ShootingData(BulletType.PEA , ShootingMood.AllLines , 150);
+            plant.getPlantfoodSkill().add(new Shoot(pf));
             return super.allocateSkill(plant);
         }
     },
@@ -37,6 +44,10 @@ public enum PlantsSkillAllocator {
         Plant allocateSkill(Plant plant) {
             ShootingData data = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 1);
             plant.setBaseSkill(new Shoot(data));
+            plant.getPlantfoodSkill().add(new Freeze(Freeze.Type.LINE));
+            ShootingData pf = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 40);
+            plant.getPlantfoodSkill().add(new Freeze(Freeze.Type.LINE));
+            plant.getPlantfoodSkill().add(new Shoot(pf));
             return super.allocateSkill(plant);
         }
     },
@@ -45,18 +56,31 @@ public enum PlantsSkillAllocator {
         Plant allocateSkill(Plant plant) {
             ShootingData data = new ShootingData(BulletType.PEA , ShootingMood.Diagonal , 4);
             plant.setBaseSkill(new Shoot(data));
+            ShootingData pf = new ShootingData(BulletType.PEA , ShootingMood.Diagonal , 120);
+            plant.getPlantfoodSkill().add(new Shoot(pf));
             return super.allocateSkill(plant);
         }
     },
     PEA_POD{
 
     },
-    SPLIT_PEA,
+    SPLIT_PEA{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ShootingData data = new ShootingData(BulletType.PEA , ShootingMood.Front_Back , 3);
+            plant.setBaseSkill(new Shoot(data));
+            ShootingData pf = new ShootingData(BulletType.PEA , ShootingMood.Front_Back , 120);
+            plant.getPlantfoodSkill().add(new Shoot(pf));
+            return super.allocateSkill(plant);
+        }
+    },
     CITRON{
         @Override
         Plant allocateSkill(Plant plant) {
-            ShootingData data = new ShootingData(BulletType.PLASMA , ShootingMood.OneLine , 2);
+            ShootingData data = new ShootingData(BulletType.HEAVY_BULLET , ShootingMood.OneLine , 1);
             plant.setBaseSkill(new Shoot(data));
+            ShootingData pf = new ShootingData(BulletType.PLASMA , ShootingMood.OneLine , 1);
+            plant.getPlantfoodSkill().add(new Shoot(pf));
             return super.allocateSkill(plant);
         }
     },
@@ -64,59 +88,294 @@ public enum PlantsSkillAllocator {
     STARFRUIT{
         @Override
         Plant allocateSkill(Plant plant) {
-            ShootingData data = new ShootingData(BulletType.PEA , ShootingMood.Star , 5);
+            ShootingData data = new ShootingData(BulletType.STAR , ShootingMood.Star , 5);
             plant.setBaseSkill(new Shoot(data));
+            ShootingData pf = new ShootingData(BulletType.STAR , ShootingMood.Star , 150);
+            plant.getPlantfoodSkill().add(new Shoot(pf));
             return super.allocateSkill(plant);
         }
     },
-    GOO_PEASHOOTER,
-    MEGA_GATLING_PEA,
-    SEA_SHROOM,
-    PUFF_SHROOM,
+    FIRE_PEASHOOTER{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ShootingData data = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 1);
+            plant.setBaseSkill(new Shoot(data));
+            ShootingData pf = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 40);
+            plant.getPlantfoodSkill().add(new Shoot(pf));
+            return  super.allocateSkill(plant);
+        }
+    },
+    GOO_PEASHOOTER{
+
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ShootingData data = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 1);
+            plant.setBaseSkill(new Shoot(data));
+            ShootingData pf = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 40);
+            plant.getPlantfoodSkill().add(new Shoot(pf));
+            return super.allocateSkill(plant);
+        }
+    },
+    MEGA_GATLING_PEA{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ShootingData data = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 4);
+            plant.setBaseSkill(new Shoot(data));
+            return  super.allocateSkill(plant);
+        }
+    },
+    SEA_SHROOM{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            /// mid range shoot
+            return  super.allocateSkill(plant);
+        }
+    },
+    PUFF_SHROOM{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            /// mid range shoot
+            return   super.allocateSkill(plant);
+        }
+    },
     /// -----------EXPLOSIVES--------------
-    POTATO_MINE,
-    PRIMAL_POTATO_MINE,
-    CHERRY_BOMB,
-    SQUASH,
-    GRAPESHOT,
-    JALAPENO,
-    DOOM_SHROOM,
+    POTATO_MINE{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(ExplosionData.ExplosionType.TOUCH);
+            plant.setBaseSkill(new Explosive(data));
+            return  super.allocateSkill(plant);
+        }
+    },
+    PRIMAL_POTATO_MINE{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(3 ,3); /// this plant has TRAP tag , so by default just when a zombie is close to it , it explodes
+            plant.setBaseSkill(new Explosive(data));
+            return  super.allocateSkill(plant);
+        }
+    },
+    CHERRY_BOMB{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(3,3);
+            plant.setBaseSkill(new Explosive(data));
+            return  super.allocateSkill(plant);
+        }
+    },
+    SQUASH{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(ExplosionData.ExplosionType.NEXT_TO);
+            plant.setBaseSkill(new Explosive(data));
+            ExplosionData pf = new ExplosionData(2);
+            Explosive e = new Explosive(pf);
+            e.setRandom(true);
+            plant.getPlantfoodSkill().add(e);
+            return  super.allocateSkill(plant);
+        }
+    },
+    GRAPESHOT{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(3,3);
+            /// needs an implementation: base skill should be a list , and we should add Clone class(for this , and potatos)
+            plant.setBaseSkill(new Explosive(data));
+            return  super.allocateSkill(plant);
+
+        }
+    },
+    JALAPENO{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(ExplosionData.ExplosionType.LINE);
+            plant.setBaseSkill(new Explosive(data));
+            return  super.allocateSkill(plant);
+        }
+    },
+    DOOM_SHROOM{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(ExplosionData.ExplosionType.ALL);
+            plant.setBaseSkill(new Explosive(data));
+            return  super.allocateSkill(plant);
+        }
+    },
     TANGLE_KELP,
     ICEBERG_LETTUCE,
     HOT_POTATO,
     GRAVE_BUSTER,
     /// ---------LOBBERS------------------
-    CABBAGE_PULT,
-    KERNEL_PULT,
-    MELON_PULT,
-    WINTER_MELON,
-    PEPPER_PULT,
+    CABBAGE_PULT{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ShootingData data = new ShootingData(BulletType.CABBAGE , ShootingMood.LOBBER , 1);
+            plant.setBaseSkill(new Shoot(data));
+
+            return super.allocateSkill(plant);
+        }
+    },
+    KERNEL_PULT{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ShootingData data = new ShootingData(BulletType.CORN , ShootingMood.LOBBER , 1);
+            plant.setBaseSkill(new Shoot(data));
+            ShootingData pf = new ShootingData(BulletType.BUTTER , ShootingMood.LOBBER , 10);
+            Shoot all = new Shoot(pf);
+            all.setAll(true);
+            plant.getPlantfoodSkill().add(all);
+            return super.allocateSkill(plant);
+        }
+    },
+    MELON_PULT{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ShootingData data = new ShootingData(BulletType.MELON , ShootingMood.LOBBER , 1);
+            plant.setBaseSkill(new Shoot(data));
+            return  super.allocateSkill(plant);
+        }
+    },
+    WINTER_MELON{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ShootingData data = new ShootingData(BulletType.MELON , ShootingMood.LOBBER , 1);
+            plant.setBaseSkill(new Shoot(data));
+            return  super.allocateSkill(plant);
+        }
+    },
+    PEPPER_PULT{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ShootingData data = new ShootingData(BulletType.PEPPER, ShootingMood.LOBBER , 1);
+            plant.setBaseSkill(new Shoot(data));
+            return  super.allocateSkill(plant);
+        }
+    },
     /// -----------STRIKE_THROUGH--------
     CACTUS,
     FUM_SHROOM,
     /// -----------MELEE---------------
-    BONK_CHOY,
+    BONK_CHOY{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            plant.setBaseSkill(new Melee(Melee.MeleeAttack.PUNCH));
+            plant.getPlantfoodSkill().add(new Melee(Melee.MeleeAttack.AoE , 1 , 1));
+            return super.allocateSkill(plant);
+        }
+    },
     PHAT_BEET,
-    CHOMPER,
-    WASSABI_WHIP,
+    CHOMPER{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(ExplosionData.ExplosionType.NEXT_TO);
+            plant.setBaseSkill(new Explosive(data));
+            ExplosionData pf = new ExplosionData(ExplosionData.ExplosionType.RANDOM);
+            pf.randomCount = 3;
+            plant.getPlantfoodSkill().add(new Explosive(pf));
+            return super.allocateSkill(plant);
+        }
+    },
+    WASSABI_WHIP{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(ExplosionData.ExplosionType.NEXT_TO);
+            plant.setBaseSkill(new Explosive(data));
+            ExplosionData pf = new ExplosionData(ExplosionData.ExplosionType.RANDOM);
+            pf.randomCount = 3;
+            plant.getPlantfoodSkill().add(new Explosive(pf));
+            /// TO DO: fire effecth
+            return super.allocateSkill(plant);
+        }
+    },
     KIWIBEAST,
     /// ----------WALL_NUTS------------
     WALL_NUT,
-    TALL_NUT,
-    ENDURIAN,
-    GARLIC,
-    SWEET_POTATO,
-    EXPLODE_O_NUT,
+    TALL_NUT{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            Block skill = new Block();
+            plant.setBaseSkill(skill);
+            return   super.allocateSkill(plant);
+        }
+    },
+    ENDURIAN{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            Block skill = new Block();
+            skill.damage = true;
+            plant.setBaseSkill(skill);
+            return   super.allocateSkill(plant);
+        }
+    },
+    GARLIC{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            Block skill = new Block();
+            plant.setBaseSkill(skill);
+            return   super.allocateSkill(plant);
+        }
+    },
+    SWEET_POTATO{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            Block skill = new Block(true);
+            plant.setBaseSkill(skill);
+            return   super.allocateSkill(plant);
+        }
+    },
+    EXPLODE_O_NUT{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            Block skill = new Block();
+            plant.setBaseSkill(skill);
+            return   super.allocateSkill(plant);
+        }
+    },
     PUMPKIN,
-    SUN_BEAN,
+    SUN_BEAN{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            Block skill = new Block();
+            plant.setBaseSkill(skill);
+            return super.allocateSkill(plant);
+        }
+    },
     /// --------MODIFIERS-----------
     TORCHWOOD,
     HYPNO_SHROOM,
     IMITATER,
     LILY_PAD,
     /// --------HOMING--------------
-    CAULIPOWER,
-    ELECTRIC_BLUEBERRY,
+    CAULIPOWER{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            Homing data = new Homing(BulletType.MAGIC , Homing.Type.RANDOM);
+            plant.setBaseSkill(data);
+            
+            return super.allocateSkill(plant);
+        }
+    },
+    ELECTRIC_BLUEBERRY{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            plant.setBaseSkill(new Homing(BulletType.LIGHTNING , Homing.Type.RANDOM));
+            Homing pf = new Homing(BulletType.MAGIC , Homing.Type.RANDOM);
+            pf.targetCount = 3;
+            plant.getPlantfoodSkill().add(pf);
+            return super.allocateSkill(plant);
+        }
+    },
+    CAT_TAIL{
+        @Override
+        Plant allocateSkill(Plant plant) {
+            Homing skill  = new Homing(BulletType.MAGIC , Homing.Type.CLOSEST);
+            plant.setBaseSkill(skill);
+            Homing pf =  new Homing(BulletType.MAGIC , Homing.Type.RANDOM);
+            pf.targetCount = 30;
+            plant.getPlantfoodSkill().add(pf);
+            return super.allocateSkill(plant);
+        }
+    },
     MAGNET_SHROOM;
     ///
 

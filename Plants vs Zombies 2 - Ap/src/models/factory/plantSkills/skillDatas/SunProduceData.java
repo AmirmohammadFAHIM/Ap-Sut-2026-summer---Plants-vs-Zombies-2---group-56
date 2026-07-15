@@ -1,6 +1,6 @@
 package models.factory.plantSkills.skillDatas;
 
-import models.npc.SunType;
+import models.entity.SunType;
 
 public class SunProduceData {
     private SunType sunType;

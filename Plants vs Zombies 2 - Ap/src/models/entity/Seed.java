@@ -1,6 +1,4 @@
-package models.npc;
-
-import java.util.Random;
+package models.entity;
 
 public class Seed {
 

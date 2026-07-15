@@ -1,67 +1,84 @@
 package models.factory.plantSkills;
 
+import models.Constants;
 import models.games.BaseGame;
-import models.npc.Bullet;
-import models.npc.Plant;
-import models.npc.PlantTags;
-import models.npc.Zombie;
+import models.entity.*;
 
-import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
 public class Homing implements Skill{
-    private boolean random;
-    private Bullet bullet;
+    public enum Type{RANDOM,CLOSEST}
+    Type type = Type.CLOSEST;
+    private BulletType bullet;
+    public int targetCount = 1;
+    public Homing(BulletType bullet , Type type ){
+        this.bullet = bullet;
+    }
 
     @Override
     public void do_skill(Plant plant, BaseGame game) {
-        if (random) {
-            bullet.setToLockIn(randomZombie(game));
-        } else {
-            bullet.setToLockIn(closestZombie(
-                    plant, game
-            ));
+
+
+    }
+
+    @Override
+    public void all(Plant plant, BaseGame game) {
+
+    }
+
+    @Override
+    public void setRandom(boolean random) {
+            type = random ? Type.RANDOM : Type.CLOSEST;
+    }
+
+    @Override
+    public void setAll(boolean all) {
+
+    }
+
+
+
+    @Override
+    public ArrayList<Zombie> random(Plant plant, BaseGame game, int numbers) {
+        java.util.ArrayList<Zombie> targets =  Skill.super.random(plant, game, targetCount);
+        for (Zombie x : targets){
+            Bullet bullet = new Bullet(plant.getX() + plant.getWidth() ,
+                plant.getY() + plant.getHeight() * 0.8f , this.bullet);
+        bullet.setToLockIn(x);
+        float dx = x.getX() - plant.getX();
+        float dy = x.getY() - plant.getY();
+        bullet.setVelocityX(Constants.MagicalBulletVelocity);
+        bullet.setVelocityY(Constants.MagicalBulletVelocity * dy / dx);
+        bullet.getTags().add(Bullet.Tag.HOMING);
+        bullet.getTags().add(Bullet.Tag.MAGICAL);
+        game.getBullets().add(bullet);
         }
-
-        bullet = new Bullet();
-        bullet.setX(plant.getX());
-        bullet.setY(plant.getY());
-        bullet.setHoming(true); /// when a bullet is homing , It knows where to go because It has the
-        /// zombie to lock in.(We don't need to set the velocity here , in the next frames the bullet
-        /// does it itself).
-        if(plant.getTags().contains(PlantTags.MAGICAL)) bullet.setMagical(true);
-        if(plant.getTags().contains(PlantTags.POISON)) bullet.setMagical(true);
-        if(plant.getTags().contains(PlantTags.ICE)) bullet.setIce(true);
-        else if(plant.getTags().contains(PlantTags.FIRE)) bullet.setFire(true);
+        return null;
 
     }
 
-
-    public void plantFoodSkill(Plant plant, BaseGame game) {
-
-    }
-
-
-    private Zombie randomZombie(BaseGame  game) {
-        Random rand = new Random();
-        int randomIdx = rand.nextInt(game.getCurrentWave().getZombies().size());
-        return game.getCurrentWave().getZombies().get(randomIdx);
-    }
-
-    private Zombie closestZombie(Plant palnt , BaseGame game) {
+    private void closestZombie(Plant plant , BaseGame game) {
         Iterator iterator =  game.getCurrentWave().getZombies().iterator();
         Zombie curr = game.getCurrentWave().getZombies().getFirst();
-        float distance = distance(palnt.getX() , palnt.getY() , curr.getX() , curr.getY());
+        float distance = distance(plant.getX() , plant.getY() , curr.getX() , curr.getY());
         while (iterator.hasNext()) {
             Zombie zombie = (Zombie) iterator.next();
-            if(distance(palnt.getX(),  palnt.getY(), zombie.getX(), zombie.getY()) < distance){
+            if(distance(plant.getX(),  plant.getY(), zombie.getX(), zombie.getY()) < distance){
                 curr = zombie;
-              //  distance = distance()
             }
         }
 
-        return curr;
+        Bullet bullet = new Bullet(plant.getX() + plant.getWidth() ,
+                plant.getY() + plant.getHeight() * 0.8f , this.bullet);
+        bullet.setToLockIn(curr);
+        float dx = curr.getX() - plant.getX();
+        float dy = curr.getY() - plant.getY();
+        bullet.setVelocityX(Constants.MagicalBulletVelocity);
+        bullet.setVelocityY(Constants.MagicalBulletVelocity * dy / dx);
+        bullet.getTags().add(Bullet.Tag.HOMING);
+        bullet.getTags().add(Bullet.Tag.MAGICAL);
+        game.getBullets().add(bullet);
     }
 
 

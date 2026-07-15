@@ -1,23 +1,17 @@
-package models.npc;
+package models.entity;
 
 import models.factory.zombies.observers.Armor;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Zombie {
+public class Zombie extends  Entity {
     private String type;
     private ArrayList<Armor> armors;
-    private float x;
-    private float y;
     private Rectangle bounds;
-    private int line;
-    private int tileInex;
-    private float velocityX;
-    private float velocityY;
     private int cost;
-    private int hp;
     private Zombie imp;
+
 
     public void drop(){
 
@@ -88,14 +82,6 @@ public class Zombie {
         this.cost = cost;
     }
 
-    public int getHp() {
-        return hp;
-    }
-
-    public void setHp(int hp) {
-        this.hp = hp;
-    }
-
     public Zombie getImp() {
         return imp;
     }
@@ -112,11 +98,5 @@ public class Zombie {
         this.bounds = bounds;
     }
 
-    public int getTileInex() {
-        return tileInex;
-    }
 
-    public void setTileInex(int tileInex) {
-        this.tileInex = tileInex;
-    }
 }

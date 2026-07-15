@@ -1,8 +1,7 @@
 package models.games.specialGames;
 
 import models.games.BaseGame;
-import models.games.Game;
-import models.npc.Plant;
+import models.entity.Plant;
 
 import java.util.ArrayList;
 

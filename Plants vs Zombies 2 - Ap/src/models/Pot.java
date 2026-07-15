@@ -1,6 +1,6 @@
 package models;
 
-import models.npc.Plant;
+import models.entity.Plant;
 
 public class Pot {
     private Plant plant;

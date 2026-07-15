@@ -1,4 +1,4 @@
-package models.npc;
+package models.entity;
 
 public enum BulletType {
 
@@ -8,17 +8,25 @@ public enum BulletType {
     PLASMA,
     HEAVY_BULLET,
 
+    STAR,
+
     POISON,
 
     MAGIC,
+
+    LIGHTNING,
 
     BUTTER,
 
     MELON,
 
+    CABBAGE,
+
     LETTUCE,
 
     CORN,
+
+    PEPPER,
 
     PEA,
 
@@ -26,5 +34,7 @@ public enum BulletType {
 
     ONION,
 
+    /// for cactus(obviously)
+    ELECTRICAL_CACTUS,
     CACTUS;
 }

@@ -1,6 +1,6 @@
 package models.factory.plantSkills.skillDatas;
 
-import models.npc.BulletType;
+import models.entity.BulletType;
 
 public class ShootingData {
     private BulletType bullet;

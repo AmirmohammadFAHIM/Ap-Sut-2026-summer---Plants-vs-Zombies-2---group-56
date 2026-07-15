@@ -1,4 +1,4 @@
-package models.npc;
+package models.entity;
 
 public class Graphic {
     // This will be the place for the texture(or texture region)

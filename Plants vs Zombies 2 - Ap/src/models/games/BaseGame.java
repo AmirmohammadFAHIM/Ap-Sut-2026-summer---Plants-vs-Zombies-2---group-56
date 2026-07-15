@@ -3,10 +3,10 @@ package models.games;
 import models.factory.builder.SunBuilder;
 import models.gamePanes.Field;
 import models.gamePanes.Wave;
-import models.npc.Bullet;
-import models.npc.Plant;
-import models.npc.Sun;
-import models.npc.Zombie;
+import models.entity.Bullet;
+import models.entity.Plant;
+import models.entity.Sun;
+import models.entity.Zombie;
 
 import java.util.ArrayList;
 

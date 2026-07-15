@@ -1,7 +1,7 @@
 package models.factory.zombies;
 
 import models.games.Game;
-import models.npc.Plant;
+import models.entity.Plant;
 
 public enum DarkAge implements Skill {
     ;

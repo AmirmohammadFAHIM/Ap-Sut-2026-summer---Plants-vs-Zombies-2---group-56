@@ -1,8 +1,8 @@
 package models.factory.plantSkills;
 
 import models.games.BaseGame;
-import models.npc.Plant;
-import models.npc.Zombie;
+import models.entity.Plant;
+import models.entity.Zombie;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -28,6 +28,18 @@ public interface Skill {
     }
 
     public void all(Plant plant , BaseGame game);
+
+    public void setRandom(boolean random);
+    public void setAll(boolean all);
+
+    public default void dispose(Plant self ,  BaseGame game){
+
+    }
+    public default boolean disposable(){
+        return false;
+    }
+
+
 
     //public void plantFoodSkill(Plant plant , BaseGame game);
 }

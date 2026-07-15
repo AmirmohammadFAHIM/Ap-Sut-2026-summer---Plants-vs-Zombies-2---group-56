@@ -2,13 +2,17 @@ package models.factory.plantSkills;
 
 import models.factory.plantSkills.skillDatas.ExplosionData;
 import models.games.BaseGame;
-import models.npc.Plant;
-import models.npc.Zombie;
+import models.entity.Plant;
+import models.entity.Zombie;
 
-import java.util.Random;
+import java.util.ArrayList;
 
 public class Explosive implements Skill{
     ExplosionData data;
+    public Explosive(ExplosionData  data){
+        this.data = data;
+    }
+
     @Override
     public void do_skill(Plant plant, BaseGame game) {
         switch (data.type){
@@ -17,7 +21,7 @@ public class Explosive implements Skill{
             case LINE -> oneLine(plant, game);
             case NEXT_TO -> nextTo(plant, game);
             case TOUCH -> touch(plant, game);
-            case RANDOM -> random(plant, game);
+            case RANDOM -> random(plant, game , data.randomCount);
         }
     }
 
@@ -46,6 +50,16 @@ public class Explosive implements Skill{
 
         game.getField().getTiles().get(self.getLine())
                 .get(self.getTileIndex()).setPlantable(false);
+    }
+
+    @Override
+    public void setRandom(boolean random) {
+        data.type = random ? ExplosionData.ExplosionType.RANDOM : data.type;
+    }
+
+    @Override
+    public void setAll(boolean all) {
+            data.type = all ? ExplosionData.ExplosionType.ALL : data.type;
     }
 
     private void touch(Plant self, BaseGame game) {
@@ -106,12 +120,13 @@ public class Explosive implements Skill{
     }
 
 
-    private void random(Plant self, BaseGame game) {
-        Random random  = new Random();
-        int one = random.nextInt(game.getCurrentWave().getZombies().size());
-        int two = random.nextInt(game.getCurrentWave().getZombies().size());
-        game.getCurrentWave().getZombies().get(one).setHp(0);
-        game.getCurrentWave().getZombies().get(two).setHp(0);
+    @Override
+    public ArrayList<Zombie> random(Plant plant, BaseGame game, int numbers) {
+        ArrayList<Zombie> randomZombies = Skill.super.random(plant, game, numbers);
+        for (Zombie z : randomZombies) {
+            z.setHp(0);
+            /// heat effect as well
+        }
+        return  randomZombies;
     }
-
 }

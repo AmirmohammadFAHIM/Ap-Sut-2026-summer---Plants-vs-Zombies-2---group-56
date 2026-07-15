@@ -1,6 +1,6 @@
 package models.factory.builder;
 
-import models.npc.Zombie;
+import models.entity.Zombie;
 
 public class ZombieBuilder {
     private Zombie instance;

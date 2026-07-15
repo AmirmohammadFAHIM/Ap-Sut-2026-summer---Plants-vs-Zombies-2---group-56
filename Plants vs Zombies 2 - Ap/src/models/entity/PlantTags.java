@@ -1,6 +1,8 @@
-package models.npc;
+package models.entity;
 
 public enum PlantTags {
+
+    MOVE_ZOMBIES,
 
     ONCE_USAGE,
 

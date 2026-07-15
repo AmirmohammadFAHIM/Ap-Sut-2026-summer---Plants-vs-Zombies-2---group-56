@@ -1,7 +1,7 @@
 package controllers.menus.SecondaryMenus;
 
 import models.Pot;
-import models.npc.Seed;
+import models.entity.Seed;
 
 import java.util.ArrayList;
 

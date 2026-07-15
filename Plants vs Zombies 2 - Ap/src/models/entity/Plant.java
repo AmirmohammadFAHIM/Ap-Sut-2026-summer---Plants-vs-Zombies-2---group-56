@@ -1,4 +1,4 @@
-package models.npc;
+package models.entity;
 
 import models.factory.plantSkills.Skill;
 import models.games.BaseGame;
@@ -13,7 +13,7 @@ public class Plant extends Entity {
     private PlantType plantType;
     private ArrayList<PlantTags> tags;
     private Skill baseSkill;
-    private Skill plantfoodSkill;
+    private ArrayList<Skill> plantfoodSkill;
     private boolean frozen = false;
     private boolean cat = false;
     private float lifeTime;
@@ -65,11 +65,11 @@ public class Plant extends Entity {
         this.baseSkill = baseSkill;
     }
 
-    public Skill getPlantfoodSkill() {
+    public ArrayList<Skill> getPlantfoodSkill() {
         return plantfoodSkill;
     }
 
-    public void setPlantfoodSkill(Skill plantfoodSkill) {
+    public void setPlantfoodSkill(ArrayList<Skill> plantfoodSkill) {
         this.plantfoodSkill = plantfoodSkill;
     }
 
@@ -94,7 +94,7 @@ public class Plant extends Entity {
             t = ActionInterval;
             baseSkill.do_skill(this , game);
             if(tags.contains(PlantTags.ONCE_USAGE)){
-                removeSelf(game);
+                dispose(game);
             }
         }
         else{
@@ -102,18 +102,23 @@ public class Plant extends Entity {
         }
 
         if(lifeTime <= 0 && lifeTime >= -1){
-            removeSelf(game);
+            dispose(game);
         }
         else if(lifeTime > 0) lifeTime -= delta;
     }
 
 
-    private void removeSelf(BaseGame game){
+
+    public void dispose(BaseGame game){
         game.getPlants().remove(this);
+
+        /// TO DO: Check for two tags : 1-Explosive , 2-MoveZombies
     }
 
     public void setPlantFood(boolean plantFood , BaseGame game) {
-        plantfoodSkill.do_skill(this , game);
+        for (Skill x : plantfoodSkill){
+            x.do_skill(this , game);
+        }
     }
 }
 

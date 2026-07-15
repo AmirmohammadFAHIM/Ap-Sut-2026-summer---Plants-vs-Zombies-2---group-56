@@ -1,4 +1,4 @@
-package models.npc;
+package models.entity;
 
 public class Entity {
     protected float x;
@@ -11,6 +11,8 @@ public class Entity {
     protected int tileIndex;
     protected float hp;
     protected boolean isAlive = true;
+    protected boolean ground = true;
+    protected boolean hurt = false;
     public Entity(float x, float y, float width, float height, int line, int tileIndex) {
 
     }
@@ -88,5 +90,26 @@ public class Entity {
 
     public void setHp(float hp) {
         this.hp = hp;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+    public boolean isGround() {
+        return ground;
+    }
+    public void setGround(boolean ground) {
+        this.ground = ground;
+    }
+
+    public boolean isHurt() {
+        return hurt;
+    }
+
+    public void setHurt(boolean hurt) {
+        this.hurt = hurt;
     }
 }

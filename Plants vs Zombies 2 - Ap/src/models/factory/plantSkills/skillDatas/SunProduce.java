@@ -2,8 +2,8 @@ package models.factory.plantSkills.skillDatas;
 
 import models.factory.plantSkills.Skill;
 import models.games.BaseGame;
-import models.npc.Plant;
-import models.npc.Sun;
+import models.entity.Plant;
+import models.entity.Sun;
 
 public class SunProduce implements Skill {
     private SunProduceData normalData;

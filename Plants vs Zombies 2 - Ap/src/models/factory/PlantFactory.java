@@ -1,7 +1,7 @@
 package models.factory;
 
 import models.factory.builder.PlantBuilder;
-import models.npc.Plant;
+import models.entity.Plant;
 
 public class PlantFactory {
     private PlantBuilder plantBuilder;

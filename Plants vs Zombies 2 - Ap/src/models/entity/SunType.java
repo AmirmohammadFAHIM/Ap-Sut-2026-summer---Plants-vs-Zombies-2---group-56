@@ -1,4 +1,4 @@
-package models.npc;
+package models.entity;
 
 public enum SunType {
     NORMAL(25 , 8),

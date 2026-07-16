@@ -173,6 +173,7 @@ public class Plant extends Entity {
     }
 
     public void setFreezeLevel(int freezeLevel) {
+        if(freezeLevel >= 3) freezeLevel = 3;
         this.freezeLevel = freezeLevel;
     }
 }

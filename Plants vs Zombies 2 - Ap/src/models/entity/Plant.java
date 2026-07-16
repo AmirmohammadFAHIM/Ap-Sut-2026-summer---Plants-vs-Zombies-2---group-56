@@ -19,6 +19,8 @@ public class Plant extends Entity {
     private boolean frozen = false;
     private boolean cat = false;
     private float lifeTime;
+    private int freezeLevel = 0;
+
 
     public Plant(float actionInterval) {
         ActionInterval = actionInterval;
@@ -163,6 +165,15 @@ public class Plant extends Entity {
         for (Skill x : plantfoodSkill){
             x.do_skill(this , game);
         }
+    }
+
+
+    public int getFreezeLevel() {
+        return freezeLevel;
+    }
+
+    public void setFreezeLevel(int freezeLevel) {
+        this.freezeLevel = freezeLevel;
     }
 }
 

@@ -3,6 +3,7 @@ package models.gamePanes;
 public class Tile {
     private static float width;
     private static float height;
+    float x , y;
     private TileType tileType;
     private boolean plantable = true;
     private boolean zombieSpawner = false;
@@ -67,5 +68,45 @@ public class Tile {
 
     public void setBlock(boolean block) {
         this.block = block;
+    }
+
+    public float getHp() {
+        return hp;
+    }
+
+    public void setHp(float hp) {
+        this.hp = hp;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
     }
 }

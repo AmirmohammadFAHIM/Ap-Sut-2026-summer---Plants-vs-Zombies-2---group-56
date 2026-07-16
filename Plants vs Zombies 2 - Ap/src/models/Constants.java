@@ -9,5 +9,6 @@ public class Constants {
     public final static int DeadLine_TileIndex = 3;
     public final static int LYP_Count = 5;
     public final static int Plants_count_in_a_game = 8;
+    public final static int PlantWhatYouGet_StartingSunCount = 800;
 
 }

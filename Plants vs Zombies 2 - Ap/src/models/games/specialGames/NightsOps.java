@@ -3,6 +3,7 @@ package models.games.specialGames;
 import models.Constants;
 import models.entity.Plant;
 import models.entity.PlantTags;
+import models.factory.builder.PlantType;
 import models.games.BaseGame;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class NightsOps extends BaseGame implements SpecialGame {
     }
 
     @Override
-    public ArrayList<Plant> filterPlants() {
+    public ArrayList<PlantType> filterPlants() {
         return null;
     }
 

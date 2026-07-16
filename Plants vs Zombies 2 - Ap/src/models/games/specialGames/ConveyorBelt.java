@@ -1,7 +1,7 @@
 package models.games.specialGames;
 
+import models.factory.builder.PlantType;
 import models.games.BaseGame;
-import models.entity.Plant;
 
 import java.util.ArrayList;
 
@@ -32,7 +32,7 @@ public class ConveyorBelt extends BaseGame implements SpecialGame {
     }
 
     @Override
-    public ArrayList<Plant> filterPlants() {
+    public ArrayList<PlantType> filterPlants() {
         return null;
     }
 

@@ -1,5 +1,6 @@
 package models.entity;
 
+import models.factory.builder.PlantType;
 import models.factory.plantSkills.Skill;
 import models.games.BaseGame;
 
@@ -10,7 +11,8 @@ public class Plant extends Entity {
     private int cost;
     private final float ActionInterval;
     private float t;
-    private PlantType plantType;
+    private PlantCategory category;
+    private PlantType type;
     private ArrayList<PlantTags> tags;
     private Skill baseSkill;
     private ArrayList<Skill> plantfoodSkill;
@@ -24,8 +26,8 @@ public class Plant extends Entity {
 
     public void boost(){}
 
-    public PlantType getPlantType() {
-        return plantType;
+    public PlantCategory getCategory() {
+        return category;
     }
 
     public ArrayList<PlantTags> getTags() {
@@ -49,8 +51,8 @@ public class Plant extends Entity {
         this.cost = cost;
     }
 
-    public void setPlantType(PlantType plantType) {
-        this.plantType = plantType;
+    public void setCategory(PlantCategory category) {
+        this.category = category;
     }
 
     public void setTags(ArrayList<PlantTags> tags) {
@@ -63,6 +65,34 @@ public class Plant extends Entity {
 
     public void setBaseSkill(Skill baseSkill) {
         this.baseSkill = baseSkill;
+    }
+
+    public float getActionInterval() {
+        return ActionInterval;
+    }
+
+    public float getT() {
+        return t;
+    }
+
+    public void setT(float t) {
+        this.t = t;
+    }
+
+    public PlantType getType() {
+        return type;
+    }
+
+    public void setType(PlantType type) {
+        this.type = type;
+    }
+
+    public float getLifeTime() {
+        return lifeTime;
+    }
+
+    public void setLifeTime(float lifeTime) {
+        this.lifeTime = lifeTime;
     }
 
     public ArrayList<Skill> getPlantfoodSkill() {

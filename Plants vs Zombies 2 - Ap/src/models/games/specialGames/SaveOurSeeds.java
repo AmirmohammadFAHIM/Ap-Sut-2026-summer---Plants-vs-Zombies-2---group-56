@@ -1,5 +1,6 @@
 package models.games.specialGames;
 
+import models.factory.builder.PlantType;
 import models.games.BaseGame;
 import models.entity.Plant;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 public class SaveOurSeeds extends BaseGame implements SpecialGame {
     ArrayList<Plant> toProtect;
     @Override
-    public ArrayList<Plant> filterPlants() {
+    public ArrayList<PlantType> filterPlants() {
         return null;
     }
 

@@ -1,15 +1,17 @@
 package models.entity;
 
-public enum PlantType {
+public enum PlantCategory {
+
+    SunProducer,
 
     SHOOTER{
         public void setplant(){
-           String name = this.plant.getPlantType().name();
+           String name = this.plant.getCategory().name();
 
         }
     };
 
-    private PlantType() {
+    private PlantCategory() {
     }
 
     public void setPlant(Plant plant) {

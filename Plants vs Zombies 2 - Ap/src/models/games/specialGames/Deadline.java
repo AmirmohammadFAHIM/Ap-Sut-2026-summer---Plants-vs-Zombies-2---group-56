@@ -2,14 +2,14 @@ package models.games.specialGames;
 
 import models.Constants;
 import models.entity.Zombie;
+import models.factory.builder.PlantType;
 import models.games.BaseGame;
-import models.entity.Plant;
 
 import java.util.ArrayList;
 
 public class Deadline extends BaseGame implements SpecialGame {
     @Override
-    public ArrayList<Plant> filterPlants() {
+    public ArrayList<PlantType> filterPlants() {
         return null;
     }
 

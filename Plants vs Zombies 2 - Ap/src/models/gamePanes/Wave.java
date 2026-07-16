@@ -4,7 +4,6 @@ import models.entity.Zombie;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Wave {
     private ArrayList<Zombie> zombies = new ArrayList<>();
@@ -12,7 +11,7 @@ public class Wave {
     private int zombieCount = 0;
     private float zombiesHP;
     private int id;
-    private int cost;
+    private float cost;
 
     Random rand = new Random();
     public void initWave(ArrayList<Zombie> available){
@@ -38,6 +37,53 @@ public class Wave {
 
     }
 
+    public void setZombies(ArrayList<Zombie> zombies) {
+        this.zombies = zombies;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
+
+    public int getZombieCount() {
+        return zombieCount;
+    }
+
+    public void setZombieCount(int zombieCount) {
+        this.zombieCount = zombieCount;
+    }
+
+    public float getZombiesHP() {
+        return zombiesHP;
+    }
+
+    public void setZombiesHP(float zombiesHP) {
+        this.zombiesHP = zombiesHP;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public float getCost() {
+        return cost;
+    }
+
+    public void setCost(float cost) {
+        this.cost = cost;
+    }
+
+    public Random getRand() {
+        return rand;
+    }
+
+    public void setRand(Random rand) {
+        this.rand = rand;
+    }
 
     public ArrayList<Zombie> getZombies() {
         return zombies;

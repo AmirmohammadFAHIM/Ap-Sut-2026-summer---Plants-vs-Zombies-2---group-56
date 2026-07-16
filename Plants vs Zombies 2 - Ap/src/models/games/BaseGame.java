@@ -1,5 +1,9 @@
 package models.games;
 
+import commands.GameCommands;
+import controllers.Start.PlantSelection;
+import models.Constants;
+import models.factory.PlantFactory;
 import models.factory.builder.SunBuilder;
 import models.gamePanes.Field;
 import models.gamePanes.Wave;
@@ -12,17 +16,32 @@ import java.util.ArrayList;
 
 public class BaseGame implements Game {
     public enum GameState{STARTING , PLAYING , PAUSE , END}
-
+    protected GameState state =  GameState.STARTING;
+    protected PlantSelection selection;
     protected int sunCount = 0;
     protected Field field ;
     protected ArrayList<Wave> waves;
-    protected ArrayList<Plant> plants;
+    protected ArrayList<Plant> plants_inField;
+    protected ArrayList<Plant> available_plants;
     protected SunBuilder sunBuilder;
     protected Wave currentWave;
     protected Wave previousWave;
     protected ArrayList<Zombie> zombies; ///combination of current wave and next wave
     protected ArrayList<Bullet>  bullets;
     protected ArrayList<Sun> suns;
+    protected GameCommands StartGameCommand;
+
+    public GameCommands getStartGameCommand() {
+        return StartGameCommand;
+    }
+
+    public GameState getState() {
+        return state;
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
+    }
 
     public int getSunCount() {
         return sunCount;
@@ -38,37 +57,51 @@ public class BaseGame implements Game {
     }
 
     @Override
-    public void playGame() {
+    public boolean startGame(String plantName) {
+        /// TO DO: GET THE STRING , ADD THE PLANT TO THE AVAILABLE PLANTS , WHEN FULL , RETURN TRUE: MEANS WE ABOUT TO START
+        Plant selected_plant = selection.selectPlant(plantName);
+        if(available_plants.contains(selected_plant)) {
+            return false;
+        }
+        else  {
+            available_plants.add(selected_plant);
+        }
+
+        return available_plants.size() == Constants.Plants_count_in_a_game;
+    }
+
+    @Override
+    public void playGame(float delta) {
 
     }
 
     @Override
-    public void updatePlants() {
+    public void updatePlants(float delta) {
 
     }
 
     @Override
-    public void updateZombies() {
+    public void updateZombies(float delta) {
 
     }
 
     @Override
-    public void updateScene() {
+    public void updateScene(float delta) {
 
     }
 
     @Override
-    public void updateGame() {
+    public void updateGame(float delta) {
 
     }
 
     @Override
-    public void plant() {
+    public void plant(String plantName , int x , int y) {
 
     }
 
     @Override
-    public void dePlant() {
+    public void dePlant(int x , int y) {
 
     }
 
@@ -113,12 +146,12 @@ public class BaseGame implements Game {
         this.waves = waves;
     }
 
-    public ArrayList<Plant> getPlants() {
-        return plants;
+    public ArrayList<Plant> getPlants_inField() {
+        return plants_inField;
     }
 
-    public void setPlants(ArrayList<Plant> plants) {
-        this.plants = plants;
+    public void setPlants_inField(ArrayList<Plant> plants_inField) {
+        this.plants_inField = plants_inField;
     }
 
     public SunBuilder getSunBuilder() {

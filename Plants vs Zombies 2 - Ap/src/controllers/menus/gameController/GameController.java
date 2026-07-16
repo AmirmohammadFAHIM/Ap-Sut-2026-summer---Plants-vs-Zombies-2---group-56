@@ -1,10 +1,9 @@
 package controllers.menus.gameController;
 
 import models.games.BaseGame;
-import models.games.Game;
 
 public class GameController implements Controller{/// Main Brain of the game
-    private Game game;
+    private BaseGame game;
 
     public void updateGame(){}
 
@@ -13,7 +12,11 @@ public class GameController implements Controller{/// Main Brain of the game
     public void gameEnded(){}
 
     @Override
-    public boolean GameStart() {
+    public boolean GameStart(String input) {
+        boolean start = game.startGame(input);
+        if(start){
+            game.setState(BaseGame.GameState.PLAYING);
+        }
         return false;
     }
 
@@ -24,5 +27,8 @@ public class GameController implements Controller{/// Main Brain of the game
     public void Cheat(){}
 
 
+    public BaseGame getGame() {
+        return game;
+    }
 }
 

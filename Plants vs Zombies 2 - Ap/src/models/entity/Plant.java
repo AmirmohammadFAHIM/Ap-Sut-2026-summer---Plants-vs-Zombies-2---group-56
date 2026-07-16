@@ -124,7 +124,7 @@ public class Plant extends Entity {
     }
 
     public void dispose(BaseGame game){
-        game.getPlants().remove(this);
+        game.getPlants_inField().remove(this);
 
         /// TO DO: Check for two tags : 1-Explosive , 2-MoveZombies: for each in skills , see if theirs disposable or no
     }

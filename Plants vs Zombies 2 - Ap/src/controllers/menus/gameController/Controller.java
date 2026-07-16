@@ -6,7 +6,7 @@ public interface Controller {
     public boolean isFinished();
 
     public void gameEnded();
-    public boolean GameStart();
+    public boolean GameStart(String input);
     public default void startWave(){}
     public default void endWave(){}
     public default void Cheat(){}

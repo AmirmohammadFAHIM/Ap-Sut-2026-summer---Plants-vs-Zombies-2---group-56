@@ -18,7 +18,7 @@ public class Bullet {
     public enum Tag{MAGICAL,ICE,FIRE,POISON,HOMING}
     ArrayList<Tag> tags;
     private boolean proved = false;
-    /// for homing plants of course!
+    /// for homing plants_inField of course!
     private Zombie toLockIn;
 
     public Bullet(float x, float y , int velocityX ,  int velocityY) {

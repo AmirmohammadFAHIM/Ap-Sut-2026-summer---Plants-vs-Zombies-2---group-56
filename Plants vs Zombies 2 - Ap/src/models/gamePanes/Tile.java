@@ -5,6 +5,21 @@ public class Tile {
     private static float height;
     private TileType tileType;
     private boolean plantable = true;
+    private boolean zombieSpawner = false;
+    private boolean block =  false;
+    private float hp;
+    private int line;
+    private int col;
+    public Tile(TileType tileType , int line , int col) {
+        this.tileType = tileType;
+        this.plantable = tileType.isPlantable();
+        this.zombieSpawner = tileType.isZombieSpawner();
+        this.block = tileType.block;
+        this.hp = tileType.hp;
+        this.line = line;
+        this.col = col;
+
+    }
 
     public static float getHeight() {
         return height;
@@ -36,5 +51,21 @@ public class Tile {
 
     public void setPlantable(boolean plantable) {
         this.plantable = plantable;
+    }
+
+    public boolean isZombieSpawner() {
+        return zombieSpawner;
+    }
+
+    public void setZombieSpawner(boolean zombieSpawner) {
+        this.zombieSpawner = zombieSpawner;
+    }
+
+    public boolean isBlock() {
+        return block;
+    }
+
+    public void setBlock(boolean block) {
+        this.block = block;
     }
 }

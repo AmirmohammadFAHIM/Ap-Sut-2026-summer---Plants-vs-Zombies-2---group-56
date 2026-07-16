@@ -2,8 +2,8 @@ package models;
 
 import models.GameAdventure.Chapter;
 import models.GameAdventure.levels.Level;
-import models.npc.Plant;
-import models.npc.Zombie;
+import models.entity.Plant;
+import models.entity.Zombie;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,11 +27,16 @@ public class User implements Serializable {
 
     private int coins = 0;
     private int diamonds = 0;
-    private int highestScore = 0;
+    private int highestScore = 0; // همان MeowPoint
     private int gamesPlayed = 0;
     private int levelsPassed = 0;
     private int difficultyLevel = 3;
     private boolean isStayLoggedIn = false;
+
+    private int unlockedPots = 5;
+    private int plantFoods = 0;
+    private int marigoldSeeds = 0;
+    private int randomSeeds = 0;
 
     public User(String name, String passwordHash, String nickname, String email, String gender) {
         this.name = name;
@@ -143,10 +148,41 @@ public class User implements Serializable {
     }
 
     public void setStayLoggedIn(boolean stayLoggedIn) {
-        isStayLoggedIn = stayLoggedIn;
+        this.isStayLoggedIn = stayLoggedIn;
+    }
+
+    public int getUnlockedPots() {
+        return unlockedPots;
+    }
+
+    public void addUnlockedPots(int amount) {
+        this.unlockedPots += amount;
+    }
+
+    public int getPlantFoods() {
+        return plantFoods;
+    }
+
+    public void addPlantFoods(int amount) {
+        this.plantFoods += amount;
+    }
+
+    public int getMarigoldSeeds() {
+        return marigoldSeeds;
+    }
+
+    public void addMarigoldSeeds(int amount) {
+        this.marigoldSeeds += amount;
+    }
+
+    public int getRandomSeeds() {
+        return randomSeeds;
+    }
+
+    public void addRandomSeeds(int amount) {
+        this.randomSeeds += amount;
     }
 
     public void updateProgress() {
-
     }
 }

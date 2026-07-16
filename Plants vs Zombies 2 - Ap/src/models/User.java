@@ -1,6 +1,7 @@
 package models;
 
 import models.GameAdventure.Chapter;
+import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
 import models.entity.Plant;
 import models.entity.Zombie;
@@ -11,7 +12,7 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private Chapter chapter;
+    private Chapters chapter;
     private Level level;
     private ArrayList<Zombie> zombies;
     private ArrayList<Plant>  plants;
@@ -46,11 +47,11 @@ public class User {
         this.password = password;
     }
 
-    public Chapter getChapter() {
+    public Chapters getChapter() {
         return chapter;
     }
 
-    public void setChapter(Chapter chapter) {
+    public void setChapter(Chapters chapter) {
         this.chapter = chapter;
     }
 

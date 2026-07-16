@@ -2,7 +2,9 @@ package models.games;
 
 import commands.GameCommands;
 import controllers.Start.PlantSelection;
+import models.App;
 import models.Constants;
+import models.GameAdventure.*;
 import models.factory.PlantFactory;
 import models.factory.builder.SunBuilder;
 import models.gamePanes.Field;
@@ -30,6 +32,7 @@ public class BaseGame implements Game {
     protected ArrayList<Bullet>  bullets;
     protected ArrayList<Sun> suns;
     protected GameCommands StartGameCommand;
+    protected ChapterSpecialEvent event;
 
     public GameCommands getStartGameCommand() {
         return StartGameCommand;
@@ -72,6 +75,14 @@ public class BaseGame implements Game {
 
     @Override
     public void playGame(float delta) {
+            updatePlants(delta);
+            updatePlants(delta);
+            updateScene(delta);
+            attack(delta);
+            if(event!=null){
+                event.run(this , delta);
+            }
+
 
     }
 
@@ -90,10 +101,7 @@ public class BaseGame implements Game {
 
     }
 
-    @Override
-    public void updateGame(float delta) {
 
-    }
 
     @Override
     public void plant(String plantName , int x , int y) {
@@ -116,6 +124,22 @@ public class BaseGame implements Game {
     @Override
     public void endGame() {
 
+    }
+
+    private int waveID = 0;
+    private void attack(float delta) {
+        if(currentWave.isFinished()){
+            previousWave = currentWave;
+            currentWave = waves.get(waveID);
+            zombies.addAll(currentWave.getZombies());
+            waveID += 1;
+           event = switch (App.getCurrentuser().getChapter()){
+               case AncientEgypt -> new Tornado(this);
+               case FrozenCaves -> new IcyWind(this);
+               case BigWaveBeach -> new Water(this);
+               default -> new GraveSpawner(this);
+            };
+        }
     }
 
     public ArrayList<Bullet> getBullets() {
@@ -190,18 +214,31 @@ public class BaseGame implements Game {
         this.zombies = zombies;
     }
 
-    //  public void plant(){}
+    public PlantSelection getSelection() {
+        return selection;
+    }
 
-  //  public void pluck(){}
+    public void setSelection(PlantSelection selection) {
+        this.selection = selection;
+    }
 
-  //  public void ShowMap(){}
+    public ArrayList<Plant> getAvailable_plants() {
+        return available_plants;
+    }
 
-  //  public void ShowPlantsStatus(){}
+    public void setAvailable_plants(ArrayList<Plant> available_plants) {
+        this.available_plants = available_plants;
+    }
 
-  //  public void ShowTile(){}
+    public void setStartGameCommand(GameCommands startGameCommand) {
+        StartGameCommand = startGameCommand;
+    }
 
-   // public void showPlant(){}
+    public ChapterSpecialEvent getEvent() {
+        return event;
+    }
 
-
-
+    public void setEvent(ChapterSpecialEvent event) {
+        this.event = event;
+    }
 }

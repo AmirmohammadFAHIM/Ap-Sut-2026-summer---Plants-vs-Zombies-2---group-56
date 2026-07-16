@@ -8,7 +8,6 @@ public interface Game {
     public void updatePlants(float delta);
     public void updateZombies(float delta);
     public void updateScene(float delta);
-    public void updateGame(float delta);
     public void plant(String plantName , int x , int y);
     public void dePlant(int x , int y);
     public boolean check_endGame();

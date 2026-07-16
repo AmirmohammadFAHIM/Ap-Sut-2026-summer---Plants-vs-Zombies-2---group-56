@@ -11,6 +11,7 @@ public class Wave {
     private int zombieCount = 0;
     private float zombiesHP;
     private int id;
+    private int hardness;
     private float cost;
 
     Random rand = new Random();
@@ -67,6 +68,14 @@ public class Wave {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getHardness() {
+        return hardness;
+    }
+
+    public void setHardness(int hardness) {
+        this.hardness = hardness;
     }
 
     public float getCost() {

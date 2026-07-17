@@ -1,100 +1,120 @@
 package models;
 
 import models.GameAdventure.Chapter;
-import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
 import models.entity.Plant;
 import models.entity.Zombie;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String name;
+    private String nickname;
     private String email;
-    private String password;
-    private Chapters chapter;
+    private String passwordHash;
+    private String gender;
+
+    private int securityQuestionNumber;
+    private String securityAnswer;
+
+    private Chapter chapter;
     private Level level;
     private ArrayList<Zombie> zombies;
-    private ArrayList<Plant>  plants;
+    private ArrayList<Plant> plants;
+
     private int coins = 0;
     private int diamonds = 0;
-    public User(String name, String email, String password, Chapter chapter) {
+    private int highestScore = 0;
+    private int gamesPlayed = 0;
+    private int levelsPassed = 0;
+    private int difficultyLevel = 3;
+    private boolean isStayLoggedIn = false;
+
+    // ----- متغیرهای فروشگاه، گلخانه، کالکشن و اخبار -----
+    private int unlockedPots = 5;
+    private int plantFoods = 0;
+    private int randomSeeds = 0;
+    private String lastDailyPurchaseDate = "";
+    private HashMap<String, Integer> specificSeeds;
+
+    private ArrayList<String> unlockedPlantsNames; // گیاهانی که کاربر خریده/آنلاک کرده
+    private ArrayList<String> unreadNews;          // اخبار جدید
+    private ArrayList<String> readNews;            // اخبار خوانده شده
+    // ------------------------------------------------
+
+    public User(String name, String passwordHash, String nickname, String email, String gender) {
         this.name = name;
+        this.passwordHash = passwordHash;
+        this.nickname = nickname;
         this.email = email;
+        this.gender = gender;
+        this.zombies = new ArrayList<>();
+        this.plants = new ArrayList<>();
+        this.specificSeeds = new HashMap<>();
+        this.unlockedPlantsNames = new ArrayList<>();
+        this.unreadNews = new ArrayList<>();
+        this.readNews = new ArrayList<>();
     }
 
-    public String getName() {
-        return name;
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; } // اضافه شد برای تغییر یوزرنیم
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public String getNickname() { return nickname; }
+    public void setNickname(String nickname) { this.nickname = nickname; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getGender() { return gender; }
+    public void setSecurityQuestion(int questionNumber, String answer) {
+        this.securityQuestionNumber = questionNumber;
+        this.securityAnswer = answer;
+    }
+    public int getSecurityQuestionNumber() { return securityQuestionNumber; }
+    public boolean checkSecurityAnswer(String answer) { return this.securityAnswer.equals(answer); }
+
+    public int getCoins() { return coins; }
+    public void addCoins(int amount) { this.coins += amount; }
+    public int getDiamonds() { return diamonds; }
+    public void addDiamonds(int amount) { this.diamonds += amount; }
+
+    public int getHighestScore() { return highestScore; }
+    public void setHighestScore(int score) {
+        if (score > this.highestScore) { this.highestScore = score; }
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getGamesPlayed() { return gamesPlayed; }
+    public void incrementGamesPlayed() { this.gamesPlayed++; }
+    public int getLevelsPassed() { return levelsPassed; }
+    public void incrementLevelsPassed() { this.levelsPassed++; }
+    public int getDifficultyLevel() { return difficultyLevel; }
+    public void setDifficultyLevel(int difficultyLevel) { this.difficultyLevel = difficultyLevel; }
+    public boolean isStayLoggedIn() { return isStayLoggedIn; }
+    public void setStayLoggedIn(boolean stayLoggedIn) { this.isStayLoggedIn = stayLoggedIn; }
+
+    public int getUnlockedPots() { return unlockedPots; }
+    public void addUnlockedPots(int amount) { this.unlockedPots += amount; }
+    public int getPlantFoods() { return plantFoods; }
+    public void addPlantFoods(int amount) { this.plantFoods += amount; }
+    public int getRandomSeeds() { return randomSeeds; }
+    public void addRandomSeeds(int amount) { this.randomSeeds += amount; }
+    public String getLastDailyPurchaseDate() { return lastDailyPurchaseDate; }
+    public void setLastDailyPurchaseDate(String date) { this.lastDailyPurchaseDate = date; }
+
+    public void addSpecificSeed(String plantType, int amount) {
+        if (this.specificSeeds == null) this.specificSeeds = new HashMap<>();
+        this.specificSeeds.put(plantType, this.specificSeeds.getOrDefault(plantType, 0) + amount);
+    }
+    public int getSpecificSeedCount(String plantType) {
+        return this.specificSeeds != null ? this.specificSeeds.getOrDefault(plantType, 0) : 0;
     }
 
-    public String getEmail() {
-        return email;
-    }
+    public ArrayList<String> getUnlockedPlantsNames() { return unlockedPlantsNames; }
+    public ArrayList<String> getUnreadNews() { return unreadNews; }
+    public ArrayList<String> getReadNews() { return readNews; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Chapters getChapter() {
-        return chapter;
-    }
-
-    public void setChapter(Chapters chapter) {
-        this.chapter = chapter;
-    }
-
-    public Level getLevel() {
-        return level;
-    }
-
-    public void setLevel(Level level) {
-        this.level = level;
-    }
-
-    public ArrayList<Zombie> getZombies() {
-        return zombies;
-    }
-
-    public void setZombies(ArrayList<Zombie> zombies) {
-        this.zombies = zombies;
-    }
-
-    public ArrayList<Plant> getPlants() {
-        return plants;
-    }
-
-    public void setPlants(ArrayList<Plant> plants) {
-        this.plants = plants;
-    }
-
-    public int getCoins() {
-        return coins;
-    }
-
-    public void setCoins(int coins) {
-        this.coins = coins;
-    }
-
-    public int getDiamonds() {
-        return diamonds;
-    }
-
-    public void setDiamonds(int diamonds) {
-        this.diamonds = diamonds;
-    }
-
-    public void updateProgress(){}
-
+    public void updateProgress() { }
 }

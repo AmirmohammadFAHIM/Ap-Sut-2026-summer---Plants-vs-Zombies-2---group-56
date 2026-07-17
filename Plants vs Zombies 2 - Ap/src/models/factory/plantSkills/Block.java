@@ -63,7 +63,10 @@ public class Block implements Skill{
     private void damaged_action(Plant self, BaseGame game) {
         for (Zombie zombie: game.getZombies()) {
             if(zombie.getX() - self.getX() < 10 && self.isHurt()) {
-               if(damage) zombie.setHp(zombie.getHp() - self.getDamage());
+               if(damage) {
+                   float extraDamage = self.getArmor() != null ? Constants.EndurianArmorDamage : 0;
+                   zombie.setHp(zombie.getHp() - self.getDamage() - extraDamage);
+               }
                else if(self.getTags().contains(PlantTags.SUN)) {
                    game.getSuns().add(new Sun(5 , 5 , self.getX() + self.getWidth(),
                            self.getY()));

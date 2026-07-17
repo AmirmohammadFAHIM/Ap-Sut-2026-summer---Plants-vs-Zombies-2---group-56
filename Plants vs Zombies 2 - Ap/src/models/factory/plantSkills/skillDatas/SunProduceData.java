@@ -1,5 +1,6 @@
 package models.factory.plantSkills.skillDatas;
 
+import models.entity.Sun;
 import models.entity.SunType;
 
 public class SunProduceData {

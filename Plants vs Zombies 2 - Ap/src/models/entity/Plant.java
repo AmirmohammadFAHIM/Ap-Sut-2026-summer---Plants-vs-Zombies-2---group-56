@@ -1,7 +1,10 @@
 package models.entity;
 
 import models.factory.builder.PlantType;
+import models.factory.plantSkills.Explosive;
 import models.factory.plantSkills.Skill;
+import models.factory.plantSkills.skillDatas.ExplosionData;
+import models.factory.plantSkills.skillDatas.PlantArmor;
 import models.games.BaseGame;
 
 import java.util.ArrayList;
@@ -20,7 +23,15 @@ public class Plant extends Entity {
     private boolean cat = false;
     private float lifeTime;
     private int freezeLevel = 0;
+    private ArrayList<PlantArmor> armor;
 
+    public ArrayList<PlantArmor> getArmor() {
+        return armor;
+    }
+
+    public void setArmor(ArrayList<PlantArmor> armor) {
+        this.armor = armor;
+    }
 
     public Plant(float actionInterval) {
         ActionInterval = actionInterval;
@@ -175,6 +186,36 @@ public class Plant extends Entity {
     public void setFreezeLevel(int freezeLevel) {
         if(freezeLevel >= 3) freezeLevel = 3;
         this.freezeLevel = freezeLevel;
+    }
+
+    public void setHp(float hp , Zombie eater , BaseGame game){
+        this.hp = hp;
+        if(hp <= 0){
+            dispose(eater , game);
+        }
+    }
+
+    private void dispose(Zombie eater , BaseGame game){
+        if(tags.contains(PlantTags.SHROOM) && tags.contains(PlantTags.MAGICAL)){
+            /// TODO: make the zombie an opponent of other zombies
+        }
+        else if(tags.contains(PlantTags.EXPLOSIVE)){
+            ExplosionData data = new ExplosionData(3 , 3);
+            Explosive boom = new Explosive(data);
+            boom.do_skill(this ,game );
+        }
+    }
+
+    private float nextStg = 24f;
+    private void grow(float delta){
+        if(nextStg <= 0){
+            if(tags.contains(PlantTags.SHROOM)){
+
+            }
+            else if(tags.contains(PlantTags.AoE)){
+
+            }
+        }
     }
 }
 

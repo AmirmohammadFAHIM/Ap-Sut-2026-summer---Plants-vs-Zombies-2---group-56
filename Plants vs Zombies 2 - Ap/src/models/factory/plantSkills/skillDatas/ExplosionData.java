@@ -29,6 +29,7 @@ public class ExplosionData {
 
     public ExplosionData(int randomCount){
         this.randomCount = randomCount;
+        type = ExplosionType.RANDOM;
     }
 
 

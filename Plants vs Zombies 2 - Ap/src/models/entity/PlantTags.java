@@ -24,5 +24,9 @@ public enum PlantTags {
 
     TRAP,
 
+    EXPLOSIVE,
+
+    AoE,
+
     SUN;
 }

@@ -7,6 +7,7 @@ public class Tile {
     private TileType tileType;
     private boolean plantable = true;
     private boolean zombieSpawner = false;
+    private boolean empty = true;
     private boolean block =  false;
     private float hp;
     private int line;
@@ -108,5 +109,13 @@ public class Tile {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public boolean isEmpty() {
+        return empty;
+    }
+
+    public void setEmpty(boolean empty) {
+        this.empty = empty;
     }
 }

@@ -3,6 +3,7 @@ package models.factory.builder;
 import models.entity.PlantCategory;
 import models.factory.plantSkills.*;
 import models.factory.plantSkills.skillDatas.ExplosionData;
+import models.factory.plantSkills.skillDatas.Modify;
 import models.factory.plantSkills.skillDatas.ShootingData;
 import models.factory.plantSkills.skillDatas.ShootingMood;
 import models.entity.BulletType;
@@ -122,6 +123,10 @@ public enum PlantType {
         public Plant allocateSkill(Plant plant) {
             ShootingData data = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 4);
             plant.setBaseSkill(new Shoot(data));
+            ShootingData pf1 = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 120);
+            ShootingData pf2 = new ShootingData(BulletType.GIANT_PEA , ShootingMood.OneLine , 4);
+            plant.getPlantfoodSkill().add(new Shoot(pf1));
+            plant.getPlantfoodSkill().add(new Shoot(pf2));
             return  super.allocateSkill(plant);
         }
     },
@@ -145,6 +150,9 @@ public enum PlantType {
         public Plant allocateSkill(Plant plant) {
             ExplosionData data = new ExplosionData(ExplosionData.ExplosionType.TOUCH);
             plant.setBaseSkill(new Explosive(data));
+            ExtraHP clone = new ExtraHP(ExtraHP.Type.CLONE);
+            clone.cloneNumber = 2;
+            plant.getPlantfoodSkill().add(clone);
             return  super.allocateSkill(plant);
         }
     },
@@ -153,6 +161,9 @@ public enum PlantType {
         public Plant allocateSkill(Plant plant) {
             ExplosionData data = new ExplosionData(3 ,3); /// this plant has TRAP tag , so by default just when a zombie is close to it , it explodes
             plant.setBaseSkill(new Explosive(data));
+            ExtraHP clone = new ExtraHP(ExtraHP.Type.CLONE);
+            clone.cloneNumber = 2;
+            plant.getPlantfoodSkill().add(clone);
             return  super.allocateSkill(plant);
         }
     },
@@ -202,10 +213,36 @@ public enum PlantType {
             return  super.allocateSkill(plant);
         }
     },
-    TANGLE_KELP,
-    ICEBERG_LETTUCE,
-    HOT_POTATO,
-    GRAVE_BUSTER,
+    TANGLE_KELP{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(ExplosionData.ExplosionType.NEXT_TO);
+            plant.setBaseSkill(new Explosive(data));
+            ExplosionData pf = new ExplosionData(2);
+            Explosive e = new Explosive(pf);
+            e.setRandom(true);
+            plant.getPlantfoodSkill().add(e);
+            return super.allocateSkill(plant);
+        }
+    },
+    ICEBERG_LETTUCE{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            plant.setBaseSkill(new Freeze(Freeze.Type.TOUCH));
+            plant.getPlantfoodSkill().add(new Freeze(Freeze.Type.ALL));
+            return  super.allocateSkill(plant);
+        }
+    },
+    HOT_POTATO{
+
+    },
+    GRAVE_BUSTER{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            plant.setBaseSkill(new Modify(Modify.Type.GRAVE_EATER));
+            return  super.allocateSkill(plant);
+        }
+    },
     /// ---------LOBBERS------------------
     CABBAGE_PULT{
         @Override
@@ -290,13 +327,20 @@ public enum PlantType {
     },
     KIWIBEAST,
     /// ----------WALL_NUTS------------
-    WALL_NUT,
+    WALL_NUT{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            plant.getPlantfoodSkill().add(new ExtraHP(ExtraHP.Type.ARMOR , 4000));
+            return super.allocateSkill(plant);
+        }
+    },
     TALL_NUT{
         @Override
         public Plant allocateSkill(Plant plant) {
             Block skill = new Block();
             plant.setBaseSkill(skill);
-            return   super.allocateSkill(plant);
+            plant.getPlantfoodSkill().add(new  ExtraHP(ExtraHP.Type.ARMOR , 8000));
+            return super.allocateSkill(plant);
         }
     },
     ENDURIAN{
@@ -329,23 +373,45 @@ public enum PlantType {
         public Plant allocateSkill(Plant plant) {
             Block skill = new Block();
             plant.setBaseSkill(skill);
+            ExtraHP pf = new ExtraHP(ExtraHP.Type.ARMOR , 6000);
+            pf.explosive = true;
+            plant.getPlantfoodSkill().add(pf);
             return   super.allocateSkill(plant);
         }
     },
-    PUMPKIN,
+    PUMPKIN{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            plant.setBaseSkill(new  ExtraHP(ExtraHP.Type.ARMOR , plant.getHp()));
+            return super.allocateSkill(plant);
+        }
+    },
     SUN_BEAN{
         @Override
         public Plant allocateSkill(Plant plant) {
             Block skill = new Block();
             plant.setBaseSkill(skill);
+            plant.getPlantfoodSkill().add(new ExtraHP(ExtraHP.Type.ARMOR , 10000));
             return super.allocateSkill(plant);
         }
     },
     /// --------MODIFIERS-----------
-    TORCHWOOD,
+    TORCHWOOD{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            plant.setBaseSkill(new Modify());
+            return super.allocateSkill(plant);
+        }
+    },
     HYPNO_SHROOM,
     IMITATER,
-    LILY_PAD,
+    LILY_PAD{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            plant.setBaseSkill(new  Modify());
+            return super.allocateSkill(plant);
+        }
+    },
     /// --------HOMING--------------
     CAULIPOWER{
         @Override

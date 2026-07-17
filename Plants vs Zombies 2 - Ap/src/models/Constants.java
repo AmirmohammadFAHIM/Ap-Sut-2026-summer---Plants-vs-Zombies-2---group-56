@@ -12,5 +12,6 @@ public class Constants {
     public final static int PlantWhatYouGet_StartingSunCount = 800;
     public final static int DisasterZombiesBaseCount = 3;
     public final static float TornadoVelocity = 200f;
+    public final static float EndurianArmorDamage = 80f;
 
 }

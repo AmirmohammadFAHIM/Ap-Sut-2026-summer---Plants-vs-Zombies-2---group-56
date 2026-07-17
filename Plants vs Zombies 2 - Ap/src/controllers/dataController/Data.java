@@ -51,27 +51,12 @@ public class Data {
         return null;
     }
 
-    public static void setCurrentUser(User user) {
-        currentUser = user;
-    }
+    public static void setCurrentUser(User user) { currentUser = user; }
+    public static User getCurrentUser() { return currentUser; }
+    public static void setTempUser(User user) { tempUser = user; }
+    public static User getTempUser() { return tempUser; }
+    public static ArrayList<User> getAllUsers() { return allUsers; }
 
-    public static User getCurrentUser() {
-        return currentUser;
-    }
-
-    public static void setTempUser(User user) {
-        tempUser = user;
-    }
-
-    public static User getTempUser() {
-        return tempUser;
-    }
-
-    public void saveGame() {
-
-    }
-
-    public void deserializeGame() {
-
-    }
+    public void saveGame() { }
+    public void deserializeGame() { }
 }

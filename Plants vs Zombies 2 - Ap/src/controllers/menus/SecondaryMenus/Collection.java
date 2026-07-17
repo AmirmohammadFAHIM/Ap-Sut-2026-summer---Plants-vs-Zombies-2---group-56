@@ -3,6 +3,7 @@ package controllers.menus.SecondaryMenus;
 import controllers.dataController.Data;
 import controllers.menus.Menu;
 import models.User;
+import models.factory.builder.PlantsSkillAllocator;
 
 public class Collection implements Menu {
 
@@ -16,19 +17,28 @@ public class Collection implements Menu {
     }
 
     public void showunlockedPlant() {
-        System.out.println("Showing unlocked plants...");
+        User user = Data.getCurrentUser();
+        if (user != null) {
+            System.out.println("--- Unlocked Plants ---");
+            for (String plant : user.getUnlockedPlantsNames()) {
+                System.out.println("- " + plant);
+            }
+        }
     }
 
     public void showunlockedZombie() {
-        System.out.println("Showing unlocked zombies...");
+        System.out.println("Showing unlocked zombies... (To be integrated with Adventure mode progression)");
     }
 
     public void showAllPlants() {
-        System.out.println("Showing all plants in the game...");
+        System.out.println("--- All Plants in the Game ---");
+        for (PlantsSkillAllocator plant : PlantsSkillAllocator.values()) {
+            System.out.println("- " + plant.name());
+        }
     }
 
     public void showAllZombies() {
-        System.out.println("Showing all zombies in the game...");
+        System.out.println("Showing all zombies in the game... (Pending Enum creation)");
     }
 
     public void showZombie(String zombieName) {
@@ -40,18 +50,30 @@ public class Collection implements Menu {
     }
 
     public void upgradePlant(String plantName) {
-        System.out.println("Upgrading plant: " + plantName);
+        System.out.println("Upgrading plant: " + plantName + " (Logic connects to Seed packets later)");
     }
 
     public void buyPlant(String plantName) {
         User currentUser = Data.getCurrentUser();
         if (currentUser != null) {
+            String upperName = plantName.toUpperCase();
+
+            if (currentUser.getUnlockedPlantsNames().contains(upperName)) {
+                System.out.println("Error: You already own this plant.");
+                return;
+            }
+
             if (currentUser.getCoins() >= 2000) {
                 currentUser.addCoins(-2000);
+                currentUser.getUnlockedPlantsNames().add(upperName);
+
+                // ارسال یک خبر/نوتیفیکیشن به کاربر
+                News.pushNewsToUser(currentUser, "New plant unlocked: " + upperName);
+
                 Data.saveUser();
-                System.out.println("Plant " + plantName + " purchased successfully.");
+                System.out.println("Plant " + upperName + " purchased successfully.");
             } else {
-                System.out.println("Error: not enough coins to purchase this plant. 2000 coins required.");
+                System.out.println("Error: Not enough coins to purchase this plant. 2000 coins required.");
             }
         }
     }

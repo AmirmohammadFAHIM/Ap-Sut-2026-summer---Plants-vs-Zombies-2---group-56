@@ -32,6 +32,28 @@ public class Profile implements Menu {
         }
     }
 
+    public void ChangeUserName(String newUsername) {
+        User currentUser = Data.getCurrentUser();
+        if (currentUser != null) {
+            if (currentUser.getName().equals(newUsername)) {
+                System.out.println("Error: new username cannot be the same as the current one.");
+                return;
+            }
+            if (!Pattern.matches(RegexHelper.USERNAME_PATTERN, newUsername)) {
+                System.out.println("Error: username format is invalid.");
+                return;
+            }
+            if (Data.isUsernameExists(newUsername)) {
+                System.out.println("Error: username is already taken.");
+                return;
+            }
+
+            currentUser.setName(newUsername);
+            Data.saveUser();
+            System.out.println("Username changed successfully.");
+        }
+    }
+
     public void ChangeNickName(String newNickname) {
         if (newNickname == null || newNickname.length() < 3 || newNickname.length() > 30) {
             System.out.println("Error: nickname length is invalid.");

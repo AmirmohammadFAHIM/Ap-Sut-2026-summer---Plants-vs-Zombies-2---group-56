@@ -8,6 +8,7 @@ public class Tile {
     private boolean plantable = true;
     private boolean zombieSpawner = false;
     private boolean empty = true;
+    private boolean water = false;
     private boolean block =  false;
     private float hp;
     private int line;
@@ -117,5 +118,13 @@ public class Tile {
 
     public void setEmpty(boolean empty) {
         this.empty = empty;
+    }
+
+    public boolean isWater() {
+        return water;
+    }
+
+    public void setWater(boolean water) {
+        this.water = water;
     }
 }

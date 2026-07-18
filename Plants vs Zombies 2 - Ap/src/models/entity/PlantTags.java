@@ -28,5 +28,7 @@ public enum PlantTags {
 
     AoE,
 
+    WATER,
+
     SUN;
 }

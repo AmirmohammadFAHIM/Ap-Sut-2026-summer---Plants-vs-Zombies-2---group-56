@@ -21,6 +21,7 @@ public class Plant extends Entity {
     private ArrayList<Skill> plantfoodSkill;
     private boolean frozen = false;
     private boolean cat = false;
+    public boolean onLilyPad = false;
     private float lifeTime;
     private int freezeLevel = 0;
     private ArrayList<PlantArmor> armor;

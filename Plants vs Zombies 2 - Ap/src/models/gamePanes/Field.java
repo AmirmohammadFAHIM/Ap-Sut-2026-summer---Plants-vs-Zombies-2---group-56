@@ -13,13 +13,15 @@ public class Field {
     private int width;
     private int height;
     private ArrayList<ArrayList<Tile>> tiles;
-    private ArrayList<Moaner>  moaners = new ArrayList<>(5);
+    private final ArrayList<Moaner>  moaners = new ArrayList<>(5);
+    private int WaveLimitColumn;
+    private int waterCurrentSurface;
 
     public void initField(Chapters chapter , int level){
             initFirstTwoColumns(chapter);
             int specialTiles = 3 * level;
-            /// write a recursive function to fill the other parts of the field.
             initSpecials(chapter ,  specialTiles);
+           if(chapter == Chapters.BigWaveBeach) initWater();
         for (int i = 0; i < 5; i++) {
             Moaner moaner = new Moaner(i);
             moaners.add(moaner);
@@ -57,14 +59,16 @@ public class Field {
             }
 
 
-    public void updateField(){
+
+            private void initWater(){
+                for (int i = 8; i > 6 ; i--) {
+                    for (int j = 0; j < 5; j++) {
+                        tiles.get(j).get(i).setWater(true);
+                    }
+                }
+            }
 
 
-    };
-
-    public void Locactions(){
-
-    };
 
     public int getWidth() {
         return width;
@@ -88,5 +92,33 @@ public class Field {
 
     public void setTiles(ArrayList<ArrayList<Tile>> tiles) {
         this.tiles = tiles;
+    }
+
+    public ArrayList<Moaner> getMoaners() {
+        return moaners;
+    }
+
+    public int getWaveLimitColumn() {
+        return WaveLimitColumn;
+    }
+
+    public void setWaveLimitColumn(int waveLimitColumn) {
+        WaveLimitColumn = waveLimitColumn;
+    }
+
+    public Random getRand() {
+        return rand;
+    }
+
+    public void setRand(Random rand) {
+        this.rand = rand;
+    }
+
+    public int getWaterCurrentSurface() {
+        return waterCurrentSurface;
+    }
+
+    public void setWaterCurrentSurface(int waterCurrentSurface) {
+        this.waterCurrentSurface = waterCurrentSurface;
     }
 }

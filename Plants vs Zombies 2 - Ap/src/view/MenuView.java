@@ -1,6 +1,6 @@
 package view;
 
-public interface GetInput {
+public interface MenuView {
 
     public void input();
 }

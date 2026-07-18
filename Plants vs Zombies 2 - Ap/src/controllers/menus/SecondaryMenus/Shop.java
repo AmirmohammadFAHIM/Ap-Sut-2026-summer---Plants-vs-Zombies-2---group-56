@@ -5,7 +5,8 @@ import controllers.menus.Menu;
 import models.Pot;
 import models.User;
 import models.entity.Seed;
-import models.factory.builder.PlantsSkillAllocator;
+import models.factory.builder.PlantType;
+import models.factory.builder.PlantType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -117,7 +118,7 @@ public class Shop implements Menu {
 
     public void setDailyOffer() {
         // دریافت تمام گیاهان تعریف شده در بازی به صورت خودکار از طریق Enum
-        PlantsSkillAllocator[] allPlants = PlantsSkillAllocator.values();
+        PlantType[] allPlants = PlantType.values();
 
         // انتخاب یک گیاه کاملاً تصادفی از بین تمام گیاهان
         currentDailyPlant = allPlants[new Random().nextInt(allPlants.length)].name();

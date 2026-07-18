@@ -1,6 +1,7 @@
 package models;
 
 import models.GameAdventure.Chapter;
+import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
 import models.entity.Plant;
 import models.entity.Zombie;
@@ -21,7 +22,7 @@ public class User implements Serializable {
     private int securityQuestionNumber;
     private String securityAnswer;
 
-    private Chapter chapter;
+    private Chapters chapter;
     private Level level;
     private ArrayList<Zombie> zombies;
     private ArrayList<Plant> plants;
@@ -103,6 +104,10 @@ public class User implements Serializable {
     public void addRandomSeeds(int amount) { this.randomSeeds += amount; }
     public String getLastDailyPurchaseDate() { return lastDailyPurchaseDate; }
     public void setLastDailyPurchaseDate(String date) { this.lastDailyPurchaseDate = date; }
+
+    public Chapters getChapter() {
+        return chapter;
+    }
 
     public void addSpecificSeed(String plantType, int amount) {
         if (this.specificSeeds == null) this.specificSeeds = new HashMap<>();

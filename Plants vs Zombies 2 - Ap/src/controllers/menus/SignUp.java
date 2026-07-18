@@ -32,12 +32,13 @@ public class SignUp implements Menu {
         }
 
         if (!password.equals(passwordConfirm)) {
-            System.out.println("Error: passwords do not match.");
+            System.out.println("Error: passwords does not match.");
             return;
         }
 
         if (!isValidPassword(password)) {
-            System.out.println("Error: weak password. A strong password must be at least 8 characters long and contain uppercase letters, lowercase letters, numbers, and special symbols.");
+            System.out.println("Error: weak password. A strong password must be at least 8 characters long" +
+                    " and contain uppercase letters, lowercase letters, numbers, and special symbols.");
             return;
         }
 

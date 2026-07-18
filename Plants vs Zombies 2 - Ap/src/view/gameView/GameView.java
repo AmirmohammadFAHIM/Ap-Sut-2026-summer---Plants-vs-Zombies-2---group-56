@@ -2,10 +2,9 @@ package view.gameView;
 
 import controllers.menus.gameController.GameController;
 import models.games.BaseGame;
-import models.games.Game;
-import view.GetInput;
+import view.MenuView;
 
-public class GameView implements GetInput {
+public class GameView implements MenuView {
     GameController controller;
     @Override
     public void input() {

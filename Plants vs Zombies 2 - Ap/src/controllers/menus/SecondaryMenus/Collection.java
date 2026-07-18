@@ -3,7 +3,7 @@ package controllers.menus.SecondaryMenus;
 import controllers.dataController.Data;
 import controllers.menus.Menu;
 import models.User;
-import models.factory.builder.PlantsSkillAllocator;
+import models.factory.builder.PlantType;
 
 public class Collection implements Menu {
 
@@ -32,7 +32,7 @@ public class Collection implements Menu {
 
     public void showAllPlants() {
         System.out.println("--- All Plants in the Game ---");
-        for (PlantsSkillAllocator plant : PlantsSkillAllocator.values()) {
+        for (PlantType plant : PlantType.values()) {
             System.out.println("- " + plant.name());
         }
     }

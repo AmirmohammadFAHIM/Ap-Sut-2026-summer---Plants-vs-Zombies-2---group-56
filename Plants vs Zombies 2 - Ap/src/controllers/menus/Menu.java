@@ -1,7 +1,7 @@
 package controllers.menus;
 
 public interface Menu{
-    public void ChangeMenu();
+    public String ChangeMenu(String menuName);
 
     public default void ShowCurrentMenu(){
 

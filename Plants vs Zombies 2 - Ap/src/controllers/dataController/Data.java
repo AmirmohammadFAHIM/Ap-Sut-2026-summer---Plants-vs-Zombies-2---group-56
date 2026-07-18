@@ -1,15 +1,18 @@
 package controllers.dataController;
 
 import models.User;
+import models.factory.builder.PlantType;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Data {
     private static final String USERS_FILE = "users_data.dat";
     private static ArrayList<User> allUsers = new ArrayList<>();
     private static User currentUser = null;
     private static User tempUser = null;
+    private static HashMap<PlantType , PlantData> plants = new HashMap<>();
 
     public static void saveUser() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(USERS_FILE))) {
@@ -56,6 +59,14 @@ public class Data {
     public static void setTempUser(User user) { tempUser = user; }
     public static User getTempUser() { return tempUser; }
     public static ArrayList<User> getAllUsers() { return allUsers; }
+
+    public static HashMap<PlantType, PlantData> getPlants() {
+        return plants;
+    }
+
+    public static void setPlants(HashMap<PlantType, PlantData> plants) {
+        Data.plants = plants;
+    }
 
     public void saveGame() { }
     public void deserializeGame() { }

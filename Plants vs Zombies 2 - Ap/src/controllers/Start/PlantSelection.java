@@ -1,5 +1,7 @@
 package controllers.Start;
 
+import controllers.dataController.Data;
+import controllers.dataController.SeedPackage;
 import models.App;
 import models.entity.Plant;
 import models.factory.PlantFactory;
@@ -26,13 +28,13 @@ public class PlantSelection {
     public void showavailablePlants() {
     }
 
-    public Plant selectPlant(String plantName) {
+    public SeedPackage selectPlant(String plantName) {
         try {
             PlantType plantType = PlantType.valueOf(plantName);
             if(!plantsToChoose.contains(plantType)){
                 return null;
             }
-            return factory.CreatePlant(plantName);
+            return new SeedPackage(plantType , Data.getPlants().get(plantType).getRecharge());
         }catch (Exception e){
             return null;
         }

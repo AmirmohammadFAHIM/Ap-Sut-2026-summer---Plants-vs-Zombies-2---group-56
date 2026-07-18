@@ -411,6 +411,7 @@ public enum PlantType {
             plant.setBaseSkill(new  Modify());
             return super.allocateSkill(plant);
         }
+        // TODO: Implement dispose() for this plant, so when It's plants , the tile is plantable and when disposed , It's no longer plantable
     },
     /// --------HOMING--------------
     CAULIPOWER{

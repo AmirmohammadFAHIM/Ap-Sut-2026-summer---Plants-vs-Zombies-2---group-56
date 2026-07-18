@@ -1,6 +1,5 @@
 package models.games.specialGames;
 
-import models.entity.Plant;
 import models.entity.PlantCategory;
 import models.factory.builder.PlantType;
 import models.games.BaseGame;
@@ -25,16 +24,9 @@ public class LockedPlants extends BaseGame implements SpecialGame {
 
         if(!available_plants.isEmpty() && lockType == LockType.ByCategory) {
             PlantCategory lock;
-            lock = available_plants.getLast().getCategory();
+            lock = available_plants.lastEntry().getValue().getPlant().getCategory();
 
-            Iterator iterator = selection.getPlantsToChoose().iterator();
-
-            while(iterator.hasNext()){
-                PlantType plant = (PlantType) iterator.next();
-                if(plant.getCategory().equals(lock)){
-                    iterator.remove();
-                }
-            }
+            selection.getPlantsToChoose().removeIf(plant -> plant.getCategory().equals(lock));
         }
         return super.startGame(plantName);
 

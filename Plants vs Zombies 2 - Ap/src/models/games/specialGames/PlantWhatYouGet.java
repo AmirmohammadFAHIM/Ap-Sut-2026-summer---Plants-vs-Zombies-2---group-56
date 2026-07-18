@@ -41,7 +41,7 @@ public class PlantWhatYouGet extends BaseGame implements SpecialGame {
         }
         else if(!plantFinished){
             int x , y; // get them from the regex(input)
-            String plantName; // same thing here
+            String plantName = null; // same thing here
             plant(plantName , x , y);
             /// TODO: cost the price of the plant from the suns in the game
             plantFinished = sunCount == 0;

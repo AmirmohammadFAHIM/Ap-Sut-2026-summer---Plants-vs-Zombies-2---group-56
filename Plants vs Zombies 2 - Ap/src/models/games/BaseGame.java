@@ -2,19 +2,24 @@ package models.games;
 
 import commands.GameCommands;
 import controllers.Start.PlantSelection;
+import controllers.dataController.SeedPackage;
 import models.App;
 import models.Constants;
 import models.GameAdventure.*;
 import models.factory.PlantFactory;
+import models.factory.builder.PlantType;
 import models.factory.builder.SunBuilder;
 import models.gamePanes.Field;
+import models.gamePanes.Tile;
 import models.gamePanes.Wave;
 import models.entity.Bullet;
 import models.entity.Plant;
 import models.entity.Sun;
 import models.entity.Zombie;
+import models.utils.Result;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class BaseGame implements Game {
     public enum GameState{STARTING , PLAYING , PAUSE , END}
@@ -24,7 +29,7 @@ public class BaseGame implements Game {
     protected Field field ;
     protected ArrayList<Wave> waves;
     protected ArrayList<Plant> plants_inField;
-    protected ArrayList<Plant> available_plants;
+    protected LinkedHashMap<PlantType , SeedPackage> available_plants;
     protected SunBuilder sunBuilder;
     protected Wave currentWave;
     protected Wave previousWave;
@@ -33,6 +38,7 @@ public class BaseGame implements Game {
     protected ArrayList<Sun> suns;
     protected GameCommands StartGameCommand;
     protected ChapterSpecialEvent event;
+    protected PlantFactory plantFactory = new PlantFactory();
 
     public GameCommands getStartGameCommand() {
         return StartGameCommand;
@@ -61,13 +67,12 @@ public class BaseGame implements Game {
 
     @Override
     public boolean startGame(String plantName) {
-        /// TO DO: GET THE STRING , ADD THE PLANT TO THE AVAILABLE PLANTS , WHEN FULL , RETURN TRUE: MEANS WE ABOUT TO START
-        Plant selected_plant = selection.selectPlant(plantName);
-        if(available_plants.contains(selected_plant)) {
+        SeedPackage selected_plant = selection.selectPlant(plantName);
+        if(available_plants.containsKey(selected_plant.getPlant())) {
             return false;
         }
         else  {
-            available_plants.add(selected_plant);
+            available_plants.put(selected_plant.getPlant(), selected_plant);
         }
 
         return available_plants.size() == Constants.Plants_count_in_a_game;
@@ -104,8 +109,34 @@ public class BaseGame implements Game {
 
 
     @Override
-    public void plant(String plantName , int x , int y) {
+    public String plant(String plantName , int x , int y) {
+        String name = plantName.replaceAll(" " , "_").toUpperCase();
+        Result findPlant = plantAvailable(name);
+        if(!findPlant.success()) return findPlant.message();
+        else if(isEmpty(x, y)) return "The coordination is not empty or plantable.";
+        Plant newPlant = plantFactory.CreatePlant(findPlant.plantType());
+        plants_inField.add(newPlant);
+        return "New plant : " + findPlant.plantType().name() + " planted successfully at coordination :" +
+                " ( " + x + "," + y + ")";
 
+    }
+    private Result plantAvailable(String plantName) {
+        try {
+            PlantType type = PlantType.valueOf(plantName.toUpperCase());
+            if(!available_plants.containsKey(type)) {
+                return new Result(false , "The plant doesn't exist on the available plants.",null);
+            }
+            return new Result(true, null,type);
+
+        } catch (IllegalArgumentException e) {
+            return new Result(false , "The plant doesn't exist on the available plants.",null);
+        }
+
+    }
+
+    private boolean isEmpty(int x , int y){
+        Tile toPlantOn = field.getTiles().get(x).get(y);
+        return toPlantOn.isEmpty() && toPlantOn.isPlantable();
     }
 
     @Override
@@ -222,11 +253,11 @@ public class BaseGame implements Game {
         this.selection = selection;
     }
 
-    public ArrayList<Plant> getAvailable_plants() {
+    public LinkedHashMap<PlantType, SeedPackage> getAvailable_plants() {
         return available_plants;
     }
 
-    public void setAvailable_plants(ArrayList<Plant> available_plants) {
+    public void setAvailable_plants(LinkedHashMap<PlantType, SeedPackage> available_plants) {
         this.available_plants = available_plants;
     }
 

@@ -103,6 +103,7 @@ public class Zombie {
 
     // ====== UPDATE ======
     public void update(float deltaTime, GameController controller) {
+
         if (dead) return;
 
         updateEffects(deltaTime);
@@ -239,12 +240,6 @@ public class Zombie {
 
     public void die() {
         dead = true;
-
-        // Notify all abilities about death
-        for (Ability ability : abilities) {
-            ability.onDeath(this, controller);
-        }
-
         if (weapon != null) {
             weapon.onOwnerDeath();
         }

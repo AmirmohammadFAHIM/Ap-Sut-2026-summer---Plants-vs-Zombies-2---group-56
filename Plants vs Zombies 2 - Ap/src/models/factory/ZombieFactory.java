@@ -1,36 +1,60 @@
 package models.factory;
 
 import models.config.ZombieConfig;
+import models.config.AbilityConfig;
 import models.npc.Zombie;
+import models.npc.Bullet;
 import models.loader.ZombieDataLoader;
-
-import java.util.*;
+import controllers.observer.*;
 
 public class ZombieFactory {
 
-    private static final Map<String, Zombie> prototypeCache = new HashMap<>();
-
     public static Zombie createZombie(String alias) {
-        if (prototypeCache.containsKey(alias)) {
-            return cloneZombie(prototypeCache.get(alias));
-        }
-
         ZombieConfig config = ZombieDataLoader.getZombieConfig(alias);
         if (config == null) {
             throw new IllegalArgumentException("Unknown zombie alias: " + alias);
         }
 
         Zombie zombie = new Zombie(alias, config);
-        prototypeCache.put(alias, zombie);
+
+        // ====== ADD ABILITIES FROM CONFIG ======
+        if (config.getObjdata().getAbilities() != null) {
+            for (AbilityConfig abilityConfig : config.getObjdata().getAbilities()) {
+                Ability ability = AbilityFactory.create(abilityConfig);
+                if (ability != null) {
+                    zombie.addAbility(ability);
+                }
+            }
+        }
+
+        // ====== ADD BULLET OBSERVERS ======
+        addBulletObservers(zombie, config);
+
         return zombie;
     }
 
-    private static Zombie cloneZombie(Zombie prototype) {
-        ZombieConfig config = ZombieDataLoader.getZombieConfig(prototype.getId());
-        return new Zombie(prototype.getId(), config);
-    }
+    private static void addBulletObservers(Zombie zombie, ZombieConfig config) {
+        String objClass = config.getObjclass();
+        String id = config.getPrimaryAlias();
 
-    public static Set<String> getAllZombieTypes() {
-        return ZombieDataLoader.getAllZombieAliases();
+        // Juggler
+        if ("ZombieDarkJugglerProps".equals(objClass)) {
+            zombie.addBulletObserver(new JugglerObserver());
+        }
+
+        // Dragon Imp (fire immunity)
+        if (id != null && id.toLowerCase().contains("dragon")) {
+            zombie.addBulletObserver(new DragonObserver());
+        }
+
+        // Parasol (from armor: Crown or Parasol)
+        if (config.getObjdata().getZombieArmorProps() != null) {
+            for (String armorRef : config.getObjdata().getZombieArmorProps()) {
+                if (armorRef.contains("Crown") || armorRef.contains("Parasol")) {
+                    zombie.addBulletObserver(new ParasolObserver());
+                    break;
+                }
+            }
+        }
     }
 }

@@ -26,6 +26,32 @@ public class BaseGame implements Game {
     protected GameState state =  GameState.STARTING;
     protected PlantSelection selection;
     protected int sunCount = 0;
+    protected int plantFoodsCount = 0;
+
+    public int getPlantFoodsCount() {
+        return plantFoodsCount;
+    }
+
+    public void setPlantFoodsCount(int plantFoodsCount) {
+        this.plantFoodsCount = plantFoodsCount;
+    }
+
+    public PlantFactory getPlantFactory() {
+        return plantFactory;
+    }
+
+    public void setPlantFactory(PlantFactory plantFactory) {
+        this.plantFactory = plantFactory;
+    }
+
+    public int getWaveID() {
+        return waveID;
+    }
+
+    public void setWaveID(int waveID) {
+        this.waveID = waveID;
+    }
+
     protected Field field ;
     protected ArrayList<Wave> waves;
     protected ArrayList<Plant> plants_inField;

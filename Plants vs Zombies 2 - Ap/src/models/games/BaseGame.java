@@ -140,8 +140,16 @@ public class BaseGame implements Game {
     }
 
     @Override
-    public void dePlant(int x , int y) {
-
+    public String pluck(int x , int y) {
+            Tile  toPluckOn = field.getTiles().get(x).get(y);
+            for (Plant p : plants_inField){
+                if(p.getLine() == y && p.getTileIndex() == x){
+                    if(toPluckOn.isEmpty() && toPluckOn.isPlantable()
+                            && toPluckOn.isWater()) continue; // This is a lily pad!
+                    p.dispose(this);
+                }
+            }
+            return "Bro don't pluck the plants ):";
     }
 
     @Override
@@ -154,11 +162,12 @@ public class BaseGame implements Game {
 
     @Override
     public void endGame() {
+        // TODO : Implement unlocking plants and updating user's progress(Notice the level is a new level or a passed one).
 
     }
 
     private int waveID = 0;
-    private void attack(float delta) {
+    private Result attack(float delta) {
         if(currentWave.isFinished()){
             previousWave = currentWave;
             currentWave = waves.get(waveID);
@@ -170,7 +179,24 @@ public class BaseGame implements Game {
                case BigWaveBeach -> new Water(this);
                default -> new GraveSpawner(this);
             };
+           return new Result(true , setTheWaveZombies() , null);
         }
+        return new  Result(false, null,null);
+    }
+
+
+    protected String setTheWaveZombies(){
+        StringBuilder output = new StringBuilder();
+        int line = 0;
+        for (Zombie z : zombies) {
+            z.setLine(line % 5);
+            z.setTileIndex(8);
+            z.setX(9 * Tile.getWidth() + 200);
+            z.setY(line * Tile.getHeight());
+            line++;
+            output.append("Zombie spawned at line " + line + " , watch out human!\n");
+        }
+        return output.toString();
     }
 
     public ArrayList<Bullet> getBullets() {

@@ -30,5 +30,7 @@ public enum PlantTags {
 
     WATER,
 
+    STACK,
+
     SUN;
 }

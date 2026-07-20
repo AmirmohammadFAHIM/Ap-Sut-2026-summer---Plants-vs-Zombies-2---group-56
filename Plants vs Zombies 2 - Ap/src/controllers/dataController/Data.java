@@ -1,7 +1,10 @@
 package controllers.dataController;
 
+import models.App;
 import models.User;
 import models.factory.builder.PlantType;
+import view.HomeView;
+import view.SignUpView;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -28,6 +31,18 @@ public class Data {
             allUsers = (ArrayList<User>) ois.readObject();
         } catch (Exception e) {
             allUsers = new ArrayList<>();
+        }
+    }
+
+    public static void setUp(){
+        if(allUsers.isEmpty()) App.setScreen(new SignUpView());
+        else{
+            for (User user : allUsers) {
+                if(user.isStayLoggedIn()){
+                    currentUser = user;
+                    App.setScreen(new HomeView());
+                }
+            }
         }
     }
 

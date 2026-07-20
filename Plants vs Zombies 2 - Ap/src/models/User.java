@@ -5,6 +5,7 @@ import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
 import models.entity.Plant;
 import models.entity.Zombie;
+import models.factory.builder.PlantType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,8 +25,7 @@ public class User implements Serializable {
 
     private Chapters chapter;
     private Level level;
-    private ArrayList<Zombie> zombies;
-    private ArrayList<Plant> plants;
+
 
     private int coins = 0;
     private int diamonds = 0;
@@ -42,6 +42,7 @@ public class User implements Serializable {
     private String lastDailyPurchaseDate = "";
     private HashMap<String, Integer> specificSeeds;
 
+    private ArrayList<PlantType> unlockedPlants;
     private ArrayList<String> unlockedPlantsNames; // گیاهانی که کاربر خریده/آنلاک کرده
     private ArrayList<String> unreadNews;          // اخبار جدید
     private ArrayList<String> readNews;            // اخبار خوانده شده
@@ -53,8 +54,6 @@ public class User implements Serializable {
         this.nickname = nickname;
         this.email = email;
         this.gender = gender;
-        this.zombies = new ArrayList<>();
-        this.plants = new ArrayList<>();
         this.specificSeeds = new HashMap<>();
         this.unlockedPlantsNames = new ArrayList<>();
         this.unreadNews = new ArrayList<>();
@@ -120,6 +119,14 @@ public class User implements Serializable {
     public ArrayList<String> getUnlockedPlantsNames() { return unlockedPlantsNames; }
     public ArrayList<String> getUnreadNews() { return unreadNews; }
     public ArrayList<String> getReadNews() { return readNews; }
+
+    public ArrayList<PlantType> getUnlockedPlants() {
+        return unlockedPlants;
+    }
+
+    public void setUnlockedPlants(ArrayList<PlantType> unlockedPlants) {
+        this.unlockedPlants = unlockedPlants;
+    }
 
     public void updateProgress() { }
 }

@@ -17,9 +17,7 @@ public class PlantSelection {
         this.plantsToChoose = plantsToChoose;
     }
     public PlantSelection(){
-        for (Plant plant : App.getCurrentuser().getPlants()) {
-            plantsToChoose.add(plant.getType());
-        }
+        plantsToChoose.addAll(App.getCurrentuser().getUnlockedPlants());
     }
 
     public void showallPlants() {

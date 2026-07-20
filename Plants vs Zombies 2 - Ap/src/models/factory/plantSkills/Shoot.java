@@ -42,6 +42,8 @@ public class Shoot implements Skill {
             case Front_Back -> front_back_shoot(shooter , data , game);
             case Star -> star_shoot( shooter , data , game);
             case Diagonal -> diagonal(shooter , data , game);
+            case LOBBER -> lobber(shooter , game);
+            case Random -> random(shooter , game , data.getRandomCount());
         }
     }
 
@@ -144,7 +146,7 @@ public class Shoot implements Skill {
                 if(target == null){
                     target = z;
                 }
-                else if(target.getTileInex() > z.getTileInex()){
+                else if(target.getTileIndex() > z.getTileIndex()){
                     target = z;
                 }
             }

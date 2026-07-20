@@ -240,11 +240,9 @@ public class Zombie {
     public void die() {
         dead = true;
 
-        // Release stolen sun (Ra / Turquoise)
+        // Notify all abilities about death
         for (Ability ability : abilities) {
-            if (ability instanceof SunRobbingAbility) {
-                ((SunRobbingAbility) ability).releaseStolenSun();
-            }
+            ability.onDeath(this, controller);
         }
 
         if (weapon != null) {

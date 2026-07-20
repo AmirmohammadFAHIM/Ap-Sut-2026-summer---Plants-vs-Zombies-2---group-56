@@ -1,6 +1,7 @@
 package controllers.menus.SecondaryMenus;
 
 import controllers.dataController.Data;
+import models.App;
 import models.GreenHouse;
 import models.User;
 import controllers.menus.Menu;
@@ -10,7 +11,18 @@ public class GreenHouseController implements Menu {
     private GreenHouse greenHouse;
 
     @Override
-    public void ChangeMenu() {
+    public String ChangeMenu(String menuName) {
+        if (menuName.equalsIgnoreCase("Shop menu")) {
+            App.setScreen(new view.ShopView());
+            return "Changed menu successfully to Shop menu";
+        }
+        return "Invalid menu transition from GreenHouse menu.";
+    }
+
+    @Override
+    public void exitMenu() {
+        App.setScreen(new view.PlayView());
+        System.out.println("Returned to Play Menu.");
     }
 
     @Override

@@ -33,6 +33,11 @@ public class Home implements Menu {
     }
 
     @Override
+    public void exitMenu() {
+        System.out.println("Error: Use 'menu logout' to exit Home menu.");
+    }
+
+    @Override
     public void ShowCurrentMenu() {
         System.out.println("--- Home Menu ---");
     }

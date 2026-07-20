@@ -1,6 +1,7 @@
 package controllers.menus;
 
 import controllers.dataController.Data;
+import models.App;
 import models.User;
 
 import java.security.MessageDigest;
@@ -8,7 +9,14 @@ import java.security.MessageDigest;
 public class LogIn implements Menu {
 
     @Override
-    public void ChangeMenu() {
+    public String ChangeMenu(String menuName) {
+        return "Invalid menu transition from Log In menu.";
+    }
+
+    @Override
+    public void exitMenu() {
+        App.setScreen(new view.SignUpView());
+        System.out.println("Returned to Sign Up Menu.");
     }
 
     @Override

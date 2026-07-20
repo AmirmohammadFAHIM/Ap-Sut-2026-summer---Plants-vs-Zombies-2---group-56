@@ -41,6 +41,7 @@ public class PlayMenu implements Menu {
 
     @Override
     public void exitMenu() {
-        Menu.super.exitMenu();
+        App.setScreen(new view.HomeView());
+        System.out.println("Returned to Home Menu.");
     }
 }

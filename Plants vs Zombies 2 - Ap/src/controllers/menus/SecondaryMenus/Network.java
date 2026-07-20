@@ -1,12 +1,19 @@
 package controllers.menus.SecondaryMenus;
 
 import controllers.menus.Menu;
+import models.App;
 
 public class Network implements Menu {
 
     @Override
-    public void ChangeMenu() {
+    public String ChangeMenu(String menuName) {
+        return "Invalid menu transition from this menu.";
+    }
 
+    @Override
+    public void exitMenu() {
+        App.setScreen(new view.HomeView());
+        System.out.println("Returned to Home Menu.");
     }
 
     @Override

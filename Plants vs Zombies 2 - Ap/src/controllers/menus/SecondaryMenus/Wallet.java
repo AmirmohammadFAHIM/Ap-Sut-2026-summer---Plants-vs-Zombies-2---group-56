@@ -2,13 +2,20 @@ package controllers.menus.SecondaryMenus;
 
 import controllers.dataController.Data;
 import controllers.menus.Menu;
+import models.App;
 import models.User;
 
 public class Wallet implements Menu {
 
     @Override
-    public void ChangeMenu() {
+    public String ChangeMenu(String menuName) {
+        return "Invalid menu transition from this menu.";
+    }
 
+    @Override
+    public void exitMenu() {
+        App.setScreen(new view.PlayView());
+        System.out.println("Returned to Play Menu.");
     }
 
     @Override

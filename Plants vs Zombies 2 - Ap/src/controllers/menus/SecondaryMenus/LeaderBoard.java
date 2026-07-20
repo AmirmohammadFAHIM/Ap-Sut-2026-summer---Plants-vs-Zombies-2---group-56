@@ -1,6 +1,7 @@
 package controllers.menus.SecondaryMenus;
 
 import controllers.dataController.Data;
+import models.App;
 import models.User;
 import controllers.menus.Menu;
 import java.util.ArrayList;
@@ -9,7 +10,14 @@ import java.util.Comparator;
 public class LeaderBoard implements Menu{
 
     @Override
-    public void ChangeMenu() {
+    public String ChangeMenu(String menuName) {
+        return "Invalid menu transition from this menu.";
+    }
+
+    @Override
+    public void exitMenu() {
+        App.setScreen(new view.PlayView());
+        System.out.println("Returned to Play Menu.");
     }
 
     @Override

@@ -1,6 +1,7 @@
 package controllers.menus;
 
 import controllers.dataController.Data;
+import models.App;
 import models.User;
 import models.utils.RegexHelper;
 
@@ -10,7 +11,18 @@ import java.util.regex.Pattern;
 public class SignUp implements Menu {
 
     @Override
-    public void ChangeMenu() {
+    public String ChangeMenu(String menuName) {
+        if (menuName.equalsIgnoreCase("Login menu")) {
+            App.setScreen(new view.LogInView());
+            return "Changed menu successfully to Login menu";
+        }
+        return "Invalid menu transition from Sign Up menu.";
+    }
+
+    @Override
+    public void exitMenu() {
+        System.out.println("Exiting program...");
+        System.exit(0);
     }
 
     @Override

@@ -2,6 +2,7 @@ package controllers.menus.SecondaryMenus;
 
 import controllers.dataController.Data;
 import controllers.menus.Menu;
+import models.App;
 import models.User;
 import models.utils.RegexHelper;
 
@@ -11,7 +12,14 @@ import java.util.regex.Pattern;
 public class Profile implements Menu {
 
     @Override
-    public void ChangeMenu() {
+    public String ChangeMenu(String menuName) {
+        return "Invalid menu transition from this menu.";
+    }
+
+    @Override
+    public void exitMenu() {
+        App.setScreen(new view.HomeView());
+        System.out.println("Returned to Home Menu.");
     }
 
     @Override

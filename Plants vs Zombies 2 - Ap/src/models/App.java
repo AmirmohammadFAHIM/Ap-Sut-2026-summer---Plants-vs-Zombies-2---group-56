@@ -1,5 +1,6 @@
 package models;
 
+import controllers.dataController.Data;
 import controllers.menus.Menu;
 import view.MenuView;
 
@@ -32,10 +33,6 @@ public class App {
     }
 
     public static User getCurrentuser() {
-        return currentuser;
-    }
-
-    public static void setCurrentuser(User currentuser) {
-        App.currentuser = currentuser;
+        return Data.getCurrentUser() ;
     }
 }

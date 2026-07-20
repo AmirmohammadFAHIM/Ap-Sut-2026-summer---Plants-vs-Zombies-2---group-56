@@ -2,6 +2,7 @@ package controllers.menus.SecondaryMenus;
 
 import controllers.dataController.Data;
 import controllers.menus.Menu;
+import models.App;
 import models.Pot;
 import models.User;
 import models.entity.Seed;
@@ -20,7 +21,14 @@ public class Shop implements Menu {
     private String currentDailyPlant = "PEASHOOTER";
 
     @Override
-    public void ChangeMenu() {
+    public String ChangeMenu(String menuName) {
+        return "Invalid menu transition from Shop menu.";
+    }
+
+    @Override
+    public void exitMenu() {
+        App.setScreen(new view.GreenHouseView());
+        System.out.println("Returned to GreenHouse Menu.");
     }
 
     @Override

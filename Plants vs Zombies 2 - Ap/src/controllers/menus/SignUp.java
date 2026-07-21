@@ -9,13 +9,20 @@ import java.util.regex.Pattern;
 
 public class SignUp implements Menu {
 
+
     @Override
-    public void ChangeMenu() {
+    public String ChangeMenu(String menuName) {
+        return "";
     }
 
     @Override
     public void ShowCurrentMenu() {
         System.out.println("--- Sign Up Menu ---");
+    }
+
+    @Override
+    public void exitMenu() {
+        Menu.super.exitMenu();
     }
 
     public void register(String username, String password, String passwordConfirm,

@@ -1,6 +1,6 @@
 package controllers.menus.SecondaryMenus;
 
-import controllers.dataController.Data;
+import controllers.datacontroller.Data;
 import models.App;
 import models.GreenHouse;
 import models.User;

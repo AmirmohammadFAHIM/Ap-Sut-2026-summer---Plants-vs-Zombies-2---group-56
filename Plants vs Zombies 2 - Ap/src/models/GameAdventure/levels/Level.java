@@ -1,12 +1,14 @@
 package models.GameAdventure.levels;
 
 import models.GameAdventure.Chapters;
+import models.factory.builder.PlantType;
 
-import java.util.Objects;
+import java.util.ArrayList;
 
 public class Level {
     private String levelType;
-    private Chapters chapters;
+    private Chapters chapter;
+    private ArrayList<PlantType> unlockingPlants;
     private int id;
     private boolean unlocked = false;
     private boolean won = false;
@@ -61,11 +63,19 @@ public class Level {
         this.baseHardness = baseHardness;
     }
 
-    public Chapters getChapters() {
-        return chapters;
+    public Chapters getChapter() {
+        return chapter;
     }
 
-    public void setChapters(Chapters chapters) {
-        this.chapters = chapters;
+    public void setChapter(Chapters chapter) {
+        this.chapter = chapter;
+    }
+
+    public ArrayList<PlantType> getUnlockingPlants() {
+        return unlockingPlants;
+    }
+
+    public void setUnlockingPlants(ArrayList<PlantType> unlockingPlants) {
+        this.unlockingPlants = unlockingPlants;
     }
 }

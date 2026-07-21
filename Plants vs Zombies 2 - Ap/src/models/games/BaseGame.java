@@ -6,16 +6,13 @@ import controllers.dataController.SeedPackage;
 import models.App;
 import models.Constants;
 import models.GameAdventure.*;
+import models.entity.*;
 import models.factory.PlantFactory;
 import models.factory.builder.PlantType;
 import models.factory.builder.SunBuilder;
 import models.gamePanes.Field;
 import models.gamePanes.Tile;
 import models.gamePanes.Wave;
-import models.entity.Bullet;
-import models.entity.Plant;
-import models.entity.Sun;
-import models.entity.Zombie;
 import models.utils.Result;
 
 import java.util.ArrayList;
@@ -109,7 +106,7 @@ public class BaseGame implements Game {
             updatePlants(delta);
             updatePlants(delta);
             updateScene(delta);
-            attack(delta);
+            Result result = attack(delta);
             if(event!=null){
                 event.run(this , delta);
             }
@@ -139,9 +136,14 @@ public class BaseGame implements Game {
         String name = plantName.replaceAll(" " , "_").toUpperCase();
         Result findPlant = plantAvailable(name);
         if(!findPlant.success()) return findPlant.message();
-        else if(isEmpty(x, y)) return "The coordination is not empty or plantable.";
         Plant newPlant = plantFactory.CreatePlant(findPlant.plantType());
+        if(isEmpty(newPlant.getTags().contains(PlantTags.WATER) ,x, y)) return "The coordination is not empty or plantable.";
         plants_inField.add(newPlant);
+        Tile tile = field.getTiles().get(y).get(x);
+        if(plantName.equals("LILY_PAD")){
+            tile.setPlantable(true);
+        }
+        else tile.setEmpty(true);
         return "New plant : " + findPlant.plantType().name() + " planted successfully at coordination :" +
                 " ( " + x + "," + y + ")";
 
@@ -160,9 +162,10 @@ public class BaseGame implements Game {
 
     }
 
-    private boolean isEmpty(int x , int y){
+    private boolean isEmpty(boolean waterPlant , int x , int y){
         Tile toPlantOn = field.getTiles().get(x).get(y);
-        return toPlantOn.isEmpty() && toPlantOn.isPlantable();
+        boolean water = toPlantOn.isWater() || !waterPlant;
+        return toPlantOn.isEmpty() && toPlantOn.isPlantable() && water;
     }
 
     @Override
@@ -178,23 +181,30 @@ public class BaseGame implements Game {
             return "Bro don't pluck the plants ):";
     }
 
+   protected boolean won = false;
+    public boolean isWon() {
+        return won;
+    }
     @Override
-    public boolean check_endGame() {
+    public Result check_endGame() {
         for (Zombie z : zombies) {
-            if(z.getX() <= 0) return true;
+            if(z.getX() <= 0) return new Result(true , "Loss" , null);
         }
-        return false;
+        return new  Result(false, null,null);
     }
 
     @Override
     public void endGame() {
-        // TODO : Implement unlocking plants and updating user's progress(Notice the level is a new level or a passed one).
 
     }
 
     private int waveID = 0;
     private Result attack(float delta) {
         if(currentWave.isFinished()){
+            if(currentWave == waves.getLast()){
+                won = true;
+                return new Result(true , "Won" , null);
+            }
             previousWave = currentWave;
             currentWave = waves.get(waveID);
             zombies.addAll(currentWave.getZombies());

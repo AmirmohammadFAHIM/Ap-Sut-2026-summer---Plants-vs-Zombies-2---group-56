@@ -1,5 +1,7 @@
 package models.games;
 
+import models.utils.Result;
+
 public interface Game {
 
     public void initGame();
@@ -10,7 +12,7 @@ public interface Game {
     public void updateScene(float delta);
     public String plant(String plantName , int x , int y);
     public String pluck(int x , int y);
-    public boolean check_endGame();
+    public Result check_endGame();
     public void endGame();
 
 }

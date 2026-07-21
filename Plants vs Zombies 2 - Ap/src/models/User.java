@@ -25,7 +25,23 @@ public class User implements Serializable {
 
     private Chapters chapter;
     private Level level;
+    private int levelId;
 
+    public void setChapter(Chapters chapter) {
+        this.chapter = chapter;
+    }
+
+    public int getLevelId() {
+        return levelId;
+    }
+
+    public void setLevelId(int levelId) {
+        this.levelId = levelId;
+    }
+
+    public void setPlantFoods(int plantFoods) {
+        this.plantFoods = plantFoods;
+    }
 
     private int coins = 0;
     private int diamonds = 0;
@@ -43,6 +59,7 @@ public class User implements Serializable {
     private HashMap<String, Integer> specificSeeds;
 
     private ArrayList<PlantType> unlockedPlants;
+    private HashMap<PlantType , Integer> levels;
     private ArrayList<String> unlockedPlantsNames; // گیاهانی که کاربر خریده/آنلاک کرده
     private ArrayList<String> unreadNews;          // اخبار جدید
     private ArrayList<String> readNews;            // اخبار خوانده شده
@@ -58,6 +75,9 @@ public class User implements Serializable {
         this.unlockedPlantsNames = new ArrayList<>();
         this.unreadNews = new ArrayList<>();
         this.readNews = new ArrayList<>();
+        /// starting adventure information
+        this.levelId = 1;
+        this.chapter = Chapters.AncientEgypt;
     }
 
     public String getName() { return name; }
@@ -129,4 +149,12 @@ public class User implements Serializable {
     }
 
     public void updateProgress() { }
+
+    public HashMap<PlantType, Integer> getLevels() {
+        return levels;
+    }
+
+    public void setLevels(HashMap<PlantType, Integer> levels) {
+        this.levels = levels;
+    }
 }

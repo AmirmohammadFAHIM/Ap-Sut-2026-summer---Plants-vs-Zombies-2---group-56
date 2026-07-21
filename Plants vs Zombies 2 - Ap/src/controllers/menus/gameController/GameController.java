@@ -1,19 +1,27 @@
 package controllers.menus.gameController;
 
+import controllers.dataController.Data;
 import controllers.dataController.SeedPackage;
+import models.App;
+import models.GameAdventure.Chapters;
+import models.GameAdventure.levels.Level;
+import models.User;
 import models.entity.Plant;
 import models.entity.Zombie;
+import models.factory.builder.PlantType;
 import models.gamePanes.Tile;
 import models.games.BaseGame;
+import models.utils.Result;
+import view.PlayView;
 
 import java.util.ArrayList;
 
 public class GameController implements Controller{/// Main Brain of the game
     private BaseGame game;
+    private Level level;
 
 
 
-    public void gameEnded(){}
 
 
     @Override
@@ -27,13 +35,44 @@ public class GameController implements Controller{/// Main Brain of the game
     }
 
     @Override
-    public void playGame(float delta) {
+    public String playGame(float delta) {
             game.playGame(delta);
-            boolean end = game.check_endGame();
-            if(end){
-                game.setState(BaseGame.GameState.END);
-                game.endGame();
+            Result end = game.check_endGame();
+            if(end.success()){
+                if(end.message().equals("Loss")) return "Brainzzzzzzzzzz!!!!! Deliciouzzzzzzz!!";
             }
+            else if(game.isWon()){
+                end();
+                App.setScreen(new PlayView());
+                return "Sometimes in the life , I'm too competitive , It's good to be competitive.";
+            }
+            return null;
+            // TODO: return the log
+    }
+
+    private void end(){
+        User user = Data.getCurrentUser();
+        user.setLevelId(user.getLevelId()+1); /// you've unlocked new level!
+        if(user.getLevelId() == 5){
+            user.setLevelId(1);
+            Chapters newChapter = switch (user.getChapter()){
+                case AncientEgypt -> Chapters.BigWaveBeach;
+                case BigWaveBeach -> Chapters.FrozenCaves;
+                case FrozenCaves -> Chapters.DarkAge;
+                default -> user.getChapter();
+            };
+            user.setChapter(newChapter);
+        }
+        for (PlantType x : level.getUnlockingPlants()){
+            user.getUnlockedPlants().add(x);
+            user.getUnreadNews().add("Congratulation , You've Unlocked new Plant " +
+                    ", " + x.name() + " !");
+        }
+
+        // TODO : unlocking new zombies
+
+
+
     }
 
     public String showSunAmount(){

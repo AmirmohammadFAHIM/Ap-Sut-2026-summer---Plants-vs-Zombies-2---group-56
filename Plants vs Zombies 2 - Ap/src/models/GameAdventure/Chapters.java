@@ -26,7 +26,11 @@ public enum Chapters {
                     TileType.FROZEN));
         }
     },
-    AncientEgypt;
+    AncientEgypt{
+        {
+            specialTiles = new ArrayList<>(Arrays.asList(TileType.EGYPTIAN_GRAVE));
+        }
+    };
 
     ArrayList<TileType> specialTiles;
     Chapters(){

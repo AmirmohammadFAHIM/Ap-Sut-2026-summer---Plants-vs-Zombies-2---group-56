@@ -3,16 +3,16 @@ package models.games.specialGames;
 import controllers.dataController.Data;
 import controllers.dataController.SeedPackage;
 import models.Constants;
-import models.entity.Plant;
 import models.entity.PlantTags;
 import models.factory.builder.PlantType;
 import models.games.BaseGame;
+import models.utils.Result;
 
 import java.util.ArrayList;
 
 public class NightsOps extends BaseGame implements SpecialGame {
     @Override
-    public boolean check_endGame() {
+    public Result check_endGame() {
        return super.check_endGame();
     }
 

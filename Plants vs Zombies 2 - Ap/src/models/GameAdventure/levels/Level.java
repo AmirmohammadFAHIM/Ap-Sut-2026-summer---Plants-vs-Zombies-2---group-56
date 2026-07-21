@@ -1,6 +1,8 @@
 package models.GameAdventure.levels;
 
 import models.GameAdventure.Chapters;
+import models.factory.builder.PlantType;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -15,6 +17,11 @@ public class Level implements Serializable {
     private float baseHardness;
     // TODO resolved: list of zombies names
     private ArrayList<String> allowedZombies;
+    private ArrayList<PlantType> unlockingPlants;
+
+    public ArrayList<PlantType> getUnlockingPlants() {
+        return unlockingPlants;
+    }
 
     public Level(int id, Chapters chapters, String levelType, boolean unlocked, int waves, float baseHardness) {
         this.id = id;

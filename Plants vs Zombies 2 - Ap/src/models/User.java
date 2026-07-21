@@ -5,6 +5,7 @@ import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
 import models.entity.Plant;
 import models.entity.Zombie;
+import models.factory.builder.PlantType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,18 +13,36 @@ import java.util.HashMap;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
+
     private String name;
     private String nickname;
     private String email;
     private String passwordHash;
     private String gender;
+
     private int securityQuestionNumber;
     private String securityAnswer;
+
     private Chapters chapter;
     private Level level;
-    private ArrayList<Zombie> zombies;
-    private ArrayList<Plant> plants;
-    private ArrayList<models.GameAdventure.Chapter> userChapters;
+    private int levelId;
+
+    public void setChapter(Chapters chapter) {
+        this.chapter = chapter;
+    }
+
+    public int getLevelId() {
+        return levelId;
+    }
+
+    public void setLevelId(int levelId) {
+        this.levelId = levelId;
+    }
+
+    public void setPlantFoods(int plantFoods) {
+        this.plantFoods = plantFoods;
+    }
+
     private int coins = 0;
     private int diamonds = 0;
     private int highestScore = 0;
@@ -31,14 +50,20 @@ public class User implements Serializable {
     private int levelsPassed = 0;
     private int difficultyLevel = 3;
     private boolean isStayLoggedIn = false;
+
+    // ----- متغیرهای فروشگاه، گلخانه، کالکشن و اخبار -----
     private int unlockedPots = 5;
     private int plantFoods = 0;
     private int randomSeeds = 0;
     private String lastDailyPurchaseDate = "";
     private HashMap<String, Integer> specificSeeds;
-    private ArrayList<String> unlockedPlantsNames;
-    private ArrayList<String> unreadNews;
-    private ArrayList<String> readNews;
+
+    private ArrayList<PlantType> unlockedPlants;
+    private HashMap<PlantType , Integer> levels;
+    private ArrayList<String> unlockedPlantsNames; // گیاهانی که کاربر خریده/آنلاک کرده
+    private ArrayList<String> unreadNews;          // اخبار جدید
+    private ArrayList<String> readNews;            // اخبار خوانده شده
+    // ------------------------------------------------
 
     public User(String name, String passwordHash, String nickname, String email, String gender) {
         this.name = name;
@@ -46,20 +71,17 @@ public class User implements Serializable {
         this.nickname = nickname;
         this.email = email;
         this.gender = gender;
-        this.zombies = new ArrayList<>();
-        this.plants = new ArrayList<>();
         this.specificSeeds = new HashMap<>();
         this.unlockedPlantsNames = new ArrayList<>();
         this.unreadNews = new ArrayList<>();
         this.readNews = new ArrayList<>();
-        this.userChapters = new ArrayList<>();
-        for (models.GameAdventure.Chapters type : models.GameAdventure.Chapters.values()) {
-            this.userChapters.add(new models.GameAdventure.Chapter(type));
-        }
+        /// starting adventure information
+        this.levelId = 1;
+        this.chapter = Chapters.AncientEgypt;
     }
 
     public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) { this.name = name; } // اضافه شد برای تغییر یوزرنیم
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public String getNickname() { return nickname; }
@@ -118,13 +140,26 @@ public class User implements Serializable {
     public ArrayList<String> getUnreadNews() { return unreadNews; }
     public ArrayList<String> getReadNews() { return readNews; }
 
-    public void updateProgress() { }
-
-    public ArrayList<models.GameAdventure.Chapter> getUserChapters() {
-        return userChapters;
+    public ArrayList<PlantType> getUnlockedPlants() {
+        return unlockedPlants;
     }
 
-    public void setUserChapters(ArrayList<models.GameAdventure.Chapter> userChapters) {
-        this.userChapters = userChapters;
+    public void setUnlockedPlants(ArrayList<PlantType> unlockedPlants) {
+        this.unlockedPlants = unlockedPlants;
+    }
+
+    public void updateProgress() { }
+
+    public HashMap<PlantType, Integer> getLevels() {
+        return levels;
+    }
+
+    public void setLevels(HashMap<PlantType, Integer> levels) {
+        this.levels = levels;
+    }
+
+    public void setLevelsPassed(int levelsPassed) {
+        if(levelsPassed >= 16) levelsPassed = 16;
+        this.levelsPassed = levelsPassed;
     }
 }

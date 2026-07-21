@@ -1,6 +1,8 @@
 package controllers.datacontroller;
 
-public class Upgrade {
+import java.io.Serializable;
+
+public class Upgrade implements Serializable {
     private String effect;
     private boolean specialFlag;
 

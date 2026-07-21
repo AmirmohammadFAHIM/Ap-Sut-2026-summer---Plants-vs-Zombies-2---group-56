@@ -1,5 +1,7 @@
 package controllers.datacontroller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import models.App;
 import models.User;
 import models.factory.builder.PlantType;
@@ -7,8 +9,10 @@ import view.HomeView;
 import view.SignUpView;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Data {
     private static final String USERS_FILE = "users_data.dat";
@@ -67,6 +71,26 @@ public class Data {
             }
         }
         return null;
+    }
+
+    public static void loadPlantsFromJson(String filePath) {
+        Gson gson = new Gson();
+
+        try (FileReader reader = new FileReader(filePath)) {
+            Type plantListType = new TypeToken<List<PlantData>>() {}.getType();
+            List<PlantData> plantsList = gson.fromJson(reader, plantListType);
+
+            if (plantsList != null) {
+                for (PlantData plant : plantsList) {
+                    PlantType type = PlantType.valueOf(plant.getName());
+                    plants.put(type, plant);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Something went wrong while reading plants data file. \n " + e.getMessage());
+        }
     }
 
     public static void setCurrentUser(User user) { currentUser = user; }

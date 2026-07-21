@@ -2,12 +2,22 @@ package controllers.menus.gameController;
 
 import controllers.menus.Menu;
 import models.App;
+import models.GameAdventure.Chapters;
+import models.GameAdventure.levels.Level;
 import view.*;
+import view.gameView.GameView;
 
 public class PlayMenu implements Menu {
+    private Chapters currentChapter;
+    public PlayMenu() {
+        currentChapter = App.getCurrentuser().getChapter();
+    }
 
 
-    public void startGame() {
+    public String play(int level) {
+        Level toPlay; /// get from the file
+        App.setScreen(new GameView());
+        return "Let's play baby , game on!";
     }
 
     @Override
@@ -33,6 +43,31 @@ public class PlayMenu implements Menu {
         }
 
     }
+
+
+    public String changeChapter(Chapters chapter) {
+        currentChapter = chapter;
+        StringBuilder output = new StringBuilder();
+        int base = switch (App.getCurrentuser().getChapter()){
+            case DarkAge -> 12;
+            case BigWaveBeach -> 4;
+            case FrozenCaves -> 8;
+            default -> 0; // Ancient Egypt
+        };
+        for (int i = 1; i <= 4; i++) {
+            boolean unlocked = App.getCurrentuser().getLevelId() > i;
+            output.append("══════════════ LEVEL " + i +" : " + (unlocked ? "Unlocked" : "Locked"));
+            if(i == App.getCurrentuser().getLevelId() &&
+            chapter == App.getCurrentuser().getChapter()) {
+                output.append(" (You are here now)");
+            }
+            output.append( " ══════════════" + "\n");
+        }
+        return "Welcome to " + chapter.name();
+    }
+
+
+
 
     @Override
     public void ShowCurrentMenu() {

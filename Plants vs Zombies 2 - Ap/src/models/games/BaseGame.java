@@ -2,7 +2,7 @@ package models.games;
 
 import commands.GameCommands;
 import controllers.Start.PlantSelection;
-import controllers.dataController.SeedPackage;
+import controllers.datacontroller.SeedPackage;
 import models.App;
 import models.Constants;
 import models.GameAdventure.*;

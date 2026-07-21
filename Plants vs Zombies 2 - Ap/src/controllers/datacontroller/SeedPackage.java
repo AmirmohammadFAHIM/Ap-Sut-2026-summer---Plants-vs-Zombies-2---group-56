@@ -1,4 +1,4 @@
-package controllers.dataController;
+package controllers.datacontroller;
 
 import models.factory.builder.PlantType;
 

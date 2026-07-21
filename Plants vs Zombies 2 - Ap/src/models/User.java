@@ -157,4 +157,9 @@ public class User implements Serializable {
     public void setLevels(HashMap<PlantType, Integer> levels) {
         this.levels = levels;
     }
+
+    public void setLevelsPassed(int levelsPassed) {
+        if(levelsPassed >= 16) levelsPassed = 16;
+        this.levelsPassed = levelsPassed;
+    }
 }

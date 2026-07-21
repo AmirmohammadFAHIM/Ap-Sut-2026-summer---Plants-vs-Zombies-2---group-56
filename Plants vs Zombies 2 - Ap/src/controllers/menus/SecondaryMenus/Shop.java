@@ -1,11 +1,10 @@
 package controllers.menus.SecondaryMenus;
 
-import controllers.dataController.Data;
+import controllers.datacontroller.Data;
 import controllers.menus.Menu;
 import models.Pot;
 import models.User;
 import models.entity.Seed;
-import models.factory.builder.PlantType;
 import models.factory.builder.PlantType;
 
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-import controllers.dataController.Data;
+import controllers.datacontroller.Data;
 import models.App;
 
 public class Main{

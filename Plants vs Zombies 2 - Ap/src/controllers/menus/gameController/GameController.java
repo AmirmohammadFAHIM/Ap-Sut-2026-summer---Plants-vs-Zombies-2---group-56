@@ -1,7 +1,7 @@
 package controllers.menus.gameController;
 
-import controllers.dataController.Data;
-import controllers.dataController.SeedPackage;
+import controllers.datacontroller.Data;
+import controllers.datacontroller.SeedPackage;
 import models.App;
 import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
@@ -53,6 +53,7 @@ public class GameController implements Controller{/// Main Brain of the game
     private void end(){
         User user = Data.getCurrentUser();
         user.setLevelId(user.getLevelId()+1); /// you've unlocked new level!
+        user.setLevelsPassed(user.getLevelsPassed()+1);
         if(user.getLevelId() == 5){
             user.setLevelId(1);
             Chapters newChapter = switch (user.getChapter()){

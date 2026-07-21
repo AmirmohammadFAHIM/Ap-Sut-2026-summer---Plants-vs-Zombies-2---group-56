@@ -1,6 +1,6 @@
 package controllers.menus;
 
-import controllers.dataController.Data;
+import controllers.datacontroller.Data;
 import models.User;
 import models.utils.RegexHelper;
 

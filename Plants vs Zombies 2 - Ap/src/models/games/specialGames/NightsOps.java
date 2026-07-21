@@ -1,7 +1,7 @@
 package models.games.specialGames;
 
-import controllers.dataController.Data;
-import controllers.dataController.SeedPackage;
+import controllers.datacontroller.Data;
+import controllers.datacontroller.SeedPackage;
 import models.Constants;
 import models.entity.PlantTags;
 import models.factory.builder.PlantType;

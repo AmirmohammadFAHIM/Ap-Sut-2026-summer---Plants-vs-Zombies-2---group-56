@@ -1,4 +1,4 @@
-package controllers.dataController;
+package controllers.datacontroller;
 
 import models.entity.PlantTags;
 
@@ -7,8 +7,10 @@ import java.util.ArrayList;
 public class PlantData {
     private float actionInterval;
     private float hp;
+    private float cost;
     private ArrayList<PlantTags> tags;
     private float recharge;
+    private ArrayList<Upgrade>  upgrades;
 
     public float getRecharge() {
         return recharge;

@@ -1,9 +1,8 @@
 package controllers.Start;
 
-import controllers.dataController.Data;
-import controllers.dataController.SeedPackage;
+import controllers.datacontroller.Data;
+import controllers.datacontroller.SeedPackage;
 import models.App;
-import models.entity.Plant;
 import models.factory.PlantFactory;
 import models.factory.builder.PlantType;
 
@@ -17,9 +16,7 @@ public class PlantSelection {
         this.plantsToChoose = plantsToChoose;
     }
     public PlantSelection(){
-        for (Plant plant : App.getCurrentuser().getPlants()) {
-            plantsToChoose.add(plant.getType());
-        }
+        plantsToChoose.addAll(App.getCurrentuser().getUnlockedPlants());
     }
 
     public void showallPlants() {

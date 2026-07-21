@@ -1,10 +1,20 @@
-package controllers.dataController;
+package controllers.datacontroller;
 
 import models.factory.builder.PlantType;
 
 public class SeedPackage {
     private PlantType plant;
     private float recharge;
+    private float cost;
+
+    public float getCost() {
+        return cost;
+    }
+
+    public void setCost(float cost) {
+        this.cost = cost;
+    }
+
     private boolean available;
     public SeedPackage(PlantType plant, float recharge) {
         this.plant = plant;

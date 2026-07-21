@@ -26,7 +26,10 @@ public class Melee implements Skill{
     }
     @Override
     public void do_skill(Plant plant, BaseGame game) {
-
+        switch (attackType){
+            case  PUNCH -> punch(plant, game);
+            case AoE -> AoE_Punch(plant , game ,edge, punch_numbers);
+        }
     }
 
     @Override
@@ -48,8 +51,8 @@ public class Melee implements Skill{
         ArrayList<Zombie> zombies;
         for (Zombie x : game.getZombies()) {
             if(x.getLine() == plant.getLine()) {
-                if(x.getTileInex() == plant.getTileIndex() + 1 ||
-                x.getTileInex() == plant.getTileIndex() - 1){
+                if(x.getTileIndex() == plant.getTileIndex() + 1 ||
+                x.getTileIndex() == plant.getTileIndex() - 1){
                     x.setHp(x.getHp() - plant.getDamage());
                     /// TO DO: Implement the heat effect on Icy materials of zombies or field
                 }
@@ -61,7 +64,7 @@ public class Melee implements Skill{
     private void AoE_Punch(Plant plant, BaseGame game , int edge , int punch_numbers /*for multi punches(plant food)*/) {
         ArrayList<Zombie> zombies;
         for (Zombie x : game.getZombies()) {
-            if(Math.abs(x.getLine() - plant.getLine()) <= edge && Math.abs(x.getTileInex() - plant.getTileIndex()) <= edge) {
+            if(Math.abs(x.getLine() - plant.getLine()) <= edge && Math.abs(x.getTileIndex() - plant.getTileIndex()) <= edge) {
                 x.setHp(x.getHp() - plant.getDamage() * punch_numbers);
             }
         }

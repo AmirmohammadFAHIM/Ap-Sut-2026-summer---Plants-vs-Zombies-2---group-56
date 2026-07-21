@@ -1,6 +1,7 @@
 package models.factory.plantSkills;
 
 import models.entity.Plant;
+import models.entity.PlantTags;
 import models.factory.PlantFactory;
 import models.factory.plantSkills.skillDatas.PlantArmor;
 import models.gamePanes.Tile;
@@ -23,7 +24,13 @@ public class ExtraHP implements Skill{
     }
     @Override
     public void do_skill(Plant plant, BaseGame game) {
-
+            switch (type){
+                case ARMOR -> armor(plant, game);
+                case CLONE -> clone(plant, game);
+                case HEAL -> heal(plant, game);
+                case LIFE_RESET -> reset(plant, game);
+            }
+            if(plant.getTags().contains(PlantTags.STACK)) stack(plant, game);
     }
 
     @Override

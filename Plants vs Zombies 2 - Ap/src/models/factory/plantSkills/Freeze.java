@@ -12,7 +12,11 @@ public class Freeze implements Skill{
    }
     @Override
     public void do_skill(Plant plant, BaseGame game) {
-
+        switch (type){
+            case LINE:
+            case  TOUCH:
+            case  RANDOM:
+        }
     }
 
     @Override

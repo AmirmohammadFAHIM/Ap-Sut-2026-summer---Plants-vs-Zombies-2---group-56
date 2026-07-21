@@ -3,6 +3,7 @@ package models.games.specialGames;
 import models.factory.builder.PlantType;
 import models.games.BaseGame;
 import models.entity.Plant;
+import models.utils.Result;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ public class SaveOurSeeds extends BaseGame implements SpecialGame {
     }
 
     @Override
-    public boolean check_endGame() {
+    public Result check_endGame() {
         for (Plant p : toProtect) {
             if(!p.isAlive()) return true;
         }

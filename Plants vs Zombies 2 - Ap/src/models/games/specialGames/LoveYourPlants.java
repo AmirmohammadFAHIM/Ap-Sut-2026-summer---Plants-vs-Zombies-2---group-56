@@ -2,6 +2,7 @@ package models.games.specialGames;
 
 import models.factory.builder.PlantType;
 import models.games.BaseGame;
+import models.utils.Result;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ public class LoveYourPlants extends BaseGame implements SpecialGame {
     }
 
     @Override
-    public boolean check_endGame() {
+    public Result check_endGame() {
         return deadPlants >= 5;
     }
 }

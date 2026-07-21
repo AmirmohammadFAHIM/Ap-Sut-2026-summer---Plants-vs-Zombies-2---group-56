@@ -4,6 +4,7 @@ import models.Constants;
 import models.entity.Zombie;
 import models.factory.builder.PlantType;
 import models.games.BaseGame;
+import models.utils.Result;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ public class Deadline extends BaseGame implements SpecialGame {
     }
 
     @Override
-    public boolean check_endGame() {
+    public Result check_endGame() {
         for (Zombie z : zombies) {
             if(z.getTileIndex() <= Constants.DeadLine_TileIndex){
                 return true;

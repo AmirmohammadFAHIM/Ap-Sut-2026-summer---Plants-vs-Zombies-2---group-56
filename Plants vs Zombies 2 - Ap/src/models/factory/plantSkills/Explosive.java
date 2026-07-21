@@ -106,12 +106,12 @@ public class Explosive implements Skill{
         for (int i = y; i < data.height; i++) {
             for (int j = y; j < data.width; j++) {
                 for (Zombie z : game.getCurrentWave().getZombies()) {
-                    if (z.getLine() == i && z.getTileInex() == j) {
+                    if (z.getLine() == i && z.getTileIndex() == j) {
                         z.setHp(0);
                     }
                 }
                     for (Zombie zo : game.getPreviousWave().getZombies()) {
-                        if (zo.getLine() == i && zo.getTileInex() == j) {
+                        if (zo.getLine() == i && zo.getTileIndex() == j) {
                             zo.setHp(0);
                         }
                     }

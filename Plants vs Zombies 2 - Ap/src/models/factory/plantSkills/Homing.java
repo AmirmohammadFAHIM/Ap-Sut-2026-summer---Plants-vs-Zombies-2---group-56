@@ -18,7 +18,10 @@ public class Homing implements Skill{
 
     @Override
     public void do_skill(Plant plant, BaseGame game) {
-
+            switch (type){
+                case RANDOM -> random(plant , game , targetCount);
+                case CLOSEST -> closestZombie(plant, game);
+            }
 
     }
 

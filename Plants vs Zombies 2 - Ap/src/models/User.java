@@ -12,21 +12,18 @@ import java.util.HashMap;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
-
     private String name;
     private String nickname;
     private String email;
     private String passwordHash;
     private String gender;
-
     private int securityQuestionNumber;
     private String securityAnswer;
-
     private Chapters chapter;
     private Level level;
     private ArrayList<Zombie> zombies;
     private ArrayList<Plant> plants;
-
+    private ArrayList<models.GameAdventure.Chapter> userChapters;
     private int coins = 0;
     private int diamonds = 0;
     private int highestScore = 0;
@@ -34,18 +31,14 @@ public class User implements Serializable {
     private int levelsPassed = 0;
     private int difficultyLevel = 3;
     private boolean isStayLoggedIn = false;
-
-    // ----- متغیرهای فروشگاه، گلخانه، کالکشن و اخبار -----
     private int unlockedPots = 5;
     private int plantFoods = 0;
     private int randomSeeds = 0;
     private String lastDailyPurchaseDate = "";
     private HashMap<String, Integer> specificSeeds;
-
-    private ArrayList<String> unlockedPlantsNames; // گیاهانی که کاربر خریده/آنلاک کرده
-    private ArrayList<String> unreadNews;          // اخبار جدید
-    private ArrayList<String> readNews;            // اخبار خوانده شده
-    // ------------------------------------------------
+    private ArrayList<String> unlockedPlantsNames;
+    private ArrayList<String> unreadNews;
+    private ArrayList<String> readNews;
 
     public User(String name, String passwordHash, String nickname, String email, String gender) {
         this.name = name;
@@ -59,10 +52,14 @@ public class User implements Serializable {
         this.unlockedPlantsNames = new ArrayList<>();
         this.unreadNews = new ArrayList<>();
         this.readNews = new ArrayList<>();
+        this.userChapters = new ArrayList<>();
+        for (models.GameAdventure.Chapters type : models.GameAdventure.Chapters.values()) {
+            this.userChapters.add(new models.GameAdventure.Chapter(type));
+        }
     }
 
     public String getName() { return name; }
-    public void setName(String name) { this.name = name; } // اضافه شد برای تغییر یوزرنیم
+    public void setName(String name) { this.name = name; }
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public String getNickname() { return nickname; }
@@ -122,4 +119,12 @@ public class User implements Serializable {
     public ArrayList<String> getReadNews() { return readNews; }
 
     public void updateProgress() { }
+
+    public ArrayList<models.GameAdventure.Chapter> getUserChapters() {
+        return userChapters;
+    }
+
+    public void setUserChapters(ArrayList<models.GameAdventure.Chapter> userChapters) {
+        this.userChapters = userChapters;
+    }
 }

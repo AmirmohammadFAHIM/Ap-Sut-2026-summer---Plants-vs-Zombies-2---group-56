@@ -1,10 +1,11 @@
 package models.GameAdventure.levels;
 
 import models.GameAdventure.Chapters;
-
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
-public class Level {
+public class Level implements Serializable {
     private String levelType;
     private Chapters chapters;
     private int id;
@@ -12,7 +13,19 @@ public class Level {
     private boolean won = false;
     private int waves;
     private float baseHardness;
-    /// TODO: have a list of zombies names
+    // TODO resolved: list of zombies names
+    private ArrayList<String> allowedZombies;
+
+    public Level(int id, Chapters chapters, String levelType, boolean unlocked, int waves, float baseHardness) {
+        this.id = id;
+        this.chapters = chapters;
+        this.levelType = levelType;
+        this.unlocked = unlocked;
+        this.waves = waves;
+        this.baseHardness = baseHardness;
+        this.allowedZombies = new ArrayList<>();
+    }
+
     public String getLevelType() {
         return levelType;
     }
@@ -67,5 +80,13 @@ public class Level {
 
     public void setChapters(Chapters chapters) {
         this.chapters = chapters;
+    }
+
+    public ArrayList<String> getAllowedZombies() {
+        return allowedZombies;
+    }
+
+    public void setAllowedZombies(ArrayList<String> allowedZombies) {
+        this.allowedZombies = allowedZombies;
     }
 }

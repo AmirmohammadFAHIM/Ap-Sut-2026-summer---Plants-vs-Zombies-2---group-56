@@ -8,20 +8,21 @@ import models.factory.builder.PlantType;
 
 public class Collection implements Menu {
 
-    @Override
-    public String ChangeMenu(String menuName) {
-        return "Invalid menu transition from this menu.";
-    }
+
 
     @Override
-    public void exitMenu() {
-        App.setScreen(new view.PlayView());
-        System.out.println("Returned to Play Menu.");
+    public String ChangeMenu(String menuName) {
+        return "";
     }
 
     @Override
     public void ShowCurrentMenu() {
         System.out.println("--- Collection Menu ---");
+    }
+
+    @Override
+    public void exitMenu() {
+        Menu.super.exitMenu();
     }
 
     public void showunlockedPlant() {
@@ -57,8 +58,14 @@ public class Collection implements Menu {
         System.out.println("Showing details for plant: " + plantName);
     }
 
-    public void upgradePlant(String plantName) {
-        System.out.println("Upgrading plant: " + plantName + " (Logic connects to Seed packets later)");
+    public String upgradePlant(PlantType plantType) {
+        int newLevel = App.getCurrentuser().getLevels().get(plantType) + 1;
+        if(newLevel >= 5 ) return "What the fuck you think you're doing ?";
+        App.getCurrentuser().getLevels().replace(plantType , newLevel);
+        String message = "Damn! You just upgraded ma man " + plantType.name() + "to level " + newLevel;
+        App.getCurrentuser().getUnreadNews().add(message);
+        Data.saveUser();
+        return message;
     }
 
     public void buyPlant(String plantName) {

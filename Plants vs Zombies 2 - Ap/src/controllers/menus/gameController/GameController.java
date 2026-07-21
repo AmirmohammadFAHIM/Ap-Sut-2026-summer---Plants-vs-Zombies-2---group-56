@@ -7,6 +7,7 @@ import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
 import models.User;
 import models.entity.Plant;
+import models.entity.Sun;
 import models.entity.Zombie;
 import models.factory.builder.PlantType;
 import models.gamePanes.Tile;
@@ -15,6 +16,7 @@ import models.utils.Result;
 import view.PlayView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class GameController implements Controller{/// Main Brain of the game
     private BaseGame game;
@@ -147,6 +149,20 @@ public class GameController implements Controller{/// Main Brain of the game
             x.setRecharge(0);
             x.setAvailable(true);
         }
+    }
+
+
+    public String collectSun(int x , int y){
+        Iterator<Sun> iterator = game.getSuns().iterator();
+        while(iterator.hasNext()){
+            Sun sun = iterator.next();
+            if(sun.getTileIndex() == x && sun.getLine() == y){
+                game.setSunCount(game.getSunCount() + sun.getPrice());
+                iterator.remove();
+                return "Sun collected , you got " + sun.getPrice() + " suns!";
+            }
+        }
+        return null;
     }
 
     private void addPlantFood(){

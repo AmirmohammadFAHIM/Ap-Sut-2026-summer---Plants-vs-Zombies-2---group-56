@@ -1,13 +1,13 @@
 package view;
 
-import controllers.menus.SecondaryMenus.Quests;
+import controllers.menus.SecondaryMenus.TravelLog;
 import models.utils.RegexHelper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class QuestsView extends View {
-    public QuestsView() {
-        menu = new Quests();
+public class TravelLogView extends View {
+    public TravelLogView() {
+        menu = new TravelLog();
     }
 
     @Override
@@ -19,12 +19,12 @@ public class QuestsView extends View {
         Matcher changePageMatcher = Pattern.compile(RegexHelper.QUESTS_CHANGE_PAGE).matcher(input);
         Matcher showQuestsMatcher = Pattern.compile(RegexHelper.QUESTS_SHOW).matcher(input);
 
-        Quests questsMenu = (Quests) menu;
+        TravelLog travelLogMenu = (TravelLog) menu;
 
         if (changePageMatcher.matches()) {
-            questsMenu.changePage(changePageMatcher.group("pageName"));
+            travelLogMenu.changePage(changePageMatcher.group("pageName"));
         } else if (showQuestsMatcher.matches()) {
-            questsMenu.showQuests();
+            travelLogMenu.showQuests();
         } else {
             System.out.println("Invalid command!");
         }

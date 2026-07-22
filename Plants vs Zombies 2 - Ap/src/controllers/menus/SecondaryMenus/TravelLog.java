@@ -3,7 +3,7 @@ package controllers.menus.SecondaryMenus;
 import controllers.menus.Menu;
 import models.App;
 
-public class Quests implements Menu {
+public class TravelLog implements Menu {
 
     @Override
     public String ChangeMenu(String menuName) {

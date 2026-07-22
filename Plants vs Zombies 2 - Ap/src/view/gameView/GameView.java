@@ -1,6 +1,7 @@
 package view.gameView;
 
 import controllers.menus.gameController.GameController;
+import models.games.BaseGame;
 import models.utils.RegexHelper;
 import view.View;
 
@@ -46,6 +47,19 @@ public class GameView extends View {
         Matcher zombiesInfoMatcher = Pattern.compile(RegexHelper.GAME_ZOMBIES_INFO).matcher(input);
         Matcher cheatSpawnZombieMatcher = Pattern.compile(RegexHelper.GAME_CHEAT_SPAWN_ZOMBIE).matcher(input);
         Matcher startWavesMatcher = Pattern.compile(RegexHelper.GAME_START_ZOMBIE_WAVES).matcher(input);
+
+
+
+        if(controller.getGame().getState() == BaseGame.GameState.STARTING){
+            if(input.matches(controller.getGame().getStartGameCommand().getRegex())){
+                System.out.println(controller.getGame().startGame(input));
+            }
+            else{
+                System.out.println("Invalid command for starting , valid command : " + controller.getGame()
+                        .getStartGameCommand().name());
+            }
+            return;
+        }
 
         if (showAllPlantsMatcher.matches()) {
             // controller.showAllPlants(); // نیاز به پیاده‌سازی در کنترلر

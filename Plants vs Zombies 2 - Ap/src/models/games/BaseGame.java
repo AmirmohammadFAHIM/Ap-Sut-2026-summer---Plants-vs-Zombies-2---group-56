@@ -83,6 +83,12 @@ public class BaseGame implements Game {
         this.sunCount = sunCount;
     }
 
+    public void gameFinished(){
+        if(currentWave.getId() == waves.size()){
+            if(zombies.isEmpty()) won = true;
+        }
+    }
+
     @Override
     public void initGame() {
 
@@ -110,8 +116,6 @@ public class BaseGame implements Game {
             if(event!=null){
                 event.run(this , delta);
             }
-
-
     }
 
     @Override
@@ -199,8 +203,8 @@ public class BaseGame implements Game {
 
     }
 
-    private int waveID = 0;
-    private Result attack(float delta) {
+    protected int waveID = 0;
+    protected Result attack(float delta) {
         if(currentWave.isFinished()){
             if(currentWave == waves.getLast()){
                 won = true;

@@ -1,5 +1,7 @@
 package models.entity;
 
+import models.gamePanes.Tile;
+
 public class Entity {
     protected float x;
     protected float y;
@@ -73,6 +75,7 @@ public class Entity {
     }
 
     public void setLine(int line) {
+        setY(line * Tile.getHeight());
         this.line = line;
     }
 
@@ -81,6 +84,7 @@ public class Entity {
     }
 
     public void setTileIndex(int tileIndex) {
+        setX(Tile.getWidth() * tileIndex);
         this.tileIndex = tileIndex;
     }
 

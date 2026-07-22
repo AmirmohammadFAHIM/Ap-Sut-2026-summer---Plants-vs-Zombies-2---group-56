@@ -98,7 +98,7 @@ public class Bullet {
         }
         for (Zombie x : game.getZombies()){
             if(overlaps(x)){
-                // TODO: deal damagem
+                // TODO: deal damage
             }
         }
     }

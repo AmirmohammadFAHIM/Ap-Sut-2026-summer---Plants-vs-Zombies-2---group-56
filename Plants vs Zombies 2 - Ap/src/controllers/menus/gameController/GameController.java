@@ -24,8 +24,6 @@ public class GameController implements Controller{/// Main Brain of the game
 
 
 
-
-
     @Override
     public String GameStart(String input) {
         boolean start = game.startGame(input);
@@ -35,6 +33,7 @@ public class GameController implements Controller{/// Main Brain of the game
         }
         return "Game Starting ...";
     }
+
 
     @Override
     public String playGame(float delta) {
@@ -144,12 +143,14 @@ public class GameController implements Controller{/// Main Brain of the game
         return "Oh ma man , cheatt , for real you nigga??? so bad , so bad , ain't tough ):";
     }
 
+
     private void removeCooldown(){
         for (SeedPackage x : game.getAvailable_plants().values()){
             x.setRecharge(0);
             x.setAvailable(true);
         }
     }
+
 
 
     public String collectSun(int x , int y){

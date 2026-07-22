@@ -8,6 +8,7 @@ import models.games.BaseGame;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Bullet {
@@ -26,6 +27,7 @@ public class Bullet {
     private float pierce = 1;
     private boolean grounded = false;
     private float poisonDamage = Constants.poisonBaseDamage;
+    private final ArrayList<BulletType> bowling = new ArrayList<>(Arrays.asList(BulletType.ONION));
 
 
     /// ------------BOOLEANS------------
@@ -78,12 +80,28 @@ public class Bullet {
     }
 
     public void run(float delta , BaseGame game){
+
         if(pierce <= 0) dispose(game);
         updateLocation(delta);
-        block(game.getField());
+       if(!tags.contains(Tag.MAGICAL) && toLockIn == null) block(game.getField());
+       if(bowling.contains(this.type)){
+           bowling(game.getField());
+       }
 
     }
 
+    private void hit(BaseGame game){
+        if(toLockIn != null){
+            if(overlaps(toLockIn)){
+                // TODO: deal damage
+            }
+        }
+        for (Zombie x : game.getZombies()){
+            if(overlaps(x)){
+                // TODO: deal damagem
+            }
+        }
+    }
     private void dispose(BaseGame game) {
         game.getBullets().remove(this);
     }
@@ -122,6 +140,17 @@ public class Bullet {
         velocityX = Constants.HomingVelocity * (dx / d);
         velocityY = Constants.HomingVelocity * (dy / d);
     }
+
+    private void bowling(Field field){
+        if(this.y + this.height >= field.getHeight()){
+            velocityY *= -1;
+        }
+        else if(this.y <= 0){
+            velocityY *= -1;
+        }
+    }
+
+
     public float getVelocityX() {
         return velocityX;
     }
@@ -222,6 +251,14 @@ public class Bullet {
         float centreY = this.y + this.height /2 ;
         boolean x = centreX >= tile.getX() && centreX <= tile.getX() + Tile.getWidth();
         boolean y = centreY >= tile.getY() && centreY <= tile.getY() + Tile.getHeight();
+        return x & y;
+    }
+
+    public boolean overlaps(Zombie zombie){
+        float centreX = this.x + this.width /2 ;
+        float centreY = this.y + this.height /2 ;
+        boolean x = centreX >= zombie.getX() && centreX <= zombie.getX() + zombie.getWidth();
+        boolean y = centreY >= zombie.getY() && centreY <= zombie.getY() + zombie.getHeight();
         return x & y;
     }
 

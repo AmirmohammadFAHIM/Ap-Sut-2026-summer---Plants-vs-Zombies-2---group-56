@@ -3,8 +3,6 @@ package models.npc;
 import models.config.ZombieConfig;
 import models.config.ZombieData;
 import models.npc.ability.Ability;
-import models.armor.Armor;
-import models.weapon.Weapon;
 import controllers.observer.*;
 import controllers.GameController;
 

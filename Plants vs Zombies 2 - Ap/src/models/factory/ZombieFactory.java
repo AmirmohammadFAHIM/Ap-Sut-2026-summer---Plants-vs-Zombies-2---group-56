@@ -3,7 +3,7 @@ package models.factory;
 import models.config.ZombieConfig;
 import models.config.AbilityConfig;
 import models.npc.Zombie;
-import models.npc.Bullet;
+import models.npc.ability.*;
 import models.loader.ZombieDataLoader;
 import controllers.observer.*;
 

@@ -1,4 +1,6 @@
-package models.npc;
+package models;
+
+import models.npc.Plant;
 
 import java.util.Random;
 

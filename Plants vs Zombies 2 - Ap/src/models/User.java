@@ -100,6 +100,7 @@ public class User implements Serializable, QuestObserver {
     }
 
     public void setVaseBreaker(int vaseBreaker) {
+        if(vaseBreaker >= 3) vaseBreaker = 3;
         this.vaseBreaker = vaseBreaker;
     }
 

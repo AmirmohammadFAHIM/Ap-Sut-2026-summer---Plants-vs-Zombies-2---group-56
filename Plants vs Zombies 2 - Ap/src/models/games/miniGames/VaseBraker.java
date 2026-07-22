@@ -86,4 +86,8 @@ public class VaseBraker extends BaseGame {
         }
 
     }
+
+    public ArrayList<Vase> getVases() {
+        return vases;
+    }
 }

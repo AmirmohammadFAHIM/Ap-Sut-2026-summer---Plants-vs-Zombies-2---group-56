@@ -1,9 +1,14 @@
 package controllers.menus.SecondaryMenus;
 
+import controllers.datacontroller.Data;
 import controllers.menus.Menu;
 import models.App;
+import models.Quest;
+import models.User;
 
-public class Quests implements Menu {
+public class TravelLog implements Menu {
+
+    private String currentPage = "Adventure";
 
     @Override
     public String ChangeMenu(String menuName) {
@@ -20,8 +25,6 @@ public class Quests implements Menu {
     public void ShowCurrentMenu() {
         showQuests();
     }
-
-    private String currentPage = "Adventure";
 
     public void changePage(String pageName) {
         if (pageName.equalsIgnoreCase("Adventure") ||
@@ -40,9 +43,21 @@ public class Quests implements Menu {
 
     public void showQuests() {
         System.out.println("--- Travel Log : " + currentPage + " ---");
-        if (currentPage.equalsIgnoreCase("Adventure")) {
-            System.out.println("- Finish Dark Ages Pt.2 (Rewards: 15 Gems)");
-            System.out.println("- Adventure Extra: Daytime Dark Ages (Rewards: 4000 Coins)");
+        User user = Data.getCurrentUser();
+
+        if (user != null && currentPage.equalsIgnoreCase("Adventure")) {
+            if (user.getActiveQuests() == null || user.getActiveQuests().isEmpty()) {
+                System.out.println("No active quests for this category yet.");
+                return;
+            }
+
+            for (Quest quest : user.getActiveQuests()) {
+                if (quest.isDone()) {
+                    System.out.println("- [DONE] " + quest.getQuestName() + " (Rewards: " + quest.getRewardAmount() + " " + quest.getRewardType() + ")");
+                } else {
+                    System.out.println("- " + quest.getQuestName() + " (" + (int)quest.getProgress() + "/" + (int)quest.getTarget() + ") (Rewards: " + quest.getRewardAmount() + " " + quest.getRewardType() + ")");
+                }
+            }
         } else {
             System.out.println("No active quests for this category yet.");
         }

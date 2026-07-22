@@ -32,6 +32,10 @@ public class App {
         App.currentmenu = currentmenu;
     }
 
+    public static void setCurrentuser(User currentuser) {
+        App.currentuser = currentuser;
+    }
+
     public static User getCurrentuser() {
         return Data.getCurrentUser() ;
     }

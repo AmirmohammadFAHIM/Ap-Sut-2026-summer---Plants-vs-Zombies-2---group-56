@@ -31,6 +31,9 @@ public class User implements Serializable, QuestObserver {
     private int gamesPlayed = 0;
     private int levelsPassed = 0;
     private int difficultyLevel = 3;
+    private int vaseBreaker = 1;
+    private int wallNutBowling = 1;
+    private int IZombie = 1;
     private boolean isStayLoggedIn = false;
 
     private int unlockedPots = 5;
@@ -91,6 +94,32 @@ public class User implements Serializable, QuestObserver {
         this.securityQuestionNumber = questionNumber;
         this.securityAnswer = answer;
     }
+
+    public int getVaseBreaker() {
+        return vaseBreaker;
+    }
+
+    public void setVaseBreaker(int vaseBreaker) {
+        this.vaseBreaker = vaseBreaker;
+    }
+
+    public int getWallNutBowling() {
+        return wallNutBowling;
+    }
+
+    public void setWallNutBowling(int wallNutBowling) {
+        if(wallNutBowling >= 3) wallNutBowling =3;
+        this.wallNutBowling = wallNutBowling;
+    }
+
+    public int getIZombie() {
+        return IZombie;
+    }
+
+    public void setIZombie(int IZombie) {
+        this.IZombie = IZombie;
+    }
+
     public int getSecurityQuestionNumber() { return securityQuestionNumber; }
     public boolean checkSecurityAnswer(String answer) { return this.securityAnswer.equals(answer); }
     public int getCoins() { return coins; }

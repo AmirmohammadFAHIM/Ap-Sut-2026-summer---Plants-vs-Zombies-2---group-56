@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class WallnutBowling extends BaseGame {
+    public  WallnutBowling(MinigameLevel level) {
+
+    }
     ArrayList<String> belt = new ArrayList<>();
     ArrayList<BowlingNut>  nuts = new ArrayList<>();
 

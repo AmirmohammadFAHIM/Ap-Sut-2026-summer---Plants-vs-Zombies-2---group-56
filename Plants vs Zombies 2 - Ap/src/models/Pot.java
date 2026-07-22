@@ -6,7 +6,7 @@ import models.utils.*;
 public class Pot {
 
     private boolean unlocked;
-    private Plant seedling; // using seed as a new object seemed a better way , but using unlocked plants was too hard that way
+    private PlantType seedling; // using seed as a new object seemed a better way , but using unlocked plants was too hard that way
     // so now i use plant as a class for seedlings
     private int x;
     private int y;

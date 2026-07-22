@@ -102,6 +102,7 @@ public class Bullet {
             if (isIce) {
                 targetZombie.addEffect(new Effect(EffectType.FROZEN, 3.0f));
             }
+
             if (effect == EffectType.POISON) {
                 targetZombie.addEffect(new Effect(EffectType.POISON, 5.0f));
             }

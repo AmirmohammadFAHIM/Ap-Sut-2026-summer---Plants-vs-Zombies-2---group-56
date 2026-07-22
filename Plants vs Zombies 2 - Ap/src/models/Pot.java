@@ -1,13 +1,12 @@
 package models;
 
-import models.npc.Plant;
 import models.utils.*;
+import models.factory.builder.*;
 
 public class Pot {
 
     private boolean unlocked;
-    private PlantType seedling; // using seed as a new object seemed a better way , but using unlocked plants was too hard that way
-    // so now i use plant as a class for seedlings
+    private PlantType seedling;
     private int x;
     private int y;
     int random;
@@ -29,11 +28,14 @@ public class Pot {
             return;
         }
         if (random == 0){ // marigold
-            this.seedling = new Plant(); // marigold
+            this.seedling = PlantType.MARIGOLD; // marigold
         }
 
-        else{ // an unlocked plant
+        else{ // an unlocked plant , randomly
 
+            // get unlockeds count
+            // find a random number % that number
+            // this.seedling = that plant
         }
         timer = new CountDown(random * 6 + 2);
     }
@@ -45,6 +47,14 @@ public class Pot {
             // print error
             return;
         }
+        if (this.seedling.equals(PlantType.MARIGOLD)){
+            // add 500 golds tp user
+        }
+        else{
+            // user.boostList.add(seedling)
+        }
+        this.seedling = null;
+
 
     }
 
@@ -63,6 +73,10 @@ public class Pot {
         // setDiamonds(getDiamonds - reaminig)
         //
         timer.setCountingHours(0);
+    }
 
+    public void setLock(boolean lock){
+        this.unlocked = lock;
+        // will be called from shop
     }
 }

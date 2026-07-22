@@ -30,7 +30,7 @@ public class PlayMenu implements Menu {
                 App.setScreen(new GreenHouseView());
                 return "Changed successfully to Greenhouse menu";
             case "Quests menu":
-                App.setScreen(new QuestsView());
+                App.setScreen(new TravelLogView());
                 return "Changed successfully to Quests menu";
             case "Leaderboard menu":
                 App.setScreen(new LeaderBoardView());

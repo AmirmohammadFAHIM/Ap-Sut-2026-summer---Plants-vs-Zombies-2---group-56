@@ -2,7 +2,7 @@ package controllers.menus;
 
 import controllers.datacontroller.Data;
 import models.App;
-import view.NewView;
+import view.NewsView;
 import view.PlayView;
 import view.ProfileView;
 import view.SettingsView;
@@ -21,7 +21,7 @@ public class Home implements Menu {
                 yield "Changed menu successfully to Settings menu";
             }
             case "News menu" -> {
-                App.setScreen(new NewView());
+                App.setScreen(new NewsView());
                 yield "Changed menu successfully to News menu";
             }
             case "Profile menu" -> {

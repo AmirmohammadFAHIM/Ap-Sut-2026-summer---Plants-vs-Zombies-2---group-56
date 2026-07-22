@@ -1,6 +1,6 @@
 package models;
 
-import controllers.dataController.Data;
+import controllers.datacontroller.Data;
 import controllers.menus.Menu;
 import view.MenuView;
 
@@ -30,6 +30,10 @@ public class App {
 
     public static void setCurrentmenu(Menu currentmenu) {
         App.currentmenu = currentmenu;
+    }
+
+    public static void setCurrentuser(User currentuser) {
+        App.currentuser = currentuser;
     }
 
     public static User getCurrentuser() {

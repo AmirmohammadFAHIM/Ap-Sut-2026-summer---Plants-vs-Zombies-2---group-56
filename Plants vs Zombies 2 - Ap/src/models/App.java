@@ -35,4 +35,8 @@ public class App {
     public static User getCurrentuser() {
         return Data.getCurrentUser() ;
     }
+
+    public static MenuView getScreen() {
+        return screen;
+    }
 }

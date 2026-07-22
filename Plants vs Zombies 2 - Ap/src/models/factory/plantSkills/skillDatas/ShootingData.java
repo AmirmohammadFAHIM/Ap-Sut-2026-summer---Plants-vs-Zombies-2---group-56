@@ -7,6 +7,7 @@ public class ShootingData {
     private ShootingMood mood;
     private int bulletNumber;
     private int randomCount;
+    public int range;
 
     public ShootingData(BulletType type , ShootingMood mood ,  int bulletNumber) {
         this.bulletNumber = bulletNumber;

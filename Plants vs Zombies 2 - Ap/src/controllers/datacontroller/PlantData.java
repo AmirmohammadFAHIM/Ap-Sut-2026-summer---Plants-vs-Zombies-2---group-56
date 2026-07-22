@@ -14,6 +14,15 @@ public class PlantData implements Serializable {
     private ArrayList<PlantTags> tags;
     private float recharge;
     private ArrayList<Upgrade>  upgrades;
+    private float damage;
+
+    public float getDamage() {
+        return damage;
+    }
+
+    public void setDamage(float damage) {
+        this.damage = damage;
+    }
 
     public int getId() {
         return id;

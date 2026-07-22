@@ -1,34 +1,58 @@
 package models.entity;
 
 import models.Constants;
+import models.gamePanes.Field;
+import models.gamePanes.Tile;
+import models.gamePanes.TileType;
+import models.games.BaseGame;
 
+import java.awt.*;
 import java.util.ArrayList;
+
 
 public class Bullet {
     private BulletType type;
     private float velocityX;
     private float velocityY;
+    private float width;
+    private float height;
     private float destinationX;
     private float destinationY;
-    private int damage;
+    private float damage;
+    private float AoEDamage;
+    private float AoE;
     private float x;
     private float y;
+    private float pierce = 1;
+    private boolean grounded = false;
+    private float poisonDamage = Constants.poisonBaseDamage;
+
 
     /// ------------BOOLEANS------------
-    public enum Tag{MAGICAL,ICE,FIRE,POISON,HOMING}
+    public enum Tag{MAGICAL,ICE,FIRE,POISON,HOMING,AoE}
     ArrayList<Tag> tags;
     private boolean proved = false;
     /// for homing plants_inField of course!
     private Zombie toLockIn;
+    public void setTags(ArrayList<PlantTags> tags){
+        if(tags.contains(PlantTags.FIRE)){
+            this.tags.add(Tag.FIRE);
+        }
+        if(tags.contains(PlantTags.POISON)){
+            this.tags.add(Tag.POISON);
+        }
+        if(tags.contains(PlantTags.ICE)) this.tags.add(Tag.ICE);
+        if(tags.contains(PlantTags.MAGICAL)) this.tags.add(Tag.MAGICAL);
+    }
 
-    public Bullet(float x, float y , int velocityX ,  int velocityY) {
+    public Bullet(float x, float y , float velocityX ,  float velocityY) {
         this.x = x;
         this.y = y;
         this.velocityX = velocityX;
         this.velocityY = velocityY;
     }
 
-    public Bullet(float x, float y , float velocityX , BulletType type ,  int damage) {
+    public Bullet(float x, float y , float velocityX , BulletType type ,  float damage) {
         this.x = x;
         this.y = y;
         this.velocityX = velocityX;
@@ -53,10 +77,51 @@ public class Bullet {
 
     }
 
-    public void dealDamage() {}
+    public void run(float delta , BaseGame game){
+        if(pierce <= 0) dispose(game);
+        updateLocation(delta);
+        block(game.getField());
 
-    public void run(){}
+    }
 
+    private void dispose(BaseGame game) {
+        game.getBullets().remove(this);
+    }
+
+    private void block(Field field){
+        for (int i = 0; i < 5; i++) {
+            for (Tile tile : field.getTiles().get(i)){
+                if(overlaps(tile)){
+                    if(tile.getTileType() == TileType.FROZEN && this.tags.contains(Tag.FIRE)){
+                        tile.setTileType(TileType.CAVE_TILE);
+                        setPierce(pierce - 1);
+                    }
+                    else if(tile.getHp() >= 0){
+                        tile.setHp(tile.getHp() - this.damage);
+                        setPierce(pierce - 1);
+                    }
+                }
+            }
+        }
+    }
+
+    private void updateLocation(float delta){
+        if(toLockIn != null){
+            setDest();
+        }
+        this.x += velocityX * delta;
+        this.y += velocityY * delta;
+        if(!grounded){
+            this.velocityY -= Constants.gravity * delta;
+        }
+    }
+    private void setDest(){
+        float dy = toLockIn.getY() - y;
+        float dx = toLockIn.getX() - x;
+        float d = (float) Math.sqrt(dx * dx + dy * dy);
+        velocityX = Constants.HomingVelocity * (dx / d);
+        velocityY = Constants.HomingVelocity * (dy / d);
+    }
     public float getVelocityX() {
         return velocityX;
     }
@@ -89,11 +154,11 @@ public class Bullet {
         this.destinationY = destinationY;
     }
 
-    public int getDamage() {
+    public float getDamage() {
         return damage;
     }
 
-    public void setDamage(int damage) {
+    public void setDamage(float damage) {
         this.damage = damage;
     }
 
@@ -151,5 +216,16 @@ public class Bullet {
         clone.setDestinationY(this.destinationY);
         clone.setDamage(this.damage);
         return clone;
+    }
+    public boolean overlaps(Tile tile){
+        float centreX = this.x + this.width /2 ;
+        float centreY = this.y + this.height /2 ;
+        boolean x = centreX >= tile.getX() && centreX <= tile.getX() + Tile.getWidth();
+        boolean y = centreY >= tile.getY() && centreY <= tile.getY() + Tile.getHeight();
+        return x & y;
+    }
+
+    public void setPierce(float pierce) {
+        this.pierce = pierce;
     }
 }

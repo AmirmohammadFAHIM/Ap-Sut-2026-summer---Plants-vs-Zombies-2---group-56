@@ -15,5 +15,8 @@ public class Constants {
     public final static float EndurianArmorDamage = 80f;
     public final static float WaterSurfaceChangeTime = 30f;
     public final static float SunDroppingVelocity = 70f;
+    public final static float ChillTime = 5f;
+    public final static float poisonBaseDamage = 10f;
+    public final static float HomingVelocity = 250f;
 
 }

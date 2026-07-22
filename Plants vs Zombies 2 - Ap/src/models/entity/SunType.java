@@ -12,7 +12,7 @@ public enum SunType {
     BIG(50 , 8 , PLUS),
 
 
-    NORMAL(25 , 8){};
+    NORMAL(25 , 8 , BIG){};
 
 
 

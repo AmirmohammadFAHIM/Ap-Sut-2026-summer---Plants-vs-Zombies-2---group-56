@@ -13,6 +13,7 @@ public class ExplosionData {
         TOUCH,
     }
     public ExplosionType type;
+    public boolean instaKill =false;
     public int width;
     public int height;
     public int randomCount;

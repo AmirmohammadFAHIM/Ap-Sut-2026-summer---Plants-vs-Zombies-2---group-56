@@ -1,32 +1,30 @@
 package models.factory.plantSkills;
 
+import models.App;
 import models.Constants;
+import models.entity.*;
 import models.factory.plantSkills.skillDatas.ShootingData;
 import models.factory.plantSkills.skillDatas.ShootingMood;
 import models.gamePanes.Tile;
 import models.games.BaseGame;
-import models.entity.Bullet;
-import models.entity.BulletType;
-import models.entity.Plant;
-import models.entity.Zombie;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 
 public class Shoot implements Skill {
-    ShootingData normalData;
+    ShootingData data;
     boolean random = false;
     boolean all = false;
 
     public Shoot(ShootingData data){
-        normalData = data;
+        this.data = data;
     }
     @Override
     public void do_skill(Plant shooter , BaseGame game) {
 
         try {
-            shoot(shooter , normalData , game);
+            shoot(shooter , data, game);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -135,8 +133,26 @@ public class Shoot implements Skill {
     }
 
 
-    private void short_range(Plant shooter , BaseGame game){
-
+    private void midRange(Plant shooter , BaseGame game){
+                if(shooter.getCategory() == PlantCategory.StrikeThrough){
+                    for (Zombie zombie: game.getZombies()){
+                        if(zombie.getLine() == shooter.getLine() &&
+                                zombie.getTileIndex() - shooter.getTileIndex() <= data.range) {
+                            zombie.setHp(zombie.getHp() - shooter.getDamage());
+                        }
+                    }
+                }
+                else{
+                    for (Zombie zombie: game.getZombies()){
+                        if(zombie.getLine() == shooter.getLine() &&
+                                zombie.getTileIndex() - shooter.getTileIndex() <= data.range) {
+                            Bullet bullet = new Bullet(shooter.getX() +  shooter.getWidth() ,
+                                    shooter.getY() + shooter.getHeight() * 0.8f
+                                    , Constants.BulletVelocityX , 0);
+                            bullet.setType(data.getBullet());
+                        }
+                    }
+                }
     }
 
     private void lobber(Plant shooter , BaseGame game){
@@ -155,11 +171,12 @@ public class Shoot implements Skill {
        if(target != null) game.getBullets().add(lobber_shoot(shooter , target));
     }
     private Bullet lobber_shoot(Plant shooter , Zombie target){
-        Bullet bullet = new Bullet(shooter.getX() - 30, shooter.getY() + shooter.getHeight() / 2 , normalData.getBullet());
-        if(normalData.getBullet() == BulletType.CORN){
+        Bullet bullet = new Bullet(shooter.getX() - 30, shooter.getY() + shooter.getHeight() / 2 , data.getBullet());
+        if(data.getBullet() == BulletType.CORN){
             Random rand = new Random();
-            int a = rand.nextInt(6);
-            if(a == 5) bullet.setType(BulletType.BUTTER);
+            boolean changeIncrease = App.getCurrentuser().getLevels().get(shooter.getType()) >= 2;
+            int a = rand.nextInt(100); // probability = 20%
+            if((a >= 1 && a <= 40) || (changeIncrease && a >= 41 && a <= 45)) bullet.setType(BulletType.BUTTER);
         }
         bullet.setVelocityX(Constants.LobberBulletVelocityX);
         float t = (target.getX() - shooter.getX()) / (bullet.getVelocityX() + target.getVelocityX());
@@ -173,8 +190,8 @@ public class Shoot implements Skill {
 
     @Override
     public ArrayList<Zombie> random(Plant plant, BaseGame game, int numbers) {
-        ArrayList<Zombie> targets = Skill.super.random(plant, game, normalData.getRandomCount());
-        if(normalData.getMood() == ShootingMood.LOBBER){
+        ArrayList<Zombie> targets = Skill.super.random(plant, game, data.getRandomCount());
+        if(data.getMood() == ShootingMood.LOBBER){
             for (Zombie z : targets) {
                 game.getBullets().add(lobber_shoot(plant, z));
             }
@@ -184,17 +201,17 @@ public class Shoot implements Skill {
 
     @Override
     public void all(Plant plant, BaseGame game) {
-        if(normalData.getMood() == ShootingMood.LOBBER){
+        if(data.getMood() == ShootingMood.LOBBER){
             for (Zombie z : game.getZombies()) {
                 game.getBullets().add(lobber_shoot(plant, z));
             }
 
         }
-        else if(normalData.getMood() == ShootingMood.AllLines){
-            for (int i = 0; i < normalData.getBulletNumber() / 5; i++) {
+        else if(data.getMood() == ShootingMood.AllLines){
+            for (int i = 0; i < data.getBulletNumber() / 5; i++) {
                 for (int j = 1; j <= 5; j++) {
                     Bullet bullet = new Bullet(plant.getX() ,
-                            plant.getY() + i * Tile.getHeight() - Tile.getHeight() / 2,normalData.getBullet());
+                            plant.getY() + i * Tile.getHeight() - Tile.getHeight() / 2, data.getBullet());
                 }
             }
         }

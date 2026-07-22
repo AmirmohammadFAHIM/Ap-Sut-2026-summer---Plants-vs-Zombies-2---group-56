@@ -7,30 +7,7 @@ import models.utils.Result;
 import java.util.ArrayList;
 
 public class ConveyorBelt extends BaseGame implements SpecialGame {
-    @Override
-    public void updatePlants() {
 
-    }
-
-    @Override
-    public void updateZombies() {
-
-    }
-
-    @Override
-    public void updateScene() {
-
-    }
-
-    @Override
-    public void updateGame() {
-
-    }
-
-    @Override
-    public void plant() {
-
-    }
 
     @Override
     public ArrayList<PlantType> filterPlants() {

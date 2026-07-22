@@ -19,8 +19,8 @@ public class PlantWhatYouGet extends BaseGame implements SpecialGame {
     @Override
     public ArrayList<PlantType> filterPlants() {
         ArrayList<PlantType> plantTypes = new ArrayList<>();
-        for (Plant plant : App.getCurrentuser().getPlants()) {
-            if(plant.getCategory() != PlantCategory.SunProducer) plantTypes.add(plant.getType());
+        for (PlantType plant : App.getCurrentuser().getUnlockedPlants()) {
+            if(plant.getCategory() != PlantCategory.SunProducer) plantTypes.add(plant);
         }
         return null;
     }

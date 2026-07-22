@@ -34,6 +34,8 @@ public enum BulletType {
 
     ONION,
 
+    BUBBLE,
+
     /// for cactus(obviously)
     ELECTRICAL_CACTUS,
     CACTUS;

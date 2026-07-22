@@ -144,6 +144,7 @@ public class BaseGame implements Game {
             tile.setPlantable(true);
         }
         else tile.setEmpty(true);
+        this.sunCount -= (int) available_plants.get(findPlant.plantType()).getCost();
         return "New plant : " + findPlant.plantType().name() + " planted successfully at coordination :" +
                 " ( " + x + "," + y + ")";
 
@@ -333,5 +334,14 @@ public class BaseGame implements Game {
 
     public void setEvent(ChapterSpecialEvent event) {
         this.event = event;
+    }
+
+    public Plant findByCoordinates(int x , int y){
+        for (Plant p : this.plants_inField){
+            if(p.getLine() == y && p.getTileIndex() == x){
+                return p;
+            }
+        }
+        return null;
     }
 }

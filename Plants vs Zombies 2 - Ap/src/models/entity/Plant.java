@@ -1,5 +1,6 @@
 package models.entity;
 
+import models.App;
 import models.factory.builder.PlantType;
 import models.factory.plantSkills.Explosive;
 import models.factory.plantSkills.Skill;
@@ -10,14 +11,14 @@ import models.games.BaseGame;
 import java.util.ArrayList;
 
 public class Plant extends Entity {
-    private int Damage;
+    private float damage;
     private int cost;
-    private final float ActionInterval;
+    private float ActionInterval;
     private float t;
     private PlantCategory category;
     private PlantType type;
     private ArrayList<PlantTags> tags;
-    private Skill baseSkill;
+    private ArrayList<Skill> baseSkill;
     private ArrayList<Skill> plantfoodSkill;
     private boolean frozen = false;
     private boolean cat = false;
@@ -37,6 +38,9 @@ public class Plant extends Entity {
     public Plant(float actionInterval) {
         ActionInterval = actionInterval;
     }
+    public Plant(){
+
+    }
 
     public void boost(){}
 
@@ -48,12 +52,12 @@ public class Plant extends Entity {
         return tags;
     }
 
-    public int getDamage() {
-        return Damage;
+    public float getDamage() {
+        return damage;
     }
 
-    public void setDamage(int damage) {
-        Damage = damage;
+    public void setDamage(float damage) {
+        this.damage = damage;
     }
 
 
@@ -73,11 +77,11 @@ public class Plant extends Entity {
         this.tags = tags;
     }
 
-    public Skill getBaseSkill() {
+    public ArrayList<Skill> getBaseSkill() {
         return baseSkill;
     }
 
-    public void setBaseSkill(Skill baseSkill) {
+    public void setBaseSkill(ArrayList<Skill> baseSkill) {
         this.baseSkill = baseSkill;
     }
 
@@ -137,7 +141,7 @@ public class Plant extends Entity {
         if(t <= 0){
             t = ActionInterval;
            if(Trap(game)) {
-               baseSkill.do_skill(this , game);
+               for (Skill x : baseSkill) x.do_skill(this , game);
                if(tags.contains(PlantTags.ONCE_USAGE)){
                    dispose(game);
                }
@@ -178,6 +182,10 @@ public class Plant extends Entity {
             x.do_skill(this , game);
         }
     }
+    boolean plantFood;
+    public void setPlantFood(boolean plantFood) {
+        this.plantFood = plantFood;
+    }
 
 
     public int getFreezeLevel() {
@@ -195,12 +203,16 @@ public class Plant extends Entity {
             dispose(eater , game);
         }
     }
+    public void setHP(float hp){
+        this.hp = hp;
+    }
 
     private void dispose(Zombie eater , BaseGame game){
         if(tags.contains(PlantTags.SHROOM) && tags.contains(PlantTags.MAGICAL)){
             /// TODO: make the zombie an opponent of other zombies
         }
         else if(tags.contains(PlantTags.EXPLOSIVE)){
+            if(App.getCurrentuser().getLevels().get(this.type) >= 3) damage += 200;
             ExplosionData data = new ExplosionData(3 , 3);
             Explosive boom = new Explosive(data);
             boom.do_skill(this ,game );
@@ -217,6 +229,10 @@ public class Plant extends Entity {
 
             }
         }
+    }
+
+    public void setActionInterval(float actionInterval) {
+        ActionInterval = actionInterval;
     }
 }
 

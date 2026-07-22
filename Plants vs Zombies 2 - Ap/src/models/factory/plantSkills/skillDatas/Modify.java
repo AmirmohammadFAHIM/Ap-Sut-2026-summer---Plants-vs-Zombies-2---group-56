@@ -1,5 +1,6 @@
 package models.factory.plantSkills.skillDatas;
 
+import models.App;
 import models.entity.Bullet;
 import models.entity.Plant;
 import models.factory.plantSkills.Skill;
@@ -67,4 +68,20 @@ public class Modify implements Skill {
             }
         }
     }
+
+    private void heat(Plant heater ,  BaseGame game) {
+        Plant plant = game.findByCoordinates( heater.getTileIndex() ,heater.getLine());
+        if(plant != null){
+            plant.setFreezeLevel(0);
+        }
+        if(App.getCurrentuser().getLevels().get(heater.getType()) >= 3){
+            for (Plant p :  game.getPlants_inField()){
+                if(Math.abs(p.getTileIndex() - heater.getTileIndex()) <= 1
+                && Math.abs(p.getLine() - heater.getLine()) <= 1){
+                    p.setFreezeLevel(0);
+                }
+            }
+        }
+    }
+
 }

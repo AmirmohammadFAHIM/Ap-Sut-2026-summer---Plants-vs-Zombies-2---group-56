@@ -11,6 +11,11 @@ public class Melee implements Skill{
     MeleeAttack attackType;
     public int punch_numbers;
     public int edge;
+    public int range = 1;
+    public Skill setRange(int range) {
+        this.range = range;
+        return this;
+    }
     public Melee(MeleeAttack attackType){
         this.attackType = attackType;
         punch_numbers = 1;
@@ -51,8 +56,8 @@ public class Melee implements Skill{
         ArrayList<Zombie> zombies;
         for (Zombie x : game.getZombies()) {
             if(x.getLine() == plant.getLine()) {
-                if(x.getTileIndex() == plant.getTileIndex() + 1 ||
-                x.getTileIndex() == plant.getTileIndex() - 1){
+                if(x.getTileIndex() == plant.getTileIndex() +  range||
+                x.getTileIndex() == plant.getTileIndex() - range){
                     x.setHp(x.getHp() - plant.getDamage());
                     /// TO DO: Implement the heat effect on Icy materials of zombies or field
                 }

@@ -23,10 +23,10 @@ public class Deadline extends BaseGame implements SpecialGame {
     public Result check_endGame() {
         for (Zombie z : zombies) {
             if(z.getTileIndex() <= Constants.DeadLine_TileIndex){
-                return true;
+                return new Result(true , "Loss" , null);
             }
         }
-        return false;
+        return new Result(false , null, null);
     }
 
     @Override

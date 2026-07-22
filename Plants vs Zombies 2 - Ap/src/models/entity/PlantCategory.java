@@ -2,6 +2,8 @@ package models.entity;
 
 public enum PlantCategory {
 
+    StrikeThrough,
+
     SunProducer,
 
     SHOOTER{

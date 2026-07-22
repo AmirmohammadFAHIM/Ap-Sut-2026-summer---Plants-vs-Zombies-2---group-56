@@ -16,5 +16,7 @@ public enum ShootingMood {
 
     LOBBER,
 
+    MID_RANGE,
+
     Star;
 }

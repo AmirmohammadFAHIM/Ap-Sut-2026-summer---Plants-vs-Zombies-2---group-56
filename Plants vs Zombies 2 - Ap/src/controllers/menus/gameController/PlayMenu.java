@@ -63,7 +63,7 @@ public class PlayMenu implements Menu {
             }
             output.append( " ══════════════" + "\n");
         }
-        return "Welcome to " + chapter.name();
+        return "Welcome to " + chapter.name() + "\n" + output.toString();
     }
 
 

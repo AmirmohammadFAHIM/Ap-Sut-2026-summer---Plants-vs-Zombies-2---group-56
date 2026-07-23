@@ -85,6 +85,7 @@ public class SignUp implements Menu {
             tempUser.setSecurityQuestion(questionNumber, answer);
             Data.addUser(tempUser);
             Data.setTempUser(null);
+            Data.saveUser();
 
             System.out.println("User created successfully.");
         } else {

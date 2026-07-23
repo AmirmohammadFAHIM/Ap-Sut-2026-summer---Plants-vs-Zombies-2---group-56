@@ -22,7 +22,7 @@ public class RegexHelper {
     public static final String PROFILE_CHANGE_EMAIL = "(?i)^menu\\s+profile\\s+change-email\\s+-e\\s+(?<email>\\S+)$";
     public static final String PROFILE_CHANGE_PASSWORD = "(?i)^menu\\s+profile\\s+change-password\\s+-p\\s+(?<newPassword>\\S+)\\s+-o\\s+(?<oldPassword>\\S+)$";
 
-    public static final String PLAY_ENTER_CHAPTER = "(?i)^menu\\s+enter\\s+chapter\\s+-c\\s+(?<chaptername>[a-zA-Z]+)$";
+    public static final String PLAY_ENTER_CHAPTER = "(?i)^enter\\s+chapter\\s+-c\\s+(?<chaptername>[a-zA-Z]+)$";
     public static final String PLAY_SHORTCUTS = "(?i)^menu\\s+(?<shortcut>greenhouse|travel-log|leaderboard|coin-wallet|gem-wallet)$";
     public static final String PLAY_CHEAT = "(?i)^menu\\s+cheat\\s+add\\s+(?<amount>\\d+)\\s+(?<type>coin|coins|diamond|diamonds|sun|suns)$";
     public static final String PLAY_LEVEL = "(?i)^play\\s+(?<level>\\d+)$";

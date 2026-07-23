@@ -3,6 +3,7 @@ package controllers.menus;
 import controllers.datacontroller.Data;
 import models.App;
 import models.User;
+import view.HomeView;
 
 import java.security.MessageDigest;
 
@@ -42,6 +43,7 @@ public class LogIn implements Menu {
         Data.setCurrentUser(user);
         Data.saveUser();
         System.out.println("Logged in successfully.");
+        App.setScreen(new HomeView());
     }
 
     public void resetPassword(String username, String answer, String newPassword) {

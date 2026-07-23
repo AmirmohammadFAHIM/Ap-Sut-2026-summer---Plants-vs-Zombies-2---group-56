@@ -4,6 +4,8 @@ public enum GameCommands {
 
     CHEAT("$cheat\\s+(?<content>.+)^"),
 
+    PLAY("$play\\s+-t\\s+(?<delta>\\d+)^"),
+
     SHOW_TILE("$show\\s+tile\\s+status\\s+-l\\s+(?<x>\\d+)\\s+(?<y>\\d+)"),
 
     SHOW_PLANTS_STATUS("$show\\s+plants\\s+status^"),

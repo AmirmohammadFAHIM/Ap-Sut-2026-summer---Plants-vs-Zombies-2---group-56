@@ -1,20 +1,79 @@
 package models.games;
 
+import commands.GameCommands;
+import controllers.Start.PlantSelection;
+import controllers.datacontroller.SeedPackage;
+import models.App;
+import models.Constants;
+import models.GameAdventure.*;
+import models.entity.*;
+import models.factory.PlantFactory;
+import models.factory.builder.PlantType;
 import models.factory.builder.SunBuilder;
 import models.gamePanes.Field;
+import models.gamePanes.Tile;
 import models.gamePanes.Wave;
-import models.npc.Plant;
+import models.utils.Result;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class BaseGame implements Game {
-    private int
-            sunCount = 0;
-    private Field field ;
-    private ArrayList<Wave> waves;
-    private ArrayList<Plant> plants;
-    private SunBuilder sunBuilder;
-    private Wave currentWave;
+    public enum GameState{STARTING , PLAYING , PAUSE , END}
+    protected GameState state =  GameState.STARTING;
+    protected PlantSelection selection;
+    protected int sunCount = 0;
+    protected int plantFoodsCount = 0;
+
+    public int getPlantFoodsCount() {
+        return plantFoodsCount;
+    }
+
+    public void setPlantFoodsCount(int plantFoodsCount) {
+        this.plantFoodsCount = plantFoodsCount;
+    }
+
+    public PlantFactory getPlantFactory() {
+        return plantFactory;
+    }
+
+    public void setPlantFactory(PlantFactory plantFactory) {
+        this.plantFactory = plantFactory;
+    }
+
+    public int getWaveID() {
+        return waveID;
+    }
+
+    public void setWaveID(int waveID) {
+        this.waveID = waveID;
+    }
+
+    protected Field field ;
+    protected ArrayList<Wave> waves;
+    protected ArrayList<Plant> plants_inField;
+    protected LinkedHashMap<PlantType , SeedPackage> available_plants;
+    protected SunBuilder sunBuilder;
+    protected Wave currentWave;
+    protected Wave previousWave;
+    protected ArrayList<Zombie> zombies; ///combination of current wave and next wave
+    protected ArrayList<Bullet>  bullets;
+    protected ArrayList<Sun> suns;
+    protected GameCommands StartGameCommand;
+    protected ChapterSpecialEvent event;
+    protected PlantFactory plantFactory = new PlantFactory();
+
+    public GameCommands getStartGameCommand() {
+        return StartGameCommand;
+    }
+
+    public GameState getState() {
+        return state;
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
+    }
 
     public int getSunCount() {
         return sunCount;
@@ -25,43 +84,294 @@ public class BaseGame implements Game {
     }
 
     @Override
-    public void updatePlants() {
+    public void initGame() {
 
     }
 
     @Override
-    public void updateZombies() {
+    public boolean startGame(String plantName) {
+        SeedPackage selected_plant = selection.selectPlant(plantName);
+        if(available_plants.containsKey(selected_plant.getPlant())) {
+            return false;
+        }
+        else  {
+            available_plants.put(selected_plant.getPlant(), selected_plant);
+        }
+
+        return available_plants.size() == Constants.Plants_count_in_a_game;
+    }
+
+    @Override
+    public void playGame(float delta) {
+        updatePlants(delta);
+        updatePlants(delta);
+        updateScene(delta);
+        Result result = attack(delta);
+        if(event!=null){
+            event.run(this , delta);
+        }
+
 
     }
 
     @Override
-    public void updateScene() {
+    public void updatePlants(float delta) {
 
     }
 
     @Override
-    public void updateGame() {
+    public void updateZombies(float delta) {
+        for (Zombie zombie : zombies) {
+            zombie.update(delta, this);
+        }
 
+        // آزادسازی گربه‌های جادوگرهای مرده
+        checkAndReleaseDeadWizards();
+
+        // آزادسازی خورشیدهای Ra و Turquoise
+        for (Zombie zombie : zombies) {
+            if (zombie.isDead()) {
+                SunRobbingAbility sun = zombie.getAbility(SunRobbingAbility.class);
+                if (sun != null && sun.getStolenSun() > 0) {
+                    int released = sun.getStolenSun() / 2;
+                    addSun(released);
+                }
+            }
+        }
+
+        // حذف زامبی‌های مرده
+        zombies.removeIf(Zombie::isDead);
     }
 
     @Override
-    public void plant() {
+    public void updateScene(float delta) {
 
     }
 
 
-    //  public void plant(){}
 
-  //  public void pluck(){}
+    @Override
+    public String plant(String plantName , int x , int y) {
+        String name = plantName.replaceAll(" " , "_").toUpperCase();
+        Result findPlant = plantAvailable(name);
+        if(!findPlant.success()) return findPlant.message();
+        Plant newPlant = plantFactory.CreatePlant(findPlant.plantType());
+        if(isEmpty(newPlant.getTags().contains(PlantTags.WATER) ,x, y)) return "The coordination is not empty or plantable.";
+        plants_inField.add(newPlant);
+        Tile tile = field.getTiles().get(y).get(x);
+        if(plantName.equals("LILY_PAD")){
+            tile.setPlantable(true);
+        }
+        else tile.setEmpty(true);
+        this.sunCount -= (int) available_plants.get(findPlant.plantType()).getCost();
+        return "New plant : " + findPlant.plantType().name() + " planted successfully at coordination :" +
+                " ( " + x + "," + y + ")";
 
-  //  public void ShowMap(){}
+    }
+    private Result plantAvailable(String plantName) {
+        try {
+            PlantType type = PlantType.valueOf(plantName.toUpperCase());
+            if(!available_plants.containsKey(type)) {
+                return new Result(false , "The plant doesn't exist on the available plants.",null);
+            }
+            return new Result(true, null,type);
 
-  //  public void ShowPlantsStatus(){}
+        } catch (IllegalArgumentException e) {
+            return new Result(false , "The plant doesn't exist on the available plants.",null);
+        }
 
-  //  public void ShowTile(){}
+    }
 
-   // public void showPlant(){}
+    private boolean isEmpty(boolean waterPlant , int x , int y){
+        Tile toPlantOn = field.getTiles().get(x).get(y);
+        boolean water = toPlantOn.isWater() || !waterPlant;
+        return toPlantOn.isEmpty() && toPlantOn.isPlantable() && water;
+    }
+
+    @Override
+    public String pluck(int x , int y) {
+        Tile  toPluckOn = field.getTiles().get(x).get(y);
+        for (Plant p : plants_inField){
+            if(p.getLine() == y && p.getTileIndex() == x){
+                if(toPluckOn.isEmpty() && toPluckOn.isPlantable()
+                        && toPluckOn.isWater()) continue; // This is a lily pad!
+                p.dispose(this);
+            }
+        }
+        return "Bro don't pluck the plants ):";
+    }
+
+    protected boolean won = false;
+    public boolean isWon() {
+        return won;
+    }
+    @Override
+    public Result check_endGame() {
+        for (Zombie z : zombies) {
+            if(z.getX() <= 0) return new Result(true , "Loss" , null);
+        }
+        return new  Result(false, null,null);
+    }
+
+    @Override
+    public void endGame() {
+
+    }
+
+    private int waveID = 0;
+    private Result attack(float delta) {
+        if(currentWave.isFinished()){
+            if(currentWave == waves.getLast()){
+                won = true;
+                return new Result(true , "Won" , null);
+            }
+            previousWave = currentWave;
+            currentWave = waves.get(waveID);
+            zombies.addAll(currentWave.getZombies());
+            waveID += 1;
+            event = switch (App.getCurrentuser().getChapter()){
+                case AncientEgypt -> new Tornado(this);
+                case FrozenCaves -> new IcyWind(this);
+                case BigWaveBeach -> new Water(this);
+                default -> new GraveSpawner(this);
+            };
+            return new Result(true , setTheWaveZombies() , null);
+        }
+        return new  Result(false, null,null);
+    }
 
 
+    protected String setTheWaveZombies(){
+        StringBuilder output = new StringBuilder();
+        int line = 0;
+        for (Zombie z : zombies) {
+            z.setLine(line % 5);
+            z.setTileIndex(8);
+            z.setX(9 * Tile.getWidth() + 200);
+            z.setY(line * Tile.getHeight());
+            line++;
+            output.append("Zombie spawned at line " + line + " , watch out human!\n");
+        }
+        return output.toString();
+    }
+
+    public ArrayList<Bullet> getBullets() {
+        return bullets;
+    }
+
+    public ArrayList<Sun> getSuns() {
+        return suns;
+    }
+
+    public Wave getCurrentWave() {
+        return currentWave;
+    }
+
+    public Field getField() {
+        return field;
+    }
+
+    public void setField(Field field) {
+        this.field = field;
+    }
+
+    public ArrayList<Wave> getWaves() {
+        return waves;
+    }
+
+    public void setWaves(ArrayList<Wave> waves) {
+        this.waves = waves;
+    }
+
+    public ArrayList<Plant> getPlants_inField() {
+        return plants_inField;
+    }
+
+    public void setPlants_inField(ArrayList<Plant> plants_inField) {
+        this.plants_inField = plants_inField;
+    }
+
+    public SunBuilder getSunBuilder() {
+        return sunBuilder;
+    }
+
+    public void setSunBuilder(SunBuilder sunBuilder) {
+        this.sunBuilder = sunBuilder;
+    }
+
+    public void setCurrentWave(Wave currentWave) {
+        this.currentWave = currentWave;
+    }
+
+    public Wave getPreviousWave() {
+        return previousWave;
+    }
+
+    public void setPreviousWave(Wave previousWave) {
+        this.previousWave = previousWave;
+    }
+
+    public void setBullets(ArrayList<Bullet> bullets) {
+        this.bullets = bullets;
+    }
+
+    public void setSuns(ArrayList<Sun> suns) {
+        this.suns = suns;
+    }
+
+    public ArrayList<Zombie> getZombies() {
+        return zombies;
+    }
+
+    public void setZombies(ArrayList<Zombie> zombies) {
+        this.zombies = zombies;
+    }
+
+    public PlantSelection getSelection() {
+        return selection;
+    }
+
+    public void setSelection(PlantSelection selection) {
+        this.selection = selection;
+    }
+
+    public LinkedHashMap<PlantType, SeedPackage> getAvailable_plants() {
+        return available_plants;
+    }
+
+    public void setAvailable_plants(LinkedHashMap<PlantType, SeedPackage> available_plants) {
+        this.available_plants = available_plants;
+    }
+
+    public void setStartGameCommand(GameCommands startGameCommand) {
+        StartGameCommand = startGameCommand;
+    }
+
+    public ChapterSpecialEvent getEvent() {
+        return event;
+    }
+
+    public void setEvent(ChapterSpecialEvent event) {
+        this.event = event;
+    }
+
+    public Plant findByCoordinates(int x , int y){
+        for (Plant p : this.plants_inField){
+            if(p.getLine() == y && p.getTileIndex() == x){
+                return p;
+            }
+        }
+        return null;
+    }
+
+    private final WizardObserver wizardObserver = new WizardObserver();
+
+    public void addCat(Zombie wizard, Plant plant) {
+        wizardObserver.addCat(wizard, plant);
+    }
+
+    public void checkAndReleaseDeadWizards() {
+        wizardObserver.checkAndReleaseDeadWizards();
+    }
 
 }

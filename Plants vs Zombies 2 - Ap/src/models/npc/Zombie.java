@@ -33,7 +33,6 @@ public class Zombie {
 
     // ====== EQUIPMENT ======
     private final List<Armor> armors = new ArrayList<>();
-    private Weapon weapon;
 
     // ====== OBSERVERS ======
     private final List<BulletObserver> bulletObservers = new ArrayList<>();
@@ -100,8 +99,7 @@ public class Zombie {
     }
 
     // ====== UPDATE ======
-    public void update(float deltaTime, GameController controller) {
-
+    public void update(float deltaTime, BaseGame game) {
         if (dead) return;
 
         updateEffects(deltaTime);
@@ -128,11 +126,7 @@ public class Zombie {
         }
 
         for (Ability ability : abilities) {
-            ability.execute(this, deltaTime, controller);
-        }
-
-        if (weapon != null) {
-            weapon.update(deltaTime, this);
+            ability.execute(this, deltaTime, game);
         }
     }
 
@@ -238,9 +232,6 @@ public class Zombie {
 
     public void die() {
         dead = true;
-        if (weapon != null) {
-            weapon.onOwnerDeath();
-        }
     }
 
     // ====== BULLET OBSERVERS ======
@@ -295,19 +286,6 @@ public class Zombie {
 
     public boolean hasArmor() {
         return !armors.isEmpty();
-    }
-
-    // ====== WEAPON ======
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
-    }
-
-    public Weapon getWeapon() {
-        return weapon;
-    }
-
-    public boolean hasWeapon() {
-        return weapon != null;
     }
 
     // ====== PLANT INTERACTION (placeholder) ======

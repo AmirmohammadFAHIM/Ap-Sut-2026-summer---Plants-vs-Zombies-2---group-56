@@ -29,8 +29,8 @@ public class Collection implements Menu {
         User user = Data.getCurrentUser();
         if (user != null) {
             System.out.println("--- Unlocked Plants ---");
-            for (String plant : user.getUnlockedPlantsNames()) {
-                System.out.println("- " + plant);
+            for (PlantType type : user.getUnlockedPlants()) {
+                System.out.println("--" + type.name());
             }
         }
     }

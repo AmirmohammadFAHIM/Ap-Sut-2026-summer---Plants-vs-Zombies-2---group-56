@@ -7,6 +7,7 @@ import models.QuestObserver;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class User implements Serializable, QuestObserver {
@@ -62,7 +63,8 @@ public class User implements Serializable, QuestObserver {
         this.readNews = new ArrayList<>();
         this.levelId = 1;
         this.chapter = Chapters.AncientEgypt;
-
+        this.unlockedPlants = new ArrayList<>(Arrays.asList(PlantType.PEASHOOTER , PlantType.SNOW_PEA,
+                PlantType.REPEATER , PlantType.CHOMPER , PlantType.WALL_NUT));
         this.activeQuests = new ArrayList<>();
         this.activeQuests.add(new Quest("Finish Dark Ages Pt.2", 1, "KILL_ZOMBIE", 50, "Gems", 15));
         this.activeQuests.add(new Quest("Adventure Extra: Daytime Dark Ages", 2, "COLLECT_SUN", 2000, "Coins", 4000));

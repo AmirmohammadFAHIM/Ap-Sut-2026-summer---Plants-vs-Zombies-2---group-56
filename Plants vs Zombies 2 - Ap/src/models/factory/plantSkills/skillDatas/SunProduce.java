@@ -9,13 +9,13 @@ import models.entity.Sun;
 import java.util.ArrayList;
 
 public class SunProduce implements Skill {
-    private SunProduceData normalData;
-    private SunProduceData plantFoodData;
+    private SunProduceData data;
+
 
 
     @Override
     public void do_skill(Plant producer, BaseGame game) {
-        produce(producer , normalData , game);
+        produce(producer , data, game);
     }
 
     @Override
@@ -55,6 +55,13 @@ public class SunProduce implements Skill {
                 producer.getX(), producer.getY());{
             game.getSuns().add(sun);
         }
+    }
+
+
+
+    @Override
+    public void update(){
+        data.amount += 25;
     }
 
 

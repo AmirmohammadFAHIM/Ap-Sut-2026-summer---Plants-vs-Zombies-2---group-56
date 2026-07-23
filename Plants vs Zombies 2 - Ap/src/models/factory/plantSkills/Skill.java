@@ -38,6 +38,9 @@ public interface Skill {
     public default boolean disposable(){
         return false;
     }
+    public default void update(){
+
+    }
 
 
 

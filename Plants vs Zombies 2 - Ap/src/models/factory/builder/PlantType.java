@@ -325,7 +325,16 @@ public enum PlantType {
             return super.allocateSkill(plant);
         }
     },
-    PHAT_BEET,
+    PHAT_BEET{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(3 , 3);
+            plant.getBaseSkill().add(new Explosive(data));
+            ExplosionData pf = new ExplosionData(ExplosionData.ExplosionType.ALL);
+            plant.getPlantfoodSkill().add(new Explosive(pf));
+            return super.allocateSkill(plant);
+        }
+    },
     CHOMPER{
         @Override
         public Plant allocateSkill(Plant plant) {

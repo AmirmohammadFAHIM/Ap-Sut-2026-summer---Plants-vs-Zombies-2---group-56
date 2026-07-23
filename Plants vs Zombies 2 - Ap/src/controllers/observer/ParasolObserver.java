@@ -7,8 +7,8 @@ public class ParasolObserver implements BulletObserver {
 
     @Override
     public void onBulletHit(Zombie zombie, Bullet bullet) {
-        if (bullet.isLobber()) {
-            bullet.ignore();
+        if (bullet.getTags() != null && bullet.getTags().contains(Bullet.Tag.MAGICAL)) {
+            bullet.setProved(true);
         }
     }
 }

@@ -1,7 +1,8 @@
 package models.npc.ability;
 
-import models.npc.*;
-import controllers.GameController;
+import models.npc.Zombie;
+import models.npc.EffectType;
+import models.games.BaseGame;
 
 public class ExplodeAbility implements Ability {
 
@@ -10,79 +11,62 @@ public class ExplodeAbility implements Ability {
     private final float cooldown;
     private float timer;
     private boolean triggered = false;
+    private Condition condition;
+
+    public enum Condition {
+        NONE,
+        IS_CARRYING,
+        TORCH_ON,
+        NOT_FROZEN
+    }
 
     public ExplodeAbility(float range, int damage, float cooldown) {
+        this(range, damage, cooldown, Condition.NONE);
+    }
+
+    public ExplodeAbility(float range, int damage, float cooldown, Condition condition) {
         this.range = range;
         this.damage = damage;
         this.cooldown = cooldown;
+        this.condition = condition;
         this.timer = 0;
     }
 
     @Override
-    public void execute(Zombie zombie, float deltaTime, ZombieController controller) {
+    public void execute(Zombie zombie, float deltaTime, BaseGame game) {
         if (triggered) return;
         if (zombie.isDead()) return;
 
-        // برای دینامیت: اگر یخ زده باشد، تایمر متوقف می‌شود
-        if (zombie.getAbility(DynamiteState.class) != null) {
-            DynamiteState state = zombie.getAbility(DynamiteState.class);
-            if (state.isFrozen()) return;
-        }
+        // شرط
+        if (!checkCondition(zombie)) return;
 
         timer += deltaTime;
         if (timer >= cooldown) {
             triggered = true;
 
             if (zombie.hasEffect(EffectType.HYPNOTIZED)) {
-                controller.explodeAreaOnZombies(zombie.getRow(), zombie.getX(), range, damage);
+                game.explodeAreaOnZombies(zombie.getRow(), zombie.getX(), range, damage);
             } else {
-                controller.explodeArea(zombie.getRow(), zombie.getX(), range, damage);
+                game.explodeArea(zombie.getRow(), zombie.getX(), range, damage);
             }
         }
     }
 
-    public boolean isTriggered() {
-        return triggered;
+    private boolean checkCondition(Zombie zombie) {
+        switch (condition) {
+            case IS_CARRYING:
+                MoveAbility move = zombie.getAbility(MoveAbility.class);
+                return move != null && move.isCarrying();
+            case TORCH_ON:
+                return zombie.isTorchOn();
+            case NOT_FROZEN:
+                return !zombie.isDynamiteFrozen();
+            case NONE:
+            default:
+                return true;
+        }
     }
 
-    public void reset() {
-        triggered = false;
-        timer = 0;
-    }
+    public boolean isTriggered() { return triggered; }
+    public void reset() { triggered = false; timer = 0; }
 }
-
-//package models.npc.ability;
-//
-//        import models.npc.Zombie;
-//        import models.npc.EffectType;
-//        import controllers.GameController;
-//
-//public class ExplodeAbility extends Ability {
-//
-//    private final float range;
-//    private final int damage;
-//    private final float cooldown;
-//    private float timer;
-//
-//    public ExplodeAbility(float range, int damage, float cooldown) {
-//        this.range = range;
-//        this.damage = damage;
-//        this.cooldown = cooldown;
-//        this.timer = 0;
-//    }
-//
-//    @Override
-//    public void execute(Zombie zombie, float deltaTime, GameController controller) {
-//        timer -= deltaTime;
-//        if (timer > 0) return;
-//
-//        // اگر هیپنوتیزم شده باشد، به زامبی‌ها حمله می‌کند
-//        if (zombie.hasEffect(EffectType.HYPNOTIZED)) {
-//            controller.explodeAreaOnZombies(zombie.getRow(), zombie.getX(), range, damage);
-//        } else {
-//            controller.explodeArea(zombie.getRow(), zombie.getX(), range, damage);
-//        }
-//
-//        timer = cooldown;
-//    }
-//}

@@ -7,8 +7,8 @@ public class DragonObserver implements BulletObserver {
 
     @Override
     public void onBulletHit(Zombie zombie, Bullet bullet) {
-        if (bullet.isFire()) {
-            bullet.ignore();
+        if (bullet.getTags() != null && bullet.getTags().contains(Bullet.Tag.FIRE)) {
+            bullet.setProved(true);
         }
     }
 }

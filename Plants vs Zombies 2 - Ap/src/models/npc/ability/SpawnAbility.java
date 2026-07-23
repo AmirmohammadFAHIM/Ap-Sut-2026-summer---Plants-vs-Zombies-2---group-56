@@ -1,75 +1,81 @@
 package models.npc.ability;
 
-import models.npc.Zombie;
-import controllers.GameController;
+import models.entity.Zombie;
+import models.games.BaseGame;
 
-public class SpawnAbility extends Ability {
+public class SpawnAbility implements Ability {
 
     private final String spawnType;
     private final int count;
     private final float cooldown;
     private final float healthThreshold;
-
+    private final boolean isDeadTriggered;
+    private final boolean isReverse;
     private float timer;
     private boolean triggered;
-    private boolean isDeadTriggered;
 
-    // ====== برای قبرساز (تایمر) ======
-    public SpawnAbility(String spawnType, int count, float cooldown) {
-        this(spawnType, count, cooldown, 0, false);
-    }
-
-    // ====== برای غول (شرط سلامت) ======
     public SpawnAbility(String spawnType, int count, float healthThreshold) {
-        this(spawnType, count, 0, healthThreshold, false);
+        this(spawnType, count, 0, healthThreshold, false, false);
     }
 
-    // ====== برای بشکه (شرط مرگ) ======
     public SpawnAbility(String spawnType, int count, boolean isDeadTriggered) {
-        this(spawnType, count, 0, 0, isDeadTriggered);
+        this(spawnType, count, 0, 0, isDeadTriggered, false);
     }
 
-    private SpawnAbility(String spawnType, int count, float cooldown, float healthThreshold, boolean isDeadTriggered) {
+    public SpawnAbility(String spawnType, int count, boolean isReverse, boolean unused) {
+        this(spawnType, count, 0, 0, false, isReverse);
+    }
+
+    private SpawnAbility(String spawnType, int count, float cooldown, float healthThreshold,
+                         boolean isDeadTriggered, boolean isReverse) {
         this.spawnType = spawnType;
         this.count = count;
         this.cooldown = cooldown;
         this.healthThreshold = healthThreshold;
         this.isDeadTriggered = isDeadTriggered;
+        this.isReverse = isReverse;
         this.timer = 0;
         this.triggered = false;
     }
 
     @Override
-    public void execute(Zombie zombie, float deltaTime, GameController controller) {
-
-        // ====== حالت اول: غول (شرط سلامت) ======
+    public void execute(Zombie zombie, float deltaTime, BaseGame game) {
+        // Gargantuar
         if (healthThreshold > 0) {
             if (triggered) return;
-
-            float healthPercent = (float) zombie.getHp() / zombie.getMaxHp();
-            if (healthPercent <= healthThreshold) {
-                controller.spawn(zombie, spawnType, count);
+            if ((float) zombie.getHp() / zombie.getMaxHp() <= healthThreshold) {
+                game.spawn(zombie, spawnType, count);
                 triggered = true;
             }
             return;
         }
 
-        // ====== حالت دوم: بشکه (شرط مرگ) ======
+        // Barrel
         if (isDeadTriggered) {
             if (triggered) return;
-
             if (zombie.isDead()) {
-                controller.spawn(zombie, spawnType, count);
+                game.spawn(zombie, spawnType, count);
                 triggered = true;
             }
             return;
         }
 
-        // ====== حالت سوم: قبرساز (تایمر) ======
+        // Dynamite reverse
+        if (isReverse) {
+            if (triggered) return;
+            ExplodeAbility explode = zombie.getAbility(ExplodeAbility.class);
+            if (explode != null && explode.isTriggered()) {
+                game.spawnReverseZombie(zombie.getRow());
+                triggered = true;
+            }
+            return;
+        }
+
+        // Tomb Raiser (timer)
         timer += deltaTime;
         if (timer >= cooldown) {
             timer = 0;
-            controller.spawn(zombie, spawnType, count);
+            game.spawn(zombie, spawnType, count);
         }
     }
 }

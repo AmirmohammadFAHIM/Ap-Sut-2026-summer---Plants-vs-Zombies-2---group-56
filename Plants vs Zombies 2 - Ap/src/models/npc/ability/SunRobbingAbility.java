@@ -1,9 +1,9 @@
 package models.npc.ability;
 
-import models.npc.Zombie;
-import controllers.GameController;
+import models.entity.Zombie;
+import models.games.BaseGame;
 
-public class SunRobbingAbility extends Ability {
+public class SunRobbingAbility implements Ability {
 
     private int stolenSun = 0;
     private final int maxStolenSun;
@@ -17,7 +17,7 @@ public class SunRobbingAbility extends Ability {
     }
 
     @Override
-    public void execute(Zombie zombie, float deltaTime, GameController controller) {
+    public void execute(Zombie zombie, float deltaTime, BaseGame game) {
         if (stolenSun >= maxStolenSun) return;
         if (!zombie.isNearHouse()) return;
 
@@ -29,27 +29,14 @@ public class SunRobbingAbility extends Ability {
                 amount = maxStolenSun - stolenSun;
             }
             stolenSun += amount;
-            controller.removeSun(amount);
+            game.removeSun(amount);
         }
     }
 
-    public int getStolenSun() {
-        return stolenSun;
-    }
-
-    public void releaseStolenSun(GameController controller) {
+    public int getStolenSun() { return stolenSun; }
+    public void releaseStolenSun(BaseGame game) {
         if (stolenSun > 0) {
-            int released = stolenSun / 2;
-            controller.addSun(released);
-            stolenSun = 0;
-        }
-    }
-
-    @Override
-    public void onDeath(Zombie zombie, GameController controller) {
-        if (stolenSun > 0) {
-            int released = stolenSun / 2;
-            controller.addSun(released);
+            game.addSun(stolenSun / 2);
             stolenSun = 0;
         }
     }

@@ -1,9 +1,10 @@
 package models.npc.ability;
 
 import models.npc.*;
-import controllers.GameController;
+import models.npc.EffectType;
+import models.games.BaseGame;
 
-public class BulletAbility extends Ability {
+public class BulletAbility implements Ability {
 
     private final BulletType bulletType;
     private final float cooldown;
@@ -18,40 +19,24 @@ public class BulletAbility extends Ability {
     }
 
     @Override
-    public void execute(Zombie zombie, float deltaTime, GameController controller) {
+    public void execute(Zombie zombie, float deltaTime, BaseGame game) {
         timer -= deltaTime;
         if (timer > 0) return;
 
-        // هیپنوتیزم: به جای گیاه، زامبی را هدف بگیر
         boolean isHypnotized = zombie.hasEffect(EffectType.HYPNOTIZED);
 
         if (isHypnotized) {
-            // هدف: نزدیک‌ترین زامبی (غیر از خودش)
-            Zombie target = controller.findNearestZombie(zombie, range);
+            Zombie target = game.findNearestZombie(zombie, range);
             if (target == null) return;
-
-            Bullet bullet = new Bullet(
-                    zombie.getX(),
-                    zombie.getY(),
-                    zombie.getRow(),
-                    bulletType
-            );
-            bullet.setTargetZombie(target);
-            controller.addBullet(bullet);
-
+            Bullet bullet = new Bullet(zombie.getX(), zombie.getY(), bulletType);
+            bullet.setToLockIn(target);
+            game.getBullets().add(bullet);
         } else {
-            // هدف: نزدیک‌ترین گیاه
-            Plant target = controller.findTargetPlant(zombie, range);
+            Plant target = game.findTargetPlant(zombie, range);
             if (target == null) return;
-
-            Bullet bullet = new Bullet(
-                    zombie.getX(),
-                    zombie.getY(),
-                    zombie.getRow(),
-                    bulletType
-            );
-            bullet.setTargetPlant(target);
-            controller.addBullet(bullet);
+            Bullet bullet = new Bullet(zombie.getX(), zombie.getY(), bulletType);
+            bullet.setToLockIn(null);
+            game.getBullets().add(bullet);
         }
 
         timer = cooldown;

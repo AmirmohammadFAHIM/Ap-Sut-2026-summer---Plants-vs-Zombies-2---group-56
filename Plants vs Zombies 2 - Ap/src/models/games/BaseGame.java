@@ -374,4 +374,197 @@ public class BaseGame implements Game {
         wizardObserver.checkAndReleaseDeadWizards();
     }
 
+    // ====== METHODS FOR ZOMBIE ABILITIES ======
+
+    public Zombie findNearestZombie(Zombie center, float range) {
+        Zombie nearest = null;
+        float minDist = Float.MAX_VALUE;
+        for (Zombie z : zombies) {
+            if (z == center) continue;
+            float dx = z.getX() - center.getX();
+            if (Math.abs(dx) <= range * 80 && z.getRow() == center.getRow()) {
+                float dist = Math.abs(dx);
+                if (dist < minDist) {
+                    minDist = dist;
+                    nearest = z;
+                }
+            }
+        }
+        return nearest;
+    }
+
+    public Plant findTargetPlant(Zombie zombie, float range) {
+        Plant nearest = null;
+        float minDist = Float.MAX_VALUE;
+        for (Plant p : plants_inField) {
+            if (p.getRow() != zombie.getRow()) continue;
+            float dx = p.getX() - zombie.getX();
+            if (dx > 0 && dx <= range * 80) {
+                if (dx < minDist) {
+                    minDist = dx;
+                    nearest = p;
+                }
+            }
+        }
+        return nearest;
+    }
+
+    public void explodeArea(int row, float x, float range, int damage) {
+        for (Plant p : plants_inField) {
+            if (p.getRow() != row) continue;
+            float dx = Math.abs(p.getX() - x);
+            if (dx <= range * 80) {
+                p.takeDamage(damage, null);
+            }
+        }
+    }
+
+    public void explodeAreaOnZombies(int row, float x, float range, int damage) {
+        for (Zombie z : zombies) {
+            if (z.getRow() != row) continue;
+            float dx = Math.abs(z.getX() - x);
+            if (dx <= range * 80) {
+                z.takeDamage(damage);
+            }
+        }
+    }
+
+    public GridItem getPushableItemInFront(Zombie zombie) {
+        int row = zombie.getRow();
+        int col = (int) ((zombie.getX() - 100) / 80) + 1;
+        if (col >= 9) return null;
+        // check grid items at (row, col)
+        return gridController.getGridItem(row, col);
+    }
+
+    public void pushItem(Zombie zombie, GridItem item) {
+        item.setCol(item.getCol() + 1);
+        if (item.getCol() >= 9) {
+            gridController.removeGridItem(item);
+        }
+    }
+
+    public Plant findPullablePlant(Zombie zombie) {
+        int row = zombie.getRow();
+        int col = (int) ((zombie.getX() - 100) / 80);
+        for (int i = 2; i <= 8; i++) {
+            int targetCol = col + i;
+            if (targetCol >= 9) break;
+            Plant p = getPlantAt(row, targetCol);
+            if (p != null && !p.isDead()) return p;
+        }
+        return null;
+    }
+
+    public void pullPlant(Zombie zombie, Plant plant) {
+        int col = plant.getCol();
+        if (isCellEmpty(plant.getRow(), col - 1)) {
+            plant.setCol(col - 1);
+        }
+    }
+
+    public void pullZombie(Zombie source, Zombie target) {
+        float dx = target.getX() - source.getX();
+        if (dx > 80) {
+            target.setPosition(target.getX() - 80, target.getY());
+        }
+    }
+
+    public void swapZombieToRow(Zombie target, int row) {
+        target.setRow(row);
+    }
+
+    public Plant getRandomPlantInRange(Zombie zombie, float range) {
+        List<Plant> candidates = new ArrayList<>();
+        for (Plant p : plants_inField) {
+            if (p.getRow() != zombie.getRow()) continue;
+            float dx = p.getX() - zombie.getX();
+            if (dx > 0 && dx <= range * 80) {
+                candidates.add(p);
+            }
+        }
+        if (candidates.isEmpty()) return null;
+        return candidates.get(new Random().nextInt(candidates.size()));
+    }
+
+    public Zombie getRandomZombieInRange(Zombie center, float range) {
+        List<Zombie> candidates = new ArrayList<>();
+        for (Zombie z : zombies) {
+            if (z == center) continue;
+            float dx = z.getX() - center.getX();
+            if (Math.abs(dx) <= range * 80 && z.getRow() == center.getRow()) {
+                candidates.add(z);
+            }
+        }
+        if (candidates.isEmpty()) return null;
+        return candidates.get(new Random().nextInt(candidates.size()));
+    }
+
+    public Zombie getRandomZombie() {
+        if (zombies.isEmpty()) return null;
+        return zombies.get(new Random().nextInt(zombies.size()));
+    }
+
+    public void spawnReverseZombie(int row) {
+        Zombie z = ZombieFactory.createZombie("normal");
+        z.setRow(row);
+        z.setPosition(50, row * 100 + 50);
+        z.setHypnotized(true);
+        zombies.add(z);
+    }
+
+    public void spawn(Zombie source, String spawnType, int count) {
+        if (spawnType.equals("imp")) {
+            for (int i = 0; i < count; i++) {
+                Zombie imp = ZombieFactory.createZombie("imp");
+                imp.setRow(source.getRow());
+                imp.setPosition(source.getX() + 50, source.getY());
+                zombies.add(imp);
+            }
+        } else if (spawnType.equals("grave")) {
+            // create grave grid items
+        }
+    }
+
+    public void addCat(Zombie wizard, Plant plant) {
+        wizardObserver.addCat(wizard, plant);
+    }
+
+    public boolean hasKilledPlant(Zombie zombie) {
+        return zombie.getAllStarObserver() != null &&
+                zombie.getAllStarObserver().isSlowed();
+    }
+
+    public boolean isArmorBroken(Zombie zombie, String armorType) {
+        for (Armor armor : zombie.getArmors()) {
+            if (armor.getType().equals(armorType) && armor.isBroken()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeSun(int amount) {
+        sunCount -= amount;
+        if (sunCount < 0) sunCount = 0;
+    }
+
+    public void addSun(int amount) {
+        sunCount += amount;
+    }
+
+    public Plant getPlantAt(int row, int col) {
+        for (Plant p : plants_inField) {
+            if (p.getRow() == row && p.getCol() == col) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public boolean isCellEmpty(int row, int col) {
+        return getPlantAt(row, col) == null;
+    }
+
+
 }

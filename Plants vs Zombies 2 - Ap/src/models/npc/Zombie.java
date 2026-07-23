@@ -1,10 +1,10 @@
 package models.npc;
 
-import models.config.ZombieConfig;
-import models.config.ZombieData;
+import models.npc.*;
+import models.games.BaseGame;
 import models.npc.ability.Ability;
 import controllers.observer.*;
-import controllers.GameController;
+import models.npc.ability.*;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ public class Zombie {
 
     // ====== CORE ======
     private final String id;
-    private final String objClass;
+    private final String type;
     private int hp;
     private final int maxHp;
     private int damage;
@@ -24,6 +24,10 @@ public class Zombie {
     private boolean hypnotized;
     private float eatCooldown;
     private float eatTimer = 0;
+
+    // ====== HITBOX ======
+    private int width;
+    private int height;
 
     // ====== ABILITIES ======
     private final List<Ability> abilities = new ArrayList<>();
@@ -40,60 +44,65 @@ public class Zombie {
     private NewspaperObserver newspaperObserver;
     private PassThroughObserver passThroughObserver;
 
-    // ====== CONFIG ======
-    private final ZombieConfig config;
-    private final ZombieData data;
+    // ====== STATE FLAGS ======
+    private boolean isTorchOn = false;
+    private boolean isDynamiteFrozen = false;
 
     // ====== CONSTRUCTOR ======
-    public Zombie(String id, ZombieConfig config) {
+    public Zombie(String id, String type, int hp, int damage, float speed, int width, int height) {
         this.id = id;
-        this.config = config;
-        this.objClass = config.getObjclass();
-        this.data = config.getObjdata();
-
-        this.hp = data.getHitpoints();
-        this.maxHp = data.getHitpoints();
-        this.speed = (float) data.getSpeed();
-        this.damage = data.getEatDPS();
+        this.type = type;
+        this.hp = hp;
+        this.maxHp = hp;
+        this.damage = damage;
+        this.speed = speed;
+        this.width = width;
+        this.height = height;
         this.eatCooldown = calculateEatCooldown();
-
+        this.dead = false;
+        this.frozen = false;
+        this.hypnotized = false;
         initObservers();
-        addBulletObservers();
     }
 
     // ====== INIT ======
     private float calculateEatCooldown() {
-        if ("imp".equals(data.getSize()) || "Imp".equals(data.getSize())) return 0.5f;
-        if ("ZombieGargantuarProps".equals(objClass)) return 2.0f;
-        if ("ZombieModernAllStarProps".equals(objClass)) return 1.0f;
-        return data.getSpeed() > 0.25 ? 0.7f : 1.0f;
+        if (id != null && id.toLowerCase().contains("imp")) return 0.5f;
+        if (type != null && type.toLowerCase().contains("gargantuar")) return 2.0f;
+        if (type != null && type.toLowerCase().contains("allstar")) return 1.0f;
+        return speed > 0.25 ? 0.7f : 1.0f;
     }
 
     private void initObservers() {
-        if ("ZombieModernAllStarProps".equals(objClass)) {
+        if (type != null && type.toLowerCase().contains("allstar")) {
             allStarObserver = new AllStarObserver();
         }
-        if ("ZombieModernNewspaperProps".equals(objClass)) {
+        if (type != null && type.toLowerCase().contains("newspaper")) {
             newspaperObserver = new NewspaperObserver();
         }
-        if ("ZombieIceAgeDodoProps".equals(objClass)) {
+        if (type != null && type.toLowerCase().contains("dodo")) {
             passThroughObserver = new PassThroughObserver();
         }
     }
 
-    private void addBulletObservers() {
-        if ("ZombieDarkJugglerProps".equals(objClass)) {
-            addBulletObserver(new JugglerObserver());
-        }
-        if (id != null && id.toLowerCase().contains("dragon")) {
-            addBulletObserver(new DragonObserver());
-        }
-        if (data.getZombieArmorProps() != null) {
-            for (String armorRef : data.getZombieArmorProps()) {
-                if (armorRef.contains("Crown") || armorRef.contains("Parasol")) {
-                    addBulletObserver(new ParasolObserver());
-                    break;
-                }
+    // ====== BULLET OBSERVERS ======
+    public void addBulletObserver(BulletObserver observer) {
+        bulletObservers.add(observer);
+    }
+
+    public void removeBulletObserver(BulletObserver observer) {
+        bulletObservers.remove(observer);
+    }
+
+    public List<BulletObserver> getBulletObservers() {
+        return Collections.unmodifiableList(bulletObservers);
+    }
+
+    public void notifyBulletObservers(Bullet bullet) {
+        for (BulletObserver observer : bulletObservers) {
+            observer.onBulletHit(this, bullet);
+            if (!bullet.isActive()) {
+                break;
             }
         }
     }
@@ -175,34 +184,27 @@ public class Zombie {
     // ====== CORE METHODS ======
     public void move() {
         if (dead) return;
-
-        // PassThroughObserver: Dodo Rider ignores obstacles
         if (passThroughObserver != null && passThroughObserver.canPassThrough(this, null)) {
             x += getActualSpeed() * movingDirection();
             return;
         }
-
         x += getActualSpeed() * movingDirection();
     }
 
     public void attack(Plant plant) {
         if (plant == null) return;
+        if (hasEffect(EffectType.HYPNOTIZED)) return;
 
-        if (hasEffect(EffectType.HYPNOTIZED)) {
-            return;
-        }
-
-        if ("ZombieDarkWizardProps".equals(objClass)) {
+        if (type != null && type.toLowerCase().contains("wizard")) {
             plant.setCat(true);
             return;
         }
 
-        if ("ZombieCamelDefault".equals(objClass) || "ZombieTurquoiseProps".equals(objClass)) {
+        if (type != null && (type.toLowerCase().contains("turquoise") || type.toLowerCase().contains("camel"))) {
             return;
         }
 
         plant.takeDamage(damage, this);
-
         if (plant.isDead() && allStarObserver != null) {
             allStarObserver.onPlantKilled(this);
         }
@@ -232,28 +234,6 @@ public class Zombie {
 
     public void die() {
         dead = true;
-    }
-
-    // ====== BULLET OBSERVERS ======
-    public void addBulletObserver(BulletObserver observer) {
-        bulletObservers.add(observer);
-    }
-
-    public void removeBulletObserver(BulletObserver observer) {
-        bulletObservers.remove(observer);
-    }
-
-    public List<BulletObserver> getBulletObservers() {
-        return Collections.unmodifiableList(bulletObservers);
-    }
-
-    public void notifyBulletObservers(Bullet bullet) {
-        for (BulletObserver observer : bulletObservers) {
-            observer.onBulletHit(this, bullet);
-            if (!bullet.isActive()) {
-                break;
-            }
-        }
     }
 
     // ====== ABILITIES ======
@@ -288,34 +268,24 @@ public class Zombie {
         return !armors.isEmpty();
     }
 
+    // ====== STATE FLAGS ======
+    public boolean isTorchOn() { return isTorchOn; }
+    public void setTorchOn(boolean torchOn) { this.isTorchOn = torchOn; }
+
+    public boolean isDynamiteFrozen() { return isDynamiteFrozen; }
+    public void setDynamiteFrozen(boolean dynamiteFrozen) { this.isDynamiteFrozen = dynamiteFrozen; }
+
     // ====== PLANT INTERACTION (placeholder) ======
-    public boolean reachedPlant() {
-        return false;
-    }
-
-    public Plant findNextPlant() {
-        return null;
-    }
-
-    public boolean isNearPlant() {
-        return false;
-    }
-
-    public Plant getTargetPlant() {
-        return null;
-    }
-
-    public boolean isNearHouse() {
-        return x < 50;
-    }
-
-    public int movingDirection() {
-        return hypnotized ? -1 : 1;
-    }
+    public boolean reachedPlant() { return false; }
+    public Plant findNextPlant() { return null; }
+    public boolean isNearPlant() { return false; }
+    public Plant getTargetPlant() { return null; }
+    public boolean isNearHouse() { return x < 50; }
+    public int movingDirection() { return hypnotized ? -1 : 1; }
 
     // ====== GETTERS & SETTERS ======
     public String getId() { return id; }
-    public String getObjClass() { return objClass; }
+    public String getType() { return type; }
     public int getHp() { return hp; }
     public int getMaxHp() { return maxHp; }
     public int getDamage() { return damage; }
@@ -327,6 +297,8 @@ public class Zombie {
     public boolean isDead() { return dead; }
     public boolean isFrozen() { return frozen; }
     public boolean isHypnotized() { return hypnotized; }
+    public float getWidth() { return width; }
+    public float getHeight() { return height; }
 
     public void setHp(int hp) { this.hp = hp; }
     public void setSpeed(float speed) { this.speed = speed; }
@@ -335,7 +307,7 @@ public class Zombie {
     public void setFrozen(boolean frozen) { this.frozen = frozen; }
     public void setHypnotized(boolean hypnotized) { this.hypnotized = hypnotized; }
 
-    public AllStarObserver getAllStarObserver() { return allStarObserver; }
-    public NewspaperObserver getNewspaperObserver() { return newspaperObserver; }
-    public PassThroughObserver getPassThroughObserver() { return passThroughObserver; }
+//    public AllStarObserver getAllStarObserver() { return allStarObserver; }
+//    public NewspaperObserver getNewspaperObserver() { return newspaperObserver; }
+//    public PassThroughObserver getPassThroughObserver() { return passThroughObserver; }
 }

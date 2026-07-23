@@ -7,6 +7,7 @@ public class JugglerObserver implements BulletObserver {
 
     @Override
     public void onBulletHit(Zombie zombie, Bullet bullet) {
-        bullet.deflectBack();
+        bullet.setVelocityX(-bullet.getVelocityX());
+        bullet.setVelocityY(-bullet.getVelocityY());
     }
 }

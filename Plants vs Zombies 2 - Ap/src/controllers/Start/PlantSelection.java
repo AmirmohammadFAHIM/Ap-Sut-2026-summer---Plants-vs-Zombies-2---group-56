@@ -7,6 +7,8 @@ import models.factory.PlantFactory;
 import models.factory.builder.PlantType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class PlantSelection {
     PlantFactory factory = new PlantFactory();
@@ -19,11 +21,7 @@ public class PlantSelection {
         plantsToChoose.addAll(App.getCurrentuser().getUnlockedPlants());
     }
 
-    public void showallPlants() {
-    }
 
-    public void showavailablePlants() {
-    }
 
     public SeedPackage selectPlant(String plantName) {
         try {
@@ -32,6 +30,7 @@ public class PlantSelection {
                 return null;
             }
             return new SeedPackage(plantType , Data.getPlants().get(plantType).getRecharge());
+            ///  TODO : affect the updates
         }catch (Exception e){
             return null;
         }
@@ -40,7 +39,9 @@ public class PlantSelection {
     }
 
 
-    public void removePlant() {
+    public String removePlant(HashMap<PlantType , SeedPackage> packets, PlantType toRemove) {
+        packets.remove(toRemove);
+        return toRemove + " has been removed";
     }
 
     public void boostPlant() {

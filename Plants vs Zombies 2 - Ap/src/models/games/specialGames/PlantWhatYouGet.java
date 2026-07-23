@@ -8,8 +8,11 @@ import models.entity.Plant;
 import models.entity.PlantCategory;
 import models.factory.builder.PlantType;
 import models.games.BaseGame;
+import models.games.Game;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PlantWhatYouGet extends BaseGame implements SpecialGame {
     PlantWhatYouGet(){
@@ -34,25 +37,22 @@ public class PlantWhatYouGet extends BaseGame implements SpecialGame {
     boolean plantFinished;
     @Override
     public boolean startGame(String input) {
-        if(!selectionFinished){
-           selectionFinished = super.startGame(input);
-           if(selectionFinished) StartGameCommand = GameCommands.PLANT;
-           return false;
-        }
-        else if(!plantFinished){
-            int x , y; // get them from the regex(input)
-            String plantName = null; // same thing here
-            plant(plantName , x , y);
-            /// TODO: cost the price of the plant from the suns in the game
-            plantFinished = sunCount == 0;
-            if(plantFinished) StartGameCommand = GameCommands.START_GAME;
-            return false;
-        }
-        else{
-            return true; // only when the command is start game , we reach here , so don't worry
-        }
-
-
-
+        return selectionFinished;
     }
+
+    @Override
+    public void playGame(float delta) {
+        if(selectionFinished &&  plantFinished){
+             super.playGame(delta);
+        }
+    }
+
+    @Override
+    public String plant(String plantName, int x, int y) {
+        String output = super.plant(plantName, x, y);
+        if(sunCount == 0) plantFinished = true;
+        return output;
+    }
+
+
 }

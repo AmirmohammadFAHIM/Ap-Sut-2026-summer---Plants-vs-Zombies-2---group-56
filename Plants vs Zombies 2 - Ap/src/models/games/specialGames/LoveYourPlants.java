@@ -20,6 +20,9 @@ public class LoveYourPlants extends BaseGame implements SpecialGame {
 
     @Override
     public Result check_endGame() {
-        return deadPlants >= 5;
+        if(deadPlants >= 5){
+            return new Result(true , "Loss" , null);
+        }
+        return  new Result(false, null , null);
     }
 }

@@ -13,10 +13,13 @@ import models.factory.builder.SunBuilder;
 import models.gamePanes.Field;
 import models.gamePanes.Tile;
 import models.gamePanes.Wave;
+import models.utils.RegexHelper;
 import models.utils.Result;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BaseGame implements Game {
     public enum GameState{STARTING , PLAYING , PAUSE , END}
@@ -96,15 +99,16 @@ public class BaseGame implements Game {
 
     @Override
     public boolean startGame(String plantName) {
-        SeedPackage selected_plant = selection.selectPlant(plantName);
-        if(available_plants.containsKey(selected_plant.getPlant())) {
-            return false;
-        }
-        else  {
-            available_plants.put(selected_plant.getPlant(), selected_plant);
-        }
+        return plantSelection;
+    }
 
-        return available_plants.size() == Constants.Plants_count_in_a_game;
+    protected boolean plantSelection = false;
+    public String add(String name){
+        if(available_plants.size() == 8) return "Impossible. Slots are full";
+        SeedPackage seedPackage = selection.selectPlant(name);
+        available_plants.put(seedPackage.getPlant(), seedPackage);
+        if(available_plants.size() == 8) plantSelection = true;
+        return "Plant added successfully";
     }
 
     @Override
@@ -348,4 +352,5 @@ public class BaseGame implements Game {
         }
         return null;
     }
+
 }

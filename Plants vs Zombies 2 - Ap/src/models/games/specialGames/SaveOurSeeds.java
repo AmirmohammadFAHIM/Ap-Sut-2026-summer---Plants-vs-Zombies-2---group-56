@@ -22,8 +22,8 @@ public class SaveOurSeeds extends BaseGame implements SpecialGame {
     @Override
     public Result check_endGame() {
         for (Plant p : toProtect) {
-            if(!p.isAlive()) return true;
+            if(!p.isAlive()) return new Result(true , "Loss" , null);
         }
-        return  false;
+        return  new Result(false , null , null);
     }
 }

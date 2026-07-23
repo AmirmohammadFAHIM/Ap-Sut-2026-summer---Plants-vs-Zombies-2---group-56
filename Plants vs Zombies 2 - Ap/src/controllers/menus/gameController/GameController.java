@@ -23,6 +23,12 @@ public class GameController implements Controller{/// Main Brain of the game
     private Level level;
 
 
+    public String plant(String name , int x , int y){
+        return game.plant(name,x,y);
+    }
+    public String pluck( int x , int y){
+        return game.pluck(x,y);
+    }
 
     @Override
     public String GameStart(String input) {
@@ -166,8 +172,49 @@ public class GameController implements Controller{/// Main Brain of the game
         return null;
     }
 
+
+    public String availablePlants(){
+        StringBuilder output = new StringBuilder();
+        for (PlantType x : game.getSelection().getPlantsToChoose()){
+            output.append(x.name()).append("\n");
+        }
+        return output.toString();
+    }
+
+    public String allPlants(){
+        StringBuilder output = new StringBuilder();
+        for (PlantType x : App.getCurrentuser().getUnlockedPlants()){
+            output.append(x.name()).append("\n");
+        }
+        return output.toString();
+    }
+
     private void addPlantFood(){
         game.setPlantFoodsCount(game.getPlantFoodsCount()+1);
+    }
+
+    public String removePlant(String name){
+        try {
+            PlantType t = PlantType.valueOf(name);
+            if(game.getState() != BaseGame.GameState.STARTING){
+                return game.getSelection().removePlant(game.getAvailable_plants() ,
+                        t);
+            }
+            return "Invalid command now.";
+        } catch (RuntimeException e) {
+            return "Plant not found.";
+        }
+
+
+    }
+
+    public String addPlant(String name){
+        try {
+            SeedPackage seedPackage = game.getSelection().selectPlant(name);
+            return "added plant " + seedPackage.getPlant();
+        } catch (RuntimeException e) {
+            return "Plant not found.";
+        }
     }
 
     public BaseGame getGame() {

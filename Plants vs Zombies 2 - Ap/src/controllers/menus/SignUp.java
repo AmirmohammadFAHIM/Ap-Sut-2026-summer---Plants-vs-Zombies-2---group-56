@@ -38,6 +38,7 @@ public class SignUp implements Menu {
             return;
         }
 
+
         if (Data.isUsernameExists(username)) {
             System.out.println("Error: username is already taken.");
             return;
@@ -54,15 +55,19 @@ public class SignUp implements Menu {
             return;
         }
 
+        System.out.println("password passed");
+
         if (!isValidNickname(nickname)) {
             System.out.println("Error: nickname length is invalid. It must be between 3 and 30 characters.");
             return;
         }
 
+        System.out.println("nickname passed");
         if (!isValidEmail(email)) {
             System.out.println("Error: email format is invalid.");
             return;
         }
+        System.out.println("email passed");
 
         String hashedPassword = hashPassword(password);
         User newUser = new User(username, hashedPassword, nickname, email, gender);

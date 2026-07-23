@@ -51,46 +51,31 @@ public class GameView extends View {
 
 
         if(controller.getGame().getState() == BaseGame.GameState.STARTING){
-            if(input.matches(controller.getGame().getStartGameCommand().getRegex())){
-                System.out.println(controller.getGame().startGame(input));
+            if (showAllPlantsMatcher.matches()) {
+                System.out.println(controller.allPlants());
+            } else if (showAvailPlantsMatcher.matches()) {
+                System.out.println(controller.availablePlants());
+            } else if (addPlantMatcher.matches()) {
+                String type = addPlantMatcher.group("type");
+                System.out.println(controller.addPlant(type));
+            } else if (removePlantMatcher.matches()) {
+                String type = removePlantMatcher.group("type");
+                System.out.println(controller.removePlant(type));
+            } else if (boostPlantMatcher.matches()) {
+                String type = boostPlantMatcher.group("type");
+                //controller.boostPlant(type);
+                System.out.println("Boosting plant: " + type);
+            } else if (startGameMatcher.matches()) {
+                System.out.println(controller.GameStart(input));
             }
-            else{
-                System.out.println("Invalid command for starting , valid command : " + controller.getGame()
-                        .getStartGameCommand().name());
-            }
-            return;
         }
-
-        if (showAllPlantsMatcher.matches()) {
-            // controller.showAllPlants(); // نیاز به پیاده‌سازی در کنترلر
-            System.out.println("Showing all plants...");
-        } else if (showAvailPlantsMatcher.matches()) {
-            // controller.showAvailablePlants();
-            System.out.println("Showing available plants...");
-        } else if (addPlantMatcher.matches()) {
-            String type = addPlantMatcher.group("type");
-            // controller.addPlantToSelection(type);
-            System.out.println("Adding plant: " + type);
-        } else if (removePlantMatcher.matches()) {
-            String type = removePlantMatcher.group("type");
-            // controller.removePlantFromSelection(type);
-            System.out.println("Removing plant: " + type);
-        } else if (boostPlantMatcher.matches()) {
-            String type = boostPlantMatcher.group("type");
-            // controller.boostPlant(type);
-            System.out.println("Boosting plant: " + type);
-        } else if (startGameMatcher.matches()) {
-            System.out.println(controller.GameStart(input));
-        }
-
         else if (advanceTimeMatcher.matches()) {
             int ticks = Integer.parseInt(advanceTimeMatcher.group("count"));
-            System.out.println(controller.playGame(ticks)); // پاس دادن زمان به کنترلر
+            System.out.println(controller.playGame(ticks * 0.1f)); // پاس دادن زمان به کنترلر
         } else if (collectSunMatcher.matches()) {
             int x = Integer.parseInt(collectSunMatcher.group("x"));
             int y = Integer.parseInt(collectSunMatcher.group("y"));
-            // controller.collectSun(x, y);
-            System.out.println("Collecting sun at (" + x + ", " + y + ")");
+            System.out.println(controller.collectSun(x,y));
         } else if (showSunAmountMatcher.matches()) {
             System.out.println(controller.showSunAmount());
         } else if (cheatAddSunMatcher.matches()) {
@@ -102,13 +87,12 @@ public class GameView extends View {
             String type = plantPlantMatcher.group("type");
             int x = Integer.parseInt(plantPlantMatcher.group("x"));
             int y = Integer.parseInt(plantPlantMatcher.group("y"));
-            // controller.plantInGame(type, x, y);
-            System.out.println("Planting " + type + " at (" + x + ", " + y + ")");
+            System.out.println(controller.plant(type,x,y));
+
         } else if (pluckPlantMatcher.matches()) {
             int x = Integer.parseInt(pluckPlantMatcher.group("x"));
             int y = Integer.parseInt(pluckPlantMatcher.group("y"));
-            // controller.pluckPlant(x, y);
-            System.out.println("Plucking plant at (" + x + ", " + y + ")");
+            System.out.println(controller.pluck(x , y));
         } else if (feedPlantMatcher.matches()) {
             int x = Integer.parseInt(feedPlantMatcher.group("x"));
             int y = Integer.parseInt(feedPlantMatcher.group("y"));

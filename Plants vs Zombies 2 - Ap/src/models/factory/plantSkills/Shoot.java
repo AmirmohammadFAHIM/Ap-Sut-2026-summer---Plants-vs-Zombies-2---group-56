@@ -43,6 +43,7 @@ public class Shoot implements Skill {
             case LOBBER -> lobber(shooter , game);
             case Random -> random(shooter , game , data.getRandomCount());
         }
+        if(data.range > 0) midRange(shooter , game);
     }
 
     float onionChange;

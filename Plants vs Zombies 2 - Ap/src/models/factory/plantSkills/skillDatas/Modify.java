@@ -1,8 +1,7 @@
 package models.factory.plantSkills.skillDatas;
 
 import models.App;
-import models.entity.Bullet;
-import models.entity.Plant;
+import models.entity.*;
 import models.factory.plantSkills.Skill;
 import models.gamePanes.Tile;
 import models.gamePanes.TileType;
@@ -18,7 +17,9 @@ public class Modify implements Skill {
     }
     @Override
     public void do_skill(Plant plant, BaseGame game) {
-
+        if(plant.getCategory() == PlantCategory.StrikeThrough) runBack(plant, game);
+        else if(plant.getTags().contains(PlantTags.FIRE)) fire(plant, game);
+        else if(plant.getTags().contains(PlantTags.WATER)) lilyPad(plant, game);
     }
 
     @Override
@@ -84,4 +85,9 @@ public class Modify implements Skill {
         }
     }
 
+    public void runBack(Plant plant, BaseGame game) {
+        for (Zombie x :  game.getZombies()) {
+            if(x.getLine() == plant.getLine()) x.setTileIndex(plant.getTileIndex() - 3);
+        }
+    }
 }

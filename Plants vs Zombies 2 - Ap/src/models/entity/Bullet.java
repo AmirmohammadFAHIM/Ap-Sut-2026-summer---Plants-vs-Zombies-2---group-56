@@ -6,7 +6,6 @@ import models.gamePanes.Tile;
 import models.gamePanes.TileType;
 import models.games.BaseGame;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -26,6 +25,7 @@ public class Bullet {
     private float y;
     private float pierce = 1;
     private boolean grounded = false;
+    private boolean active;
     private float poisonDamage = Constants.poisonBaseDamage;
     private final ArrayList<BulletType> bowling = new ArrayList<>(Arrays.asList(BulletType.ONION));
 
@@ -83,22 +83,35 @@ public class Bullet {
 
         if(pierce <= 0) dispose(game);
         updateLocation(delta);
-       if(!tags.contains(Tag.MAGICAL) && toLockIn == null) block(game.getField());
-       if(bowling.contains(this.type)){
-           bowling(game.getField());
-       }
+        if(!tags.contains(Tag.MAGICAL) && toLockIn == null) block(game.getField());
+        if(bowling.contains(this.type)){
+            bowling(game.getField());
+        }
 
     }
 
     private void hit(BaseGame game){
-        if(toLockIn != null){
-            if(overlaps(toLockIn)){
-                // TODO: deal damage
+        if (toLockIn != null) {
+            toLockIn.notifyBulletObservers(this);
+            if (this.isActive()) {
+                toLockIn.takeDamage((int) this.damage);
             }
+            return;
         }
-        for (Zombie x : game.getZombies()){
-            if(overlaps(x)){
-                // TODO: deal damage
+
+        for (Zombie z : game.getZombies()) {
+            if (overlaps(z)) {
+                z.notifyBulletObservers(this);
+                if (this.isActive()) {
+                    z.takeDamage((int) this.damage);
+                    if (this.getTags().contains(Tag.ICE)) {
+                        z.addEffect(new Effect(EffectType.FROZEN, 3.0f));
+                    }
+                    if (this.getTags().contains(Tag.POISON)) {
+                        z.addEffect(new Effect(EffectType.POISONED, 5.0f));
+                    }
+                }
+                break;
             }
         }
     }
@@ -264,5 +277,12 @@ public class Bullet {
 
     public void setPierce(float pierce) {
         this.pierce = pierce;
+    }
+
+    public boolean isActive(){
+        return this.active;
+    }
+    public void setActive(boolean active){
+        this.active = active;
     }
 }

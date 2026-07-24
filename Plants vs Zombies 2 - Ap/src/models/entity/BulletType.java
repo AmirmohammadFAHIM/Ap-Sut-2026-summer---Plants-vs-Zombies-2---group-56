@@ -14,6 +14,8 @@ public enum BulletType {
 
     MAGIC,
 
+    ICE,
+
     LIGHTNING,
 
     BUTTER,

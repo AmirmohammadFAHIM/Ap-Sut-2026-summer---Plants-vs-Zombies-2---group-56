@@ -1,102 +1,330 @@
 package models.entity;
 
-import models.factory.zombies.observers.Armor;
+import models.games.BaseGame;
+import models.entity.ability.Ability;
+import controllers.observer.*;
 
-import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 
-public class Zombie extends  Entity {
-    private String type;
-    private ArrayList<Armor> armors;
-    private Rectangle bounds;
-    private int cost;
-    private Zombie imp;
+public class Zombie {
 
+    // ====== CORE ======
+    private final String id;
+    private final String type;
+    private int hp;
+    private final int maxHp;
+    private int damage;
+    private float speed;
+    private float x, y;
+    private int row;
+    private int tileIndex;
+    private boolean dead;
+    private boolean frozen;
+    private boolean hypnotized;
+    private float eatCooldown;
+    private float eatTimer = 0;
 
-    public void drop(){
+    // ====== HITBOX ======
+    private int width;
+    private int height;
 
-    }
+    // ====== ABILITIES ======
+    private final List<Ability> abilities = new ArrayList<>();
 
+    // ====== EFFECTS ======
+    private final List<Effect> effects = new ArrayList<>();
 
-    public float getX() {
-        return x;
-    }
+    // ====== EQUIPMENT ======
+    private final List<Armor> armors = new ArrayList<>();
 
-    public float getY() {
-        return y;
-    }
+    // ====== OBSERVERS ======
+    private final List<BulletObserver> bulletObservers = new ArrayList<>();
+    private AllStarObserver allStarObserver;
+    private NewspaperObserver newspaperObserver;
+    private PassThroughObserver passThroughObserver;
 
-    public String getType() {
-        return type;
-    }
+    // ====== STATE FLAGS ======
+    private boolean isTorchOn = false;
+    private boolean isDynamiteFrozen = false;
 
-    public void setType(String type) {
+    // ====== CONSTRUCTOR ======
+    public Zombie(String id, String type, int hp, int damage, float speed, int width, int height) {
+        this.id = id;
         this.type = type;
+        this.hp = hp;
+        this.maxHp = hp;
+        this.damage = damage;
+        this.speed = speed;
+        this.width = width;
+        this.height = height;
+        this.eatCooldown = calculateEatCooldown();
+        this.dead = false;
+        this.frozen = false;
+        this.hypnotized = false;
+        initObservers();
     }
 
-    public ArrayList<Armor> getArmors() {
-        return armors;
+    // ====== INIT ======
+    private float calculateEatCooldown() {
+        if (id != null && id.toLowerCase().contains("imp")) return 0.5f;
+        if (type != null && type.toLowerCase().contains("gargantuar")) return 2.0f;
+        if (type != null && type.toLowerCase().contains("allstar")) return 1.0f;
+        return speed > 0.25 ? 0.7f : 1.0f;
     }
 
-    public void setArmors(ArrayList<Armor> armors) {
-        this.armors = armors;
+    private void initObservers() {
+        if (type != null && type.toLowerCase().contains("allstar")) {
+            allStarObserver = new AllStarObserver();
+        }
+        if (type != null && type.toLowerCase().contains("newspaper")) {
+            newspaperObserver = new NewspaperObserver();
+        }
+        if (type != null && type.toLowerCase().contains("dodo")) {
+            passThroughObserver = new PassThroughObserver();
+        }
     }
 
-    public void setX(float x) {
-        this.x = x;
+    // ====== BULLET OBSERVERS ======
+    public void addBulletObserver(BulletObserver observer) {
+        bulletObservers.add(observer);
     }
 
-    public void setY(float y) {
-        this.y = y;
+    public void removeBulletObserver(BulletObserver observer) {
+        bulletObservers.remove(observer);
     }
 
-    public int getLine() {
-        return line;
+    public List<BulletObserver> getBulletObservers() {
+        return Collections.unmodifiableList(bulletObservers);
     }
 
-    public void setLine(int line) {
-        this.line = line;
+    public void notifyBulletObservers(Bullet bullet) {
+        for (BulletObserver observer : bulletObservers) {
+            observer.onBulletHit(this, bullet);
+            if (!bullet.isActive()) {
+                break;
+            }
+        }
     }
 
-    public float getVelocityX() {
-        return velocityX;
+    // ====== UPDATE ======
+    public void update(float deltaTime, BaseGame game) {
+        if (dead) return;
+
+        updateEffects(deltaTime);
+
+        if (hasEffect(EffectType.POISONED)) {
+            applyPoisonDamage();
+        }
+
+        if (hasEffect(EffectType.FROZEN)) {
+            return;
+        }
+
+        move();
+
+        if (reachedPlant()) {
+            eatTimer += deltaTime;
+            if (eatTimer >= eatCooldown) {
+                eatTimer = 0;
+                Plant plant = findNextPlant();
+                if (plant != null) {
+                    attack(plant , game);
+                }
+            }
+        }
+
+        for (Ability ability : abilities) {
+            ability.execute(this, deltaTime, game);
+        }
     }
 
-    public void setVelocityX(float velocityX) {
-        this.velocityX = velocityX;
+    // ====== EFFECTS ======
+    public void addEffect(Effect effect) {
+        if (effect.getType() == EffectType.HYPNOTIZED) {
+            removeEffect(EffectType.HYPNOTIZED);
+        }
+        effects.add(effect);
     }
 
-    public float getVelocityY() {
-        return velocityY;
+    public void removeEffect(EffectType type) {
+        effects.removeIf(e -> e.getType() == type);
     }
 
-    public void setVelocityY(float velocityY) {
-        this.velocityY = velocityY;
+    public boolean hasEffect(EffectType type) {
+        return effects.stream().anyMatch(e -> e.getType() == type);
     }
 
-    public int getCost() {
-        return cost;
+    private void updateEffects(float deltaTime) {
+        for (Effect effect : effects) {
+            effect.update(deltaTime);
+        }
+        effects.removeIf(Effect::isExpired);
     }
 
-    public void setCost(int cost) {
-        this.cost = cost;
+    private void applyPoisonDamage() {
+        this.hp -= 5;
+        if (this.hp <= 0) {
+            this.hp = 0;
+            die();
+        }
     }
 
-    public Zombie getImp() {
-        return imp;
+    public void meltFrozen() {
+        removeEffect(EffectType.FROZEN);
     }
 
-    public void setImp(Zombie imp) {
-        this.imp = imp;
+    public float getActualSpeed() {
+        if (hasEffect(EffectType.FROZEN)) {
+            return speed * 0.3f;
+        }
+        return speed;
     }
 
-    public Rectangle getBounds() {
-        return bounds;
+    // ====== CORE METHODS ======
+    public void move() {
+        if (dead) return;
+        if (passThroughObserver != null && passThroughObserver.canPassThrough(this, null)) {
+            x += getActualSpeed() * movingDirection();
+            return;
+        }
+        x += getActualSpeed() * movingDirection();
+        // بروزرسانی tileIndex بر اساس موقعیت x
+        int newTile = (int) ((x - 100) / 50);
+        // MUST BE CHANGED   50 -> TILE WIDTH
+        if (newTile < 0) newTile = 0;
+        if (newTile > 8) newTile = 8;
+
+        if (newTile != tileIndex) {
+            tileIndex = newTile;
+        }
     }
 
-    public void setBounds(Rectangle bounds) {
-        this.bounds = bounds;
+    public void attack(Plant plant , BaseGame game) {
+        if (plant == null) return;
+        if (hasEffect(EffectType.HYPNOTIZED)) return;
+
+        if (type != null && type.toLowerCase().contains("wizard")) {
+            plant.setCat(true);
+            return;
+        }
+
+        if (type != null && (type.toLowerCase().contains("turquoise")) ) {
+            return;
+        }
+
+        plant.setHp(plant.getHp()- damage , this , game);
+        if (plant.getHp()==0 && allStarObserver != null) {
+            allStarObserver.onPlantKilled(this);
+        }
+    }
+
+    public void takeDamage(int damage) {
+        if (dead) return;
+
+        for (Armor armor : armors) {
+            if (armor.isActive()) {
+                armor.takeDamage(damage);
+                if (armor.isBroken() && "newspaper".equals(armor.getType())) {
+                    if (newspaperObserver != null) {
+                        newspaperObserver.onArmorBroken(this);
+                    }
+                }
+                return;
+            }
+        }
+
+        hp -= damage;
+        if (hp <= 0) {
+            hp = 0;
+            die();
+        }
+    }
+
+    public void die() {
+        dead = true;
+    }
+
+    // ====== ABILITIES ======
+    public void addAbility(Ability ability) {
+        abilities.add(ability);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends Ability> T getAbility(Class<T> type) {
+        for (Ability ability : abilities) {
+            if (type.isInstance(ability)) {
+                return (T) ability;
+            }
+        }
+        return null;
+    }
+
+    public List<Ability> getAbilities() {
+        return Collections.unmodifiableList(abilities);
+    }
+
+    // ====== ARMOR ======
+    public void addArmor(Armor armor) {
+        armors.add(armor);
+    }
+
+    public List<Armor> getArmors() {
+        return Collections.unmodifiableList(armors);
+    }
+
+    public boolean hasArmor() {
+        return !armors.isEmpty();
+    }
+
+    // ====== STATE FLAGS ======
+    public boolean isTorchOn() { return isTorchOn; }
+    public void setTorchOn(boolean torchOn) { this.isTorchOn = torchOn; }
+
+    public boolean isDynamiteFrozen() { return isDynamiteFrozen; }
+    public void setDynamiteFrozen(boolean dynamiteFrozen) { this.isDynamiteFrozen = dynamiteFrozen; }
+
+    // ====== PLANT INTERACTION (placeholder) ======
+    public boolean reachedPlant() { return false; }
+    public Plant findNextPlant() { return null; }
+    public boolean isNearPlant() { return false; }
+    public Plant getTargetPlant() { return null; }
+    public boolean isNearHouse() { return x < 50; }
+    public int movingDirection() { return hypnotized ? -1 : 1; }
+
+    // ====== GETTERS & SETTERS ======
+    public String getId() { return id; }
+    public String getType() { return type; }
+    public int getHp() { return hp; }
+    public int getMaxHp() { return maxHp; }
+    public int getDamage() { return damage; }
+    public float getSpeed() { return speed; }
+    public float getX() { return x; }
+    public float getY() { return y; }
+    public int getRow() { return row; }
+    public float getEatCooldown() { return eatCooldown; }
+    public boolean isDead() { return dead; }
+    public boolean isFrozen() { return frozen; }
+    public boolean isHypnotized() { return hypnotized; }
+    public float getWidth() { return width; }
+    public float getHeight() { return height; }
+
+    public void setHp(int hp) { this.hp = hp; }
+    public void setSpeed(float speed) { this.speed = speed; }
+    public void setPosition(float x, float y) { this.x = x; this.y = y; }
+    public void setRow(int row) { this.row = row; }
+    public void setFrozen(boolean frozen) { this.frozen = frozen; }
+    public void setHypnotized(boolean hypnotized) { this.hypnotized = hypnotized; }
+    public void setX(int x) { this.x = x;}
+    public void setY(int x) { this.y = x;}
+    public int getTileIndex() { return tileIndex; }
+    public void setTileIndex(int tileIndex) { this.tileIndex = tileIndex; }
+
+    public List<Effect> getEffects() {
+        return Collections.unmodifiableList(effects);
     }
 
 
+    public AllStarObserver getAllStarObserver() { return allStarObserver; }
+    public NewspaperObserver getNewspaperObserver() { return newspaperObserver; }
+    public PassThroughObserver getPassThroughObserver() { return passThroughObserver; }
 }

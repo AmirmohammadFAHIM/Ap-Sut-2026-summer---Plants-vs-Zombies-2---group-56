@@ -5,6 +5,10 @@ import controllers.menus.Menu;
 import models.App;
 import models.User;
 import models.factory.builder.PlantType;
+import models.entity.*;
+
+
+import java.util.*;
 
 public class Collection implements Menu {
     @Override
@@ -42,8 +46,65 @@ public class Collection implements Menu {
     }
 
     public String showAllZombies() {
-        return "Showing all zombies in the game... (Pending Enum creation)";
+        User user = Data.getCurrentUser();
+        if (user == null) return "Error: User not found.";
+
+        ZombieRegistry registry = user.getZombieRegistry();
+        List<ZombieRegistry.ZombieType> unlocked = registry.getUnlockedZombies();
+
+        System.out.println("--- Zombie Collection (" + unlocked.size() + "/" + registry.getTotalCount() + ") ---");
+        for (ZombieRegistry.ZombieType type : unlocked) {
+            System.out.println("- " + type.name());
+        }
+        return "chenin bood list" ;
     }
+
+//    private String formatZombieInfo(Zombie zombie) {
+//        StringBuilder sb = new StringBuilder();
+//
+//        // 1. Name
+//        sb.append(zombie.getType()).append(": ");
+//
+//        // 2. Position (tile position)
+//        int col = (int) ((zombie.getX() - 100) / 80);
+//        int row = zombie.getRow();
+//        sb.append("position: (").append(row).append(", ").append(col).append(")  ");
+//
+//        // 3. Health
+//        sb.append("health: ").append(zombie.getHp());
+//
+//        // 4. Armors
+//        List<Armor> armors = zombie.getArmors();
+//        if (!armors.isEmpty()) {
+//            sb.append("  armors: ");
+//            for (int i = 0; i < armors.size(); i++) {
+//                Armor armor = armors.get(i);
+//                sb.append(armor.getType()).append(": ").append(armor.getHealth());
+//                if (i < armors.size() - 1) {
+//                    sb.append(", ");
+//                }
+//            }
+//        }
+//
+//        // 5. Effects
+//        List<Effect> effects = zombie.getEffects();
+//        if (!effects.isEmpty()) {
+//            sb.append("  effects: ");
+//            for (int i = 0; i < effects.size(); i++) {
+//                Effect effect = effects.get(i);
+//                float remaining = effect.getRemainingTime();
+//                sb.append(effect.getType().name().toLowerCase());
+//                if (remaining > 0) {
+//                    sb.append(": ").append(String.format("%.1f", remaining)).append("s");
+//                }
+//                if (i < effects.size() - 1) {
+//                    sb.append(", ");
+//                }
+//            }
+//        }
+//
+//        return sb.toString();
+//    }
 
     public String showZombie(String zombieName) {
         return "Showing details for zombie: " + zombieName;

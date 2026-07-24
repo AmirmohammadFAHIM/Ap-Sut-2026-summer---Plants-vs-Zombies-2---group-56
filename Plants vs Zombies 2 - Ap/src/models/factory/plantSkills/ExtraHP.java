@@ -91,6 +91,8 @@ public class ExtraHP implements Skill{
     }
 
     private void reset(Plant plant, BaseGame game) {
-
+            for (Plant x :  game.getPlants_inField()) {
+                if(x.getType() == plant.getType()) x.setLifeTime(60);
+            }
     }
 }

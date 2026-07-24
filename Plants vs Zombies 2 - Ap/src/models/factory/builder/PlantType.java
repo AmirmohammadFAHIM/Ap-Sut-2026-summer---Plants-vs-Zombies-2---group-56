@@ -99,7 +99,16 @@ public enum PlantType {
             return super.allocateSkill(plant);
         }
     },
-    BOWLING_BULB,
+    BOWLING_BULB{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            ShootingData data = new ShootingData(BulletType.ONION_1 , ShootingMood.OneLine , 1);
+            plant.getBaseSkill().add(new Shoot(data));
+            ShootingData pf = new ShootingData(BulletType.ONION_1 , ShootingMood.OneLine , 3);
+            plant.getPlantfoodSkill().add(new Shoot(pf));
+            return super.allocateSkill(plant);
+        }
+    },
     STARFRUIT{
         @Override
         public Plant allocateSkill(Plant plant) {
@@ -150,6 +159,10 @@ public enum PlantType {
                     ShootingMood.MID_RANGE , 1);
             data.range = App.getCurrentuser().getLevels().get(plant.getType())
                     == 4 ? 4 : 3;
+            ShootingData pf = new ShootingData(BulletType.BUBBLE , ShootingMood.MID_RANGE , 30);
+            ExtraHP hp = new ExtraHP(ExtraHP.Type.LIFE_RESET);
+            plant.getPlantfoodSkill().add(new Shoot(pf));
+            plant.getPlantfoodSkill().add(hp);
             return  super.allocateSkill(plant);
         }
     },
@@ -160,6 +173,10 @@ public enum PlantType {
                     ShootingMood.MID_RANGE , 1);
             data.range = App.getCurrentuser().getLevels().get(plant.getType())
                     >= 2 ? 4 : 3;
+            ShootingData pf = new ShootingData(BulletType.BUBBLE , ShootingMood.MID_RANGE , 30);
+            ExtraHP hp = new ExtraHP(ExtraHP.Type.LIFE_RESET);
+            plant.getPlantfoodSkill().add(new Shoot(pf));
+            plant.getPlantfoodSkill().add(hp);
             return   super.allocateSkill(plant);
         }
     },

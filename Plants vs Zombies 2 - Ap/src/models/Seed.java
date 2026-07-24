@@ -1,8 +1,6 @@
 package models;
 
-import models.npc.Plant;
-
-import java.util.Random;
+import models.entity.Plant;
 
 public class Seed {
 

@@ -1,8 +1,7 @@
 package models.factory.plants;
 
-import models.gamePanes.Field;
 import models.games.Game;
-import models.npc.Plant;
+import models.entity.Plant;
 
 public interface Skill {
 

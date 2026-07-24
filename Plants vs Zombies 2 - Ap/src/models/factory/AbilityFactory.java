@@ -1,9 +1,9 @@
 package models.factory;
 
 import models.config.AbilityConfig;
-import models.npc.ability.*;
-import models.npc.ability.MoveAbility.MoveType;
-import models.npc.ability.SpeedChangeAbility.TriggerType;
+import models.entity.ability.*;
+import models.entity.ability.MoveAbility.MoveType;
+import models.entity.ability.SpeedChangeAbility.TriggerType;
 
 public class AbilityFactory {
 

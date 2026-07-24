@@ -1,7 +1,7 @@
-package models.npc.ability;
+package models.entity.ability;
 
-import models.npc.Zombie;
-import models.npc.EffectType;
+import models.entity.Zombie;
+import models.entity.EffectType;
 import models.games.BaseGame;
 
 public class ExplodeAbility implements Ability {

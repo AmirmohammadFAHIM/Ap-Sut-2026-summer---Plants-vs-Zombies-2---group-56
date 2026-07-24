@@ -1,7 +1,7 @@
 package controllers.observer;
 
-import models.npc.Zombie;
-import models.npc.Plant;
+import models.entity.Zombie;
+import models.entity.Plant;
 
 import java.util.*;
 

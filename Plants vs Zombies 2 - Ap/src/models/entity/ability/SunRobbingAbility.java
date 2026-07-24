@@ -1,4 +1,4 @@
-package models.npc.ability;
+package models.entity.ability;
 
 import models.entity.Zombie;
 import models.games.BaseGame;

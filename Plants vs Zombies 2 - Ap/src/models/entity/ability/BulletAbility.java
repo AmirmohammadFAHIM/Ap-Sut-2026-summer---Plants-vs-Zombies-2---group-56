@@ -1,7 +1,7 @@
-package models.npc.ability;
+package models.entity.ability;
 
-import models.npc.*;
-import models.npc.EffectType;
+import models.entity.*;
+import models.entity.EffectType;
 import models.games.BaseGame;
 
 public class BulletAbility implements Ability {

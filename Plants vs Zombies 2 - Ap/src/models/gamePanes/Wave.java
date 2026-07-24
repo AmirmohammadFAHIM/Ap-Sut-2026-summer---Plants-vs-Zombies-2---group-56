@@ -1,6 +1,6 @@
 package models.gamePanes;
 
-import models.npc.Zombie;
+import models.entity.Zombie;
 
 import java.util.ArrayList;
 

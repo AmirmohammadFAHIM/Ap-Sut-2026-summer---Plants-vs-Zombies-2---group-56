@@ -1,10 +1,10 @@
 package controllers;
 
-import models.npc.*;
+import models.entity.*;
 import models.grid.GridItem;
 import models.factory.ZombieFactory;
 import controllers.observer.WizardObserver;
-import models.npc.ability.SunRobbingAbility;
+import models.entity.ability.SunRobbingAbility;
 
 import java.util.*;
 

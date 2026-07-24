@@ -1,4 +1,4 @@
-package models.npc;
+package models.entity;
 
 public class Moaner {
     private int line;

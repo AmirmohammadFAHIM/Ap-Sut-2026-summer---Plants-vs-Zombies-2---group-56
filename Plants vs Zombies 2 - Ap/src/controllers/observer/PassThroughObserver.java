@@ -1,7 +1,7 @@
 package controllers.observer;
 
-import models.npc.Bullet;
-import models.npc.Zombie;
+import models.entity.Bullet;
+import models.entity.Zombie;
 import models.grid.GridItem;
 
 public class PassThroughObserver implements BulletObserver{

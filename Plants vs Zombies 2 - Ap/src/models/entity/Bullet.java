@@ -1,4 +1,4 @@
-package models.npc;
+package models.entity;
 
 import models.Constants;
 import models.gamePanes.Field;
@@ -6,7 +6,6 @@ import models.gamePanes.Tile;
 import models.gamePanes.TileType;
 import models.games.BaseGame;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -26,6 +25,7 @@ public class Bullet {
     private float y;
     private float pierce = 1;
     private boolean grounded = false;
+    private boolean active;
     private float poisonDamage = Constants.poisonBaseDamage;
     private final ArrayList<BulletType> bowling = new ArrayList<>(Arrays.asList(BulletType.ONION));
 
@@ -277,5 +277,12 @@ public class Bullet {
 
     public void setPierce(float pierce) {
         this.pierce = pierce;
+    }
+
+    public boolean isActive(){
+        return this.active;
+    }
+    public void setActive(boolean active){
+        this.active = active;
     }
 }

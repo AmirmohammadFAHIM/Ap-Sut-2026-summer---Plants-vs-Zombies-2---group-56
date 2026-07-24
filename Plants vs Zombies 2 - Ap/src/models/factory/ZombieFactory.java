@@ -1,7 +1,7 @@
 package models.factory;
 
-import models.npc.*;
-import models.npc.ability.*;
+import models.entity.*;
+import models.entity.ability.*;
 import controllers.observer.*;
 
 public class ZombieFactory {

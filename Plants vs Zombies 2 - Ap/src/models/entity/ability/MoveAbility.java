@@ -1,6 +1,6 @@
-package models.npc.ability;
+package models.entity.ability;
 
-import models.npc.*;
+import models.entity.*;
 import models.grid.GridItem;
 import models.games.BaseGame;
 

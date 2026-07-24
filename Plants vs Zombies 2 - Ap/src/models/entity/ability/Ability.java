@@ -1,6 +1,6 @@
-package models.npc.ability;
+package models.entity.ability;
 
-import models.npc.Zombie;
+import models.entity.Zombie;
 import models.games.BaseGame;
 
 public interface Ability {

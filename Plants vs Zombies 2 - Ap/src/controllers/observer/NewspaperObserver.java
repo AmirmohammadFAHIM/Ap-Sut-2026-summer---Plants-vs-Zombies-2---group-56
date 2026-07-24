@@ -1,6 +1,6 @@
 package controllers.observer;
 
-import models.npc.Zombie;
+import models.entity.Zombie;
 
 public class NewspaperObserver {
 

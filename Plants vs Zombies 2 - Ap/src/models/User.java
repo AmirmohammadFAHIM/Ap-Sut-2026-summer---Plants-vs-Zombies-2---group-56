@@ -2,8 +2,8 @@ package models;
 
 import models.GameAdventure.Chapter;
 import models.GameAdventure.levels.Level;
-import models.npc.Plant;
-import models.npc.Zombie;
+import models.entity.Plant;
+import models.entity.Zombie;
 
 import java.util.ArrayList;
 

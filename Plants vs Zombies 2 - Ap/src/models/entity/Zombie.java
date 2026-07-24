@@ -1,10 +1,8 @@
-package models.npc;
+package models.entity;
 
-import models.npc.*;
 import models.games.BaseGame;
-import models.npc.ability.Ability;
+import models.entity.ability.Ability;
 import controllers.observer.*;
-import models.npc.ability.*;
 
 import java.util.*;
 
@@ -306,6 +304,7 @@ public class Zombie {
     public void setRow(int row) { this.row = row; }
     public void setFrozen(boolean frozen) { this.frozen = frozen; }
     public void setHypnotized(boolean hypnotized) { this.hypnotized = hypnotized; }
+
 
 //    public AllStarObserver getAllStarObserver() { return allStarObserver; }
 //    public NewspaperObserver getNewspaperObserver() { return newspaperObserver; }

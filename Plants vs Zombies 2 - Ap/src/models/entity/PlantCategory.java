@@ -8,7 +8,7 @@ public enum PlantCategory {
 
     SHOOTER{
         public void setplant(){
-            String name = this.plant.getCategory().name();
+           String name = this.plant.getCategory().name();
 
         }
     };

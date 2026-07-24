@@ -140,12 +140,12 @@ public class Plant extends Entity {
     public void update(float delta , BaseGame game){
         if(t <= 0){
             t = ActionInterval;
-            if(Trap(game)) {
-                for (Skill x : baseSkill) x.do_skill(this , game);
-                if(tags.contains(PlantTags.ONCE_USAGE)){
-                    dispose(game);
-                }
-            }
+           if(Trap(game)) {
+               for (Skill x : baseSkill) x.do_skill(this , game);
+               if(tags.contains(PlantTags.ONCE_USAGE)){
+                   dispose(game);
+               }
+           }
 
         }
         else{

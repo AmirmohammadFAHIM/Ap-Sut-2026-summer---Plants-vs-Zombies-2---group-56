@@ -1,10 +1,18 @@
 package models.games;
 
+import models.utils.Result;
+
 public interface Game {
 
-    public void updatePlants();
-    public void updateZombies();
-    public void updateScene();
-    public void updateGame();
-    public void plant();
+    public void initGame();
+    public boolean startGame(String input);
+    public void playGame(float delta);
+    public void updatePlants(float delta);
+    public void updateZombies(float delta);
+    public void updateScene(float delta);
+    public String plant(String plantName , int x , int y);
+    public String pluck(int x , int y);
+    public Result check_endGame();
+    public void endGame();
+
 }

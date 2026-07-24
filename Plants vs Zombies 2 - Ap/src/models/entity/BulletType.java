@@ -1,4 +1,4 @@
-package
+package models.entity;
 
 public enum BulletType {
 

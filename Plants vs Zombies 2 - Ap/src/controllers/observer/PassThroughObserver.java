@@ -2,7 +2,7 @@ package controllers.observer;
 
 import models.entity.Bullet;
 import models.entity.Zombie;
-import models.grid.GridItem;
+import models.gamePanes.*;
 
 public class PassThroughObserver implements BulletObserver{
 
@@ -15,7 +15,7 @@ public class PassThroughObserver implements BulletObserver{
     public boolean canPassThrough(Zombie zombie, GridItem item) {
         // Dodo Rider ignores obstacles
         return zombie != null &&
-                zombie.getObjClass() != null &&
-                zombie.getObjClass().equals("ZombieIceAgeDodoProps");
+                zombie.getType() != null &&
+                zombie.getType().toLowerCase().contains("dodo");
     }
 }

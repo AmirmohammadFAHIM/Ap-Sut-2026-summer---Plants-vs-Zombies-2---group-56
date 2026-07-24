@@ -325,7 +325,16 @@ public enum PlantType {
             return super.allocateSkill(plant);
         }
     },
-    PHAT_BEET,
+    PHAT_BEET{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(3 , 3);
+            plant.getBaseSkill().add(new Explosive(data));
+            ExplosionData pf = new ExplosionData(ExplosionData.ExplosionType.ALL);
+            plant.getPlantfoodSkill().add(new Explosive(pf));
+            return super.allocateSkill(plant);
+        }
+    },
     CHOMPER{
         @Override
         public Plant allocateSkill(Plant plant) {
@@ -444,7 +453,7 @@ public enum PlantType {
         public Plant allocateSkill(Plant plant) {
             Skill data = new Homing(BulletType.MAGIC , Homing.Type.RANDOM);
             plant.getBaseSkill().add(data);
-
+            
             return super.allocateSkill(plant);
         }
     },
@@ -471,7 +480,6 @@ public enum PlantType {
     },
     MAGNET_SHROOM,
 
-    MARIGOLD,
 
     ///MINTS
     MINT;
@@ -485,7 +493,7 @@ public enum PlantType {
         }
         return plant;
     }
-    PlantCategory category;
+     PlantCategory category;
     public PlantCategory getCategory(){
         return  category;
     }

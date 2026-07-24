@@ -1,13 +1,7 @@
 package controllers.menus.gameController;
 
 public interface Controller {
-    public void updateGame();
-
-    public boolean isFinished();
-
-    public void gameEnded();
-    public boolean GameStart();
-    public default void startWave(){}
-    public default void endWave(){}
+    public String playGame(float delta);
+    public String GameStart(String input);
     public default void Cheat(){}
 }

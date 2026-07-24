@@ -17,6 +17,7 @@ public class Zombie {
     private float speed;
     private float x, y;
     private int row;
+    private int tileIndex;
     private boolean dead;
     private boolean frozen;
     private boolean hypnotized;
@@ -127,7 +128,7 @@ public class Zombie {
                 eatTimer = 0;
                 Plant plant = findNextPlant();
                 if (plant != null) {
-                    attack(plant);
+                    attack(plant , game);
                 }
             }
         }
@@ -187,9 +188,18 @@ public class Zombie {
             return;
         }
         x += getActualSpeed() * movingDirection();
+        // بروزرسانی tileIndex بر اساس موقعیت x
+        int newTile = (int) ((x - 100) / 50);
+        // MUST BE CHANGED   50 -> TILE WIDTH
+        if (newTile < 0) newTile = 0;
+        if (newTile > 8) newTile = 8;
+
+        if (newTile != tileIndex) {
+            tileIndex = newTile;
+        }
     }
 
-    public void attack(Plant plant) {
+    public void attack(Plant plant , BaseGame game) {
         if (plant == null) return;
         if (hasEffect(EffectType.HYPNOTIZED)) return;
 
@@ -198,12 +208,12 @@ public class Zombie {
             return;
         }
 
-        if (type != null && (type.toLowerCase().contains("turquoise") || type.toLowerCase().contains("camel"))) {
+        if (type != null && (type.toLowerCase().contains("turquoise")) ) {
             return;
         }
 
-        plant.takeDamage(damage, this);
-        if (plant.isDead() && allStarObserver != null) {
+        plant.setHp(plant.getHp()- damage , this , game);
+        if (plant.getHp()==0 && allStarObserver != null) {
             allStarObserver.onPlantKilled(this);
         }
     }
@@ -304,9 +314,17 @@ public class Zombie {
     public void setRow(int row) { this.row = row; }
     public void setFrozen(boolean frozen) { this.frozen = frozen; }
     public void setHypnotized(boolean hypnotized) { this.hypnotized = hypnotized; }
+    public void setX(int x) { this.x = x;}
+    public void setY(int x) { this.y = x;}
+    public int getTileIndex() { return tileIndex; }
+    public void setTileIndex(int tileIndex) { this.tileIndex = tileIndex; }
+
+    public List<Effect> getEffects() {
+        return Collections.unmodifiableList(effects);
+    }
 
 
-//    public AllStarObserver getAllStarObserver() { return allStarObserver; }
-//    public NewspaperObserver getNewspaperObserver() { return newspaperObserver; }
-//    public PassThroughObserver getPassThroughObserver() { return passThroughObserver; }
+    public AllStarObserver getAllStarObserver() { return allStarObserver; }
+    public NewspaperObserver getNewspaperObserver() { return newspaperObserver; }
+    public PassThroughObserver getPassThroughObserver() { return passThroughObserver; }
 }

@@ -1,6 +1,8 @@
 package view.gameView;
 
 import controllers.menus.gameController.GameController;
+import models.GameAdventure.Chapters;
+import models.GameAdventure.levels.Level;
 import models.games.BaseGame;
 import models.utils.RegexHelper;
 import view.View;
@@ -11,8 +13,8 @@ import java.util.regex.Pattern;
 public class GameView extends View {
     private GameController controller;
 
-    public GameView() {
-        this.controller = new GameController();
+    public GameView(Chapters chapter , Level level) {
+        this.controller = new GameController( chapter, level);
         this.menu = (controllers.menus.Menu) this.controller;
     }
 

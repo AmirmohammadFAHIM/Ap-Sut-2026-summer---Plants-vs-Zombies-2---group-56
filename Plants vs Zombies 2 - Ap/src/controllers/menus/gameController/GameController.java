@@ -21,7 +21,11 @@ import java.util.Iterator;
 public class GameController implements Controller{/// Main Brain of the game
     private BaseGame game;
     private Level level;
-
+    private Chapters chapter;
+public GameController(Chapters chapter , Level level){
+    this.level = level;
+    this.chapter = chapter;
+}
 
     public String plant(String name , int x , int y){
         return game.plant(name,x,y);
@@ -215,6 +219,12 @@ public class GameController implements Controller{/// Main Brain of the game
         } catch (RuntimeException e) {
             return "Plant not found.";
         }
+    }
+
+    public String boost(int x , int y){
+        Plant p = game.findByCoordinates(x, y);
+        p.setPlantFood(true);
+        return "Suiiiiiiiiiiiiiiiiii , we waz kangz at Africaaaaa";
     }
 
     public BaseGame getGame() {

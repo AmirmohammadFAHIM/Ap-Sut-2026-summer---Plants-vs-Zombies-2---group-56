@@ -14,11 +14,7 @@ public class PlayMenu implements Menu {
     }
 
 
-    public String play(int level) {
-        Level toPlay; /// get from the file
-        App.setScreen(new GameView());
-        return "Let's play baby , game on!";
-    }
+
 
     @Override
     public String ChangeMenu(String menuName) {
@@ -67,16 +63,13 @@ public class PlayMenu implements Menu {
     }
 
 
-
-
-    @Override
-    public void ShowCurrentMenu() {
-        Menu.super.ShowCurrentMenu();
+    public String play(int level){
+        Level toPlay = null;
+        App.setScreen(new GameView(currentChapter , toPlay));
+        return "Game on , baby.";
     }
 
-    @Override
-    public void exitMenu() {
-        App.setScreen(new view.HomeView());
-        System.out.println("Returned to Home Menu.");
-    }
+
+
+
 }

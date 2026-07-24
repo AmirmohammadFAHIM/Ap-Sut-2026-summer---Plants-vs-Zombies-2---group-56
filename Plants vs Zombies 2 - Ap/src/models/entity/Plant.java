@@ -6,6 +6,7 @@ import models.factory.plantSkills.Explosive;
 import models.factory.plantSkills.Skill;
 import models.factory.plantSkills.skillDatas.ExplosionData;
 import models.factory.plantSkills.skillDatas.PlantArmor;
+import models.factory.plantSkills.skillobserver.Observer;
 import models.gamePanes.Tile;
 import models.games.BaseGame;
 
@@ -27,6 +28,7 @@ public class Plant extends Entity {
     private float lifeTime;
     private int freezeLevel = 0;
     private ArrayList<PlantArmor> armor;
+    private Observer skillObserver;
 
     public ArrayList<PlantArmor> getArmor() {
         return armor;
@@ -143,7 +145,9 @@ public class Plant extends Entity {
         if(t <= 0){
             t = ActionInterval;
            if(Trap(game)) {
-               for (Skill x : baseSkill) x.do_skill(this , game);
+               if(skillObserver.observe(this , game)){
+                   for (Skill x : baseSkill) x.do_skill(this , game);
+               }
                if(tags.contains(PlantTags.ONCE_USAGE)){
                    dispose(game);
                }
@@ -259,6 +263,10 @@ public class Plant extends Entity {
 
     public void setActionInterval(float actionInterval) {
         ActionInterval = actionInterval;
+    }
+
+    public void setSkillObserver(Observer skillObserver) {
+        this.skillObserver = skillObserver;
     }
 }
 

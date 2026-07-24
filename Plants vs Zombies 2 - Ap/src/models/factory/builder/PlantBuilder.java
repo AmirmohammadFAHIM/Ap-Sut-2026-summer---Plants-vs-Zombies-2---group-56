@@ -32,6 +32,7 @@ public class PlantBuilder {
 
 
 
+
     private void upgradeEffect(){
         int level = App.getCurrentuser().getLevels().get(plant.getType());
         plant.setHp(upgradedHP(plant.getType() , level));

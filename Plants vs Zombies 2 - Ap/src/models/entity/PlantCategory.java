@@ -2,6 +2,12 @@ package models.entity;
 
 public enum PlantCategory {
 
+
+
+    Mint,
+
+    Explosive,
+
     StrikeThrough,
 
     SunProducer,

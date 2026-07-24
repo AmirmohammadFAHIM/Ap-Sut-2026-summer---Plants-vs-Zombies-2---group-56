@@ -11,6 +11,9 @@ import java.util.ArrayList;
 public class SunProduce implements Skill {
     private SunProduceData data;
 
+    public SunProduce(SunProduceData data) {
+        this.data = data;
+    }
 
 
     @Override
@@ -51,9 +54,10 @@ public class SunProduce implements Skill {
 
 
     private void produce(Plant producer,SunProduceData data , BaseGame game) {
-        Sun sun = new Sun(data.getSunType().getAmount() , data.getSunType().getRemainingTime() ,
+        Sun sun = new Sun(data.amount , data.getSunType().getRemainingTime() ,
                 producer.getX(), producer.getY());{
             game.getSuns().add(sun);
+            sun.setProducer(producer);
         }
     }
 

@@ -33,22 +33,9 @@ public class PlantBuilder {
 
     private void upgradeEffect(){
         int level = App.getCurrentuser().getLevels().get(plant.getType());
-        for (int i = 2 ; i <= level; i++){
-            Upgrade upgrade = Data.getPlants().get(plant.getType()).getUpgrades().get(i - 1);
-            String effect = upgrade.getEffect();
-            if(effect.matches(hp)){
-                hp(effect);
-            }
-            else if(effect.matches(cost)){
+        plant.setHp(upgradedHP(plant.getType() , level));
+        plant.setDamage(upgradedDamage(plant.getType() , level));
 
-            }
-            else if(effect.matches(damage)){
-                damage(effect);
-            }
-            else if(effect.matches(cooldown)){
-                cooldown(effect);
-            }
-        }
 
         explodeOnFinish();
 

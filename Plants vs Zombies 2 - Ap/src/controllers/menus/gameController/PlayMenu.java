@@ -55,7 +55,7 @@ public class PlayMenu implements Menu {
             default -> 0; // Ancient Egypt
         };
         for (int i = 1; i <= 4; i++) {
-            boolean unlocked = App.getCurrentuser().getLevelId() > i;
+            boolean unlocked = App.getCurrentuser().getLevelsPassed() - base > i;
             output.append("══════════════ LEVEL " + i +" : " + (unlocked ? "Unlocked" : "Locked"));
             if(i == App.getCurrentuser().getLevelId() &&
             chapter == App.getCurrentuser().getChapter()) {

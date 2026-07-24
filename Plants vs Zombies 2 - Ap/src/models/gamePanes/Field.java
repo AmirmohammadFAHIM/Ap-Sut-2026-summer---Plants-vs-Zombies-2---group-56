@@ -4,6 +4,9 @@ import models.GameAdventure.Chapter;
 import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
 import models.entity.Moaner;
+import models.entity.Plant;
+import models.entity.PlantTags;
+import models.games.BaseGame;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -68,6 +71,21 @@ public class Field {
                 }
             }
 
+            public void updateScene(float delta , BaseGame game) {
+                for (int i = 0; i < 5; i++) {
+                    for (Tile tile : tiles.get(i)) {
+                        if(tile.getTileType() == TileType.FROZEN){
+                            for (Plant x : game.getPlants_inField()){
+                                int dx = Math.abs(x.getTileIndex() - tile.getCol());
+                                int dy = Math.abs(x.getLine() - tile.getLine());
+                                if(dx <= 1 && dy <= 1 && x.getTags().contains(PlantTags.FIRE)){
+                                    tile.setHp(tile.getHp() - delta * 60);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
 
     public int getWidth() {

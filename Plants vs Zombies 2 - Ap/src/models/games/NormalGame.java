@@ -1,5 +1,6 @@
 package models.games;
 
+import models.entity.Sun;
 import models.entity.Zombie;
 import models.gamePanes.Wave;
 
@@ -28,5 +29,11 @@ public class NormalGame extends BaseGame{
         Wave finalWave = new Wave();
         finalWave.setCost(waves.getLast().getCost() * 2);
         finalWave.initWave(zombies);
+    }
+
+    public void updateSuns(float delta){
+        for (Sun sun : suns){
+            if(sun.getProducer() == null) sun.setRemainingTime(sun.getRemainingTime() - delta);
+        }
     }
 }

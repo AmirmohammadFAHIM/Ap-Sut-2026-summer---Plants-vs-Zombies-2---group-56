@@ -124,7 +124,7 @@ public class BaseGame implements Game {
 
     @Override
     public void updatePlants(float delta) {
-
+        for (Plant plant : plants_inField) plant.update(delta , this);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class BaseGame implements Game {
 
     @Override
     public void updateScene(float delta) {
-
+        field.updateScene(delta , this);
     }
 
 
@@ -352,5 +352,6 @@ public class BaseGame implements Game {
         }
         return null;
     }
+
 
 }

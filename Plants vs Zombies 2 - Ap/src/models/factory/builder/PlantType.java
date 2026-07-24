@@ -15,6 +15,13 @@ import models.entity.Plant;
 import java.util.ArrayList;
 
 public enum PlantType {
+
+    /// ---------Sun Producers------
+    SUNFLOWER,
+    TWIN_SUNFLOWER,
+    SUN_SHROOM,
+    PRIMAL_SUNFLOWER,
+    GOLD_BLOOM,
     /// ---------SHOOTERS----------
     PEASHOOTER{
         @Override

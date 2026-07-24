@@ -45,7 +45,29 @@ public class Shoot implements Skill {
         }
     }
 
+    float onionChange;
     public void OneLineShoot(Plant shooter, ShootingData data , BaseGame game) throws CloneNotSupportedException {
+        onionChange += 2;
+        int level = App.getCurrentuser().getLevels().get(shooter.getType());
+        if(data.getBullet() == BulletType.ONION_1 || data.getBullet() == BulletType.ONION_3){
+            if(onionChange >= (level >= 2 ? 9 : 10)) {
+                data.setBullet(BulletType.ONION_2);
+                onionChange = 0;
+            }
+        }
+        else if(data.getBullet() == BulletType.ONION_2){
+            if (onionChange >= (level >= 2 ? 4 : 5)){
+                Random rand = new Random();
+                boolean one =  rand.nextBoolean();
+                if(one){
+                    data.setBullet(BulletType.ONION_1);
+                }
+                else{
+                    data.setBullet(BulletType.ONION_3);
+                }
+                onionChange = 0;
+            }
+        }
         float x = shooter.getX() + shooter.getWidth();
         float y =  (shooter.getY() + shooter.getHeight() * 0.8f);
         Bullet bullet = new Bullet(x , y , data.getBullet());
@@ -56,9 +78,11 @@ public class Shoot implements Skill {
             game.getBullets().add(bullet1);
         }
 
+
         if(data.getBulletNumber() >= 50){
             Bullet bullet1 = new Bullet(x , y , Constants.BulletVelocityX , BulletType.GIANT_PEA
                     , shooter.getDamage());
+            game.getBullets().add(bullet1);
         }
     }
 

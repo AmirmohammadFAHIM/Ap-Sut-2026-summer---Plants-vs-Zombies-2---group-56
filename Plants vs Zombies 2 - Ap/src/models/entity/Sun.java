@@ -6,6 +6,7 @@ import models.games.BaseGame;
 import models.utils.Result;
 
 public class Sun {
+    Plant producer;
      float velocity = 70f;
     static float width;
     static float height;
@@ -126,6 +127,46 @@ public class Sun {
     public void setLine(int line) {
         this.line = line;
         this.y = line * Tile.getHeight();
+    }
+
+    public Plant getProducer() {
+        return producer;
+    }
+
+    public void setProducer(Plant producer) {
+        this.producer = producer;
+    }
+
+    public float getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(float velocity) {
+        this.velocity = velocity;
+    }
+
+    public static float getWidth() {
+        return width;
+    }
+
+    public static void setWidth(float width) {
+        Sun.width = width;
+    }
+
+    public static float getHeight() {
+        return height;
+    }
+
+    public static void setHeight(float height) {
+        Sun.height = height;
+    }
+
+    public boolean isGroung() {
+        return groung;
+    }
+
+    public void setGroung(boolean groung) {
+        this.groung = groung;
     }
 
     public int getTileIndex() {

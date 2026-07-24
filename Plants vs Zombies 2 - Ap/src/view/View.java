@@ -19,14 +19,12 @@ public class View implements MenuView {
         Matcher enterMatcher = Pattern.compile("(?i)^menu\\s+enter\\s+(?<menuName>.+)$").matcher(command);
 
         if (command.matches("(?i)^menu\\s+show\\s+current$")) {
-            menu.ShowCurrentMenu();
+            System.out.println(menu.ShowCurrentMenu());
             return true;
-        }
-        else if (command.matches("(?i)^menu\\s+exit$")) {
-            menu.exitMenu();
+        } else if (command.matches("(?i)^menu\\s+exit$")) {
+            System.out.println(menu.exitMenu());
             return true;
-        }
-        else if (enterMatcher.matches()) {
+        } else if (enterMatcher.matches()) {
             String targetMenu = enterMatcher.group("menuName");
             System.out.println(menu.ChangeMenu(targetMenu));
             return true;

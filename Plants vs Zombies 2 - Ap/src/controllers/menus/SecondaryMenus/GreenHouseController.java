@@ -1,15 +1,13 @@
+// file: Plants vs Zombies 2 - Ap/src/controllers/menus/SecondaryMenus/GreenHouseController.java
 package controllers.menus.SecondaryMenus;
 
 import controllers.datacontroller.Data;
 import models.App;
-import models.GreenHouse;
 import models.User;
 import controllers.menus.Menu;
 import java.util.Random;
 
 public class GreenHouseController implements Menu {
-    private GreenHouse greenHouse;
-
     @Override
     public String ChangeMenu(String menuName) {
         if (menuName.equalsIgnoreCase("Shop menu")) {
@@ -20,97 +18,68 @@ public class GreenHouseController implements Menu {
     }
 
     @Override
-    public void exitMenu() {
+    public String exitMenu() {
         App.setScreen(new view.PlayView());
-        System.out.println("Returned to Play Menu.");
+        return "Returned to Play Menu.";
     }
 
     @Override
-    public void ShowCurrentMenu() {
-        showgreenhouse();
-    }
+    public String ShowCurrentMenu() { return "--- GreenHouse Menu ---"; }
 
-    public GreenHouseController() {
-        this.greenHouse = new GreenHouse();
-    }
-
-    public void showgreenhouse() {
+    public String showgreenhouse() {
         User user = Data.getCurrentUser();
-        if (user == null) return;
+        if (user == null) return "Error: User not logged in.";
 
-        System.out.println("--- GreenHouse Status ---");
+        StringBuilder sb = new StringBuilder("--- GreenHouse Status ---\n");
         int unlocked = user.getUnlockedPots();
-        System.out.println("Unlocked Pots: " + unlocked + "/20");
+        sb.append("Unlocked Pots: ").append(unlocked).append("/20\n");
 
         for (int y = 1; y <= 4; y++) {
             for (int x = 1; x <= 5; x++) {
                 int potNumber = ((y - 1) * 5) + x;
-                if (potNumber > unlocked) {
-                    System.out.print("[ Locked ]\t");
-                } else {
-                    System.out.print("[ Empty  ]\t");
-                }
+                sb.append(potNumber > unlocked ? "[ Locked ]\t" : "[ Empty  ]\t");
             }
-            System.out.println();
+            sb.append("\n");
         }
+        return sb.toString().trim();
     }
 
-    public void plant(int x, int y) {
+    public String plant(int x, int y) {
         User user = Data.getCurrentUser();
-        if (user == null) return;
-
-        if (x < 1 || x > 5 || y < 1 || y > 4) {
-            System.out.println("Error: Coordinates out of bounds. X(1-5), Y(1-4).");
-            return;
-        }
+        if (user == null) return "Error: User not logged in.";
+        if (x < 1 || x > 5 || y < 1 || y > 4) return "Error: Coordinates out of bounds. X(1-5), Y(1-4).";
 
         int potNumber = ((y - 1) * 5) + x;
-        if (potNumber > user.getUnlockedPots()) {
-            System.out.println("Error: This pot is locked.");
-            return;
-        }
+        if (potNumber > user.getUnlockedPots()) return "Error: This pot is locked.";
 
         Random rand = new Random();
-        if (rand.nextBoolean()) {
-            System.out.println("Planted a Marigold at (" + x + ", " + y + "). Growth time: 2 hours.");
-        } else {
-            System.out.println("Planted a Random Plant at (" + x + ", " + y + "). Growth time: 8 hours.");
-        }
+        return rand.nextBoolean() ? "Planted a Marigold at (" + x + ", " + y + "). Growth time: 2 hours."
+                : "Planted a Random Plant at (" + x + ", " + y + "). Growth time: 8 hours.";
     }
 
-    public void grow() {
-        System.out.println("Updating growth status based on system time...");
-    }
-
-    public void forceGrow(int x, int y, int remainingHours) {
+    public String forceGrow(int x, int y, int remainingHours) {
         User user = Data.getCurrentUser();
-        if (user == null) return;
+        if (user == null) return "Error: User not logged in.";
+        if (remainingHours <= 0) return "Error: Plant is already fully grown or pot is empty.";
 
-        if (remainingHours <= 0) {
-            System.out.println("Error: Plant is already fully grown or pot is empty.");
-            return;
-        }
-
-        int diamondCost = remainingHours;
-        if (user.getDiamonds() >= diamondCost) {
-            user.addDiamonds(-diamondCost);
+        if (user.getDiamonds() >= remainingHours) {
+            user.addDiamonds(-remainingHours);
             Data.saveUser();
-            System.out.println("Forced growth using " + diamondCost + " diamonds. Plant is ready!");
-        } else {
-            System.out.println("Error: Not enough diamonds.");
+            return "Forced growth using " + remainingHours + " diamonds. Plant is ready!";
         }
+        return "Error: Not enough diamonds.";
     }
 
-    public void collect(int x, int y, boolean isMarigold) {
+    public String collect(int x, int y, boolean isMarigold) {
         User user = Data.getCurrentUser();
-        if (user == null) return;
+        if (user == null) return "Error: User not logged in.";
 
         if (isMarigold) {
             user.addCoins(500);
-            System.out.println("Collected a Marigold! Earned 500 coins.");
-        } else {
-            System.out.println("Collected a Random Plant! Boost saved.");
+            Data.saveUser();
+            return "Collected a Marigold! Earned 500 coins.";
         }
         Data.saveUser();
+        return "Collected a Random Plant! Boost saved.";
     }
 }

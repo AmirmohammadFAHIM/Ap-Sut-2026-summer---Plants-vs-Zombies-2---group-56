@@ -7,60 +7,55 @@ import controllers.menus.Menu;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class LeaderBoard implements Menu{
+public class LeaderBoard implements Menu {
+    @Override
+    public String ChangeMenu(String menuName) { return "Invalid menu transition from this menu."; }
 
     @Override
-    public String ChangeMenu(String menuName) {
-        return "Invalid menu transition from this menu.";
-    }
-
-    @Override
-    public void exitMenu() {
+    public String exitMenu() {
         App.setScreen(new view.PlayView());
-        System.out.println("Returned to Play Menu.");
+        return "Returned to Play Menu.";
     }
 
     @Override
-    public void ShowCurrentMenu() {
-        System.out.println("--- LeaderBoard Menu ---");
-        showLeaderBoard();
-    }
+    public String ShowCurrentMenu() { return "--- LeaderBoard Menu ---"; }
 
-    public void showLeaderBoard() {
+    public String showLeaderBoard() {
         ArrayList<User> users = Data.getAllUsers();
-        if (users == null || users.isEmpty()) {
-            System.out.println("No users available.");
-            return;
-        }
+        if (users == null || users.isEmpty()) return "No users available.";
 
-        System.out.println(String.format("%-15s | %-10s | %-10s | %-10s",
-                "Username", "MeowPoint", "Levels", "Games"));
-        System.out.println("------------------------------------------------------------");
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%-15s | %-10s | %-10s | %-10s\n", "Username", "MeowPoint", "Levels", "Games"));
+        sb.append("------------------------------------------------------------\n");
 
         ArrayList<User> sortedUsers = new ArrayList<>(users);
         sortedUsers.sort(Comparator.comparingInt(User::getHighestScore).reversed());
 
         for (User user : sortedUsers) {
-            System.out.println(String.format("%-15s | %-10d | %-10d | %-10d",
-                    user.getName(), user.getHighestScore(), user.getLevelsPassed(), user.getGamesPlayed()));
+            sb.append(String.format("%-15s | %-10d | %-10d | %-10d\n", user.getName(), user.getHighestScore(), user.getLevelsPassed(), user.getGamesPlayed()));
         }
+        return sb.toString().trim();
     }
 
-    public void sortLeaderBoard(String criteria) {
+    public String sortLeaderBoard(String criteria) {
         ArrayList<User> users = Data.getAllUsers();
+        if (users == null || users.isEmpty()) return "No users available.";
+
         ArrayList<User> sortedUsers = new ArrayList<>(users);
+        StringBuilder sb = new StringBuilder();
 
         if (criteria.equalsIgnoreCase("score")) {
-            System.out.println("Sorting by MeowPoint...");
+            sb.append("Sorting by MeowPoint...\n");
             sortedUsers.sort(Comparator.comparingInt(User::getHighestScore).reversed());
         } else if (criteria.equalsIgnoreCase("level")) {
-            System.out.println("Sorting by Levels Passed...");
+            sb.append("Sorting by Levels Passed...\n");
             sortedUsers.sort(Comparator.comparingInt(User::getLevelsPassed).reversed());
         }
 
         for (User user : sortedUsers) {
-            System.out.println(user.getName() + " - " + criteria + ": " +
-                    (criteria.equalsIgnoreCase("score") ? user.getHighestScore() : user.getLevelsPassed()));
+            sb.append(user.getName()).append(" - ").append(criteria).append(": ")
+                    .append(criteria.equalsIgnoreCase("score") ? user.getHighestScore() : user.getLevelsPassed()).append("\n");
         }
+        return sb.toString().trim();
     }
 }

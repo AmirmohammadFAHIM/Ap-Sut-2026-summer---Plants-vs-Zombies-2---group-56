@@ -1,5 +1,6 @@
 package controllers.menus.gameController;
 
+import controllers.datacontroller.Data;
 import controllers.menus.Menu;
 import models.App;
 import models.GameAdventure.Chapters;
@@ -7,14 +8,14 @@ import models.GameAdventure.levels.Level;
 import view.*;
 import view.gameView.GameView;
 
+import java.util.ArrayList;
+
 public class PlayMenu implements Menu {
     private Chapters currentChapter;
+
     public PlayMenu() {
         currentChapter = App.getCurrentuser().getChapter();
     }
-
-
-
 
     @Override
     public String ChangeMenu(String menuName) {
@@ -33,43 +34,77 @@ public class PlayMenu implements Menu {
                 return "Changed successfully to Leaderboard menu";
             case "Wallet menu":
                 App.setScreen(new WalletView());
-                return  "Changed successfully to Wallet menu";
+                return "Changed successfully to Wallet menu";
             default:
                 return "Invalid menu name";
         }
-
     }
-
 
     public String changeChapter(Chapters chapter) {
         currentChapter = chapter;
         StringBuilder output = new StringBuilder();
-        int base = switch (App.getCurrentuser().getChapter()){
+
+        int base = switch (App.getCurrentuser().getChapter()) {
             case DarkAge -> 12;
             case BigWaveBeach -> 4;
             case FrozenCaves -> 8;
             default -> 0; // Ancient Egypt
         };
-        for (int i = 1; i <= 4; i++) {
-            boolean unlocked = App.getCurrentuser().getLevelsPassed() - base > i;
-            output.append("══════════════ LEVEL " + i +" : " + (unlocked ? "Unlocked" : "Locked"));
-            if(i == App.getCurrentuser().getLevelId() &&
-            chapter == App.getCurrentuser().getChapter()) {
+
+        ArrayList<Level> chapterLevels = Data.getAllLevels().get(chapter);
+
+        if (chapterLevels == null || chapterLevels.isEmpty()) {
+            return "Welcome to " + chapter.name() + "\nNo levels available for this chapter yet.";
+        }
+
+        for (Level level : chapterLevels) {
+            int i = level.getId();
+            boolean unlocked = (App.getCurrentuser().getLevelsPassed() - base) >= (i - 1);
+
+            output.append("══════════════ LEVEL ").append(i).append(" : ").append(unlocked ? "Unlocked" : "Locked");
+
+            if (i == App.getCurrentuser().getLevelId() && chapter == App.getCurrentuser().getChapter()) {
                 output.append(" (You are here now)");
             }
-            output.append( " ══════════════" + "\n");
+            output.append(" ══════════════\n");
         }
+
         return "Welcome to " + chapter.name() + "\n" + output.toString();
     }
 
+    public String play(int levelId) {
+        ArrayList<Level> chapterLevels = Data.getAllLevels().get(currentChapter);
 
-    public String play(int level){
+        if (chapterLevels == null || chapterLevels.isEmpty()) {
+            return "Error: No levels found for " + currentChapter.name();
+        }
+
         Level toPlay = null;
-        App.setScreen(new GameView(currentChapter , toPlay));
-        return "Game on , baby.";
+        for (Level l : chapterLevels) {
+            if (l.getId() == levelId) {
+                toPlay = l;
+                break;
+            }
+        }
+
+        if (toPlay == null) {
+            return "Error: Level " + levelId + " does not exist in " + currentChapter.name() + ".";
+        }
+
+        int base = switch (currentChapter) {
+            case DarkAge -> 12;
+            case BigWaveBeach -> 4;
+            case FrozenCaves -> 8;
+            default -> 0;
+        };
+        boolean isUnlocked = (App.getCurrentuser().getLevelsPassed() - base) >= (levelId - 1);
+
+        if (!isUnlocked) {
+            return "Error: You haven't unlocked Level " + levelId + " yet!";
+        }
+
+        App.setScreen(new GameView(currentChapter, toPlay));
+
+        return "Loading Level " + levelId + " from " + currentChapter.name() + "...\nGame on , baby.";
     }
-
-
-
-
 }

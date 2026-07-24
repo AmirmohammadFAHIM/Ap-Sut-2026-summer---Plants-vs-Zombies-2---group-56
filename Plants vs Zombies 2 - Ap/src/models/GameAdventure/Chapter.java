@@ -15,22 +15,17 @@ public class Chapter implements Serializable {
     }
 
     private void initLevels() {
-        // فقط مرحله اول از فصل مصر باستان به صورت پیش‌فرض باز است
         boolean isFirstUnlocked = (this.chapterType == Chapters.AncientEgypt);
 
-        // مرحله ۱: عادی
         Level level1 = new Level(1, this.chapterType, "Normal", isFirstUnlocked, 3, 1.0f);
         level1.setAllowedZombies(new ArrayList<>(Arrays.asList("NormalZombie")));
 
-        // مرحله ۲: ویژه
         Level level2 = new Level(2, this.chapterType, "Special", false, 4, 1.5f);
         level2.setAllowedZombies(new ArrayList<>(Arrays.asList("NormalZombie", "ConeHeadZombie")));
 
-        // مرحله ۳: ویژه
         Level level3 = new Level(3, this.chapterType, "Special", false, 5, 2.0f);
         level3.setAllowedZombies(new ArrayList<>(Arrays.asList("NormalZombie", "ConeHeadZombie", "BucketHeadZombie")));
 
-        // مرحله ۴: باس فایت
         Level level4 = new Level(4, this.chapterType, "Boss", false, 1, 5.0f);
         level4.setAllowedZombies(new ArrayList<>(Arrays.asList("Gargantuar")));
 

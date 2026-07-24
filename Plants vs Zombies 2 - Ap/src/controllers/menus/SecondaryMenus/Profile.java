@@ -10,114 +10,80 @@ import java.security.MessageDigest;
 import java.util.regex.Pattern;
 
 public class Profile implements Menu {
+    @Override
+    public String ChangeMenu(String menuName) { return "Invalid menu transition from this menu."; }
 
     @Override
-    public String ChangeMenu(String menuName) {
-        return "Invalid menu transition from this menu.";
-    }
-
-    @Override
-    public void exitMenu() {
+    public String exitMenu() {
         App.setScreen(new view.HomeView());
-        System.out.println("Returned to Home Menu.");
+        return "Returned to Home Menu.";
     }
 
     @Override
-    public void ShowCurrentMenu() {
-        System.out.println("--- Profile Menu ---");
-    }
+    public String ShowCurrentMenu() { return "--- Profile Menu ---"; }
 
-    public void showProfile() {
+    public String showProfile() {
         User currentUser = Data.getCurrentUser();
-        if (currentUser != null) {
-            System.out.println("Username: " + currentUser.getName());
-            System.out.println("Nickname: " + currentUser.getNickname());
-            System.out.println("Games Played: " + currentUser.getGamesPlayed());
-            System.out.println("Coins: " + currentUser.getCoins());
-            System.out.println("Diamonds: " + currentUser.getDiamonds());
-            System.out.println("Levels Passed: " + currentUser.getLevelsPassed());
-            System.out.println("Highest MeowPoint: " + currentUser.getHighestScore());
-        }
+        if (currentUser == null) return "Error: User not found.";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Username: ").append(currentUser.getName()).append("\n");
+        sb.append("Nickname: ").append(currentUser.getNickname()).append("\n");
+        sb.append("Games Played: ").append(currentUser.getGamesPlayed()).append("\n");
+        sb.append("Coins: ").append(currentUser.getCoins()).append("\n");
+        sb.append("Diamonds: ").append(currentUser.getDiamonds()).append("\n");
+        sb.append("Levels Passed: ").append(currentUser.getLevelsPassed()).append("\n");
+        sb.append("Highest MeowPoint: ").append(currentUser.getHighestScore());
+        return sb.toString();
     }
 
-    public void ChangeUserName(String newUsername) {
+    public String ChangeUserName(String newUsername) {
         User currentUser = Data.getCurrentUser();
-        if (currentUser != null) {
-            if (currentUser.getName().equals(newUsername)) {
-                System.out.println("Error: new username cannot be the same as the current one.");
-                return;
-            }
-            if (!Pattern.matches(RegexHelper.USERNAME_PATTERN, newUsername)) {
-                System.out.println("Error: username format is invalid.");
-                return;
-            }
-            if (Data.isUsernameExists(newUsername)) {
-                System.out.println("Error: username is already taken.");
-                return;
-            }
+        if (currentUser == null) return "Error: User not found.";
+        if (currentUser.getName().equals(newUsername)) return "Error: new username cannot be the same as the current one.";
+        if (!Pattern.matches(RegexHelper.USERNAME_PATTERN, newUsername)) return "Error: username format is invalid.";
+        if (Data.isUsernameExists(newUsername)) return "Error: username is already taken.";
 
-            currentUser.setName(newUsername);
-            Data.saveUser();
-            System.out.println("Username changed successfully.");
-        }
+        currentUser.setName(newUsername);
+        Data.saveUser();
+        return "Username changed successfully.";
     }
 
-    public void ChangeNickName(String newNickname) {
-        if (newNickname == null || newNickname.length() < 3 || newNickname.length() > 30) {
-            System.out.println("Error: nickname length is invalid.");
-            return;
-        }
+    public String ChangeNickName(String newNickname) {
+        if (newNickname == null || newNickname.length() < 3 || newNickname.length() > 30) return "Error: nickname length is invalid.";
         User currentUser = Data.getCurrentUser();
-        if (currentUser != null) {
-            if (currentUser.getNickname().equals(newNickname)) {
-                System.out.println("Error: new nickname cannot be the same as the current one.");
-                return;
-            }
-            currentUser.setNickname(newNickname);
-            Data.saveUser();
-            System.out.println("Nickname changed successfully.");
-        }
+        if (currentUser == null) return "Error: User not found.";
+        if (currentUser.getNickname().equals(newNickname)) return "Error: new nickname cannot be the same as the current one.";
+
+        currentUser.setNickname(newNickname);
+        Data.saveUser();
+        return "Nickname changed successfully.";
     }
 
-    public void ChangeEmail(String newEmail) {
+    public String ChangeEmail(String newEmail) {
         if (newEmail == null || newEmail.length() - newEmail.replace("@", "").length() != 1 || !Pattern.matches(RegexHelper.EMAIL_PATTERN, newEmail)) {
-            System.out.println("Error: email format is invalid.");
-            return;
+            return "Error: email format is invalid.";
         }
         User currentUser = Data.getCurrentUser();
-        if (currentUser != null) {
-            if (currentUser.getEmail().equals(newEmail)) {
-                System.out.println("Error: new email cannot be the same as the current one.");
-                return;
-            }
-            currentUser.setEmail(newEmail);
-            Data.saveUser();
-            System.out.println("Email changed successfully.");
-        }
+        if (currentUser == null) return "Error: User not found.";
+        if (currentUser.getEmail().equals(newEmail)) return "Error: new email cannot be the same as the current one.";
+
+        currentUser.setEmail(newEmail);
+        Data.saveUser();
+        return "Email changed successfully.";
     }
 
-    public void ChangePassword(String oldPassword, String newPassword) {
+    public String ChangePassword(String oldPassword, String newPassword) {
         User currentUser = Data.getCurrentUser();
-        if (currentUser != null) {
-            String hashedOld = hashPassword(oldPassword);
-            if (!currentUser.getPasswordHash().equals(hashedOld)) {
-                System.out.println("Error: incorrect old password.");
-                return;
-            }
-            if (oldPassword.equals(newPassword)) {
-                System.out.println("Error: new password cannot be the same as the old password.");
-                return;
-            }
-            if (!Pattern.matches(RegexHelper.PASSWORD_PATTERN, newPassword)) {
-                System.out.println("Error: weak password.");
-                return;
-            }
+        if (currentUser == null) return "Error: User not found.";
+        String hashedOld = hashPassword(oldPassword);
+        if (!currentUser.getPasswordHash().equals(hashedOld)) return "Error: incorrect old password.";
+        if (oldPassword.equals(newPassword)) return "Error: new password cannot be the same as the old password.";
+        if (!Pattern.matches(RegexHelper.PASSWORD_PATTERN, newPassword)) return "Error: weak password.";
 
-            String hashedNew = hashPassword(newPassword);
-            currentUser.setPasswordHash(hashedNew);
-            Data.saveUser();
-            System.out.println("Password changed successfully.");
-        }
+        String hashedNew = hashPassword(newPassword);
+        currentUser.setPasswordHash(hashedNew);
+        Data.saveUser();
+        return "Password changed successfully.";
     }
 
     private String hashPassword(String password) {

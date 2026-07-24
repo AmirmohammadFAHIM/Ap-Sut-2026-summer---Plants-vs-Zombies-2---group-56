@@ -1,13 +1,13 @@
 package controllers.menus;
 
-public interface Menu{
-    public String ChangeMenu(String menuName);
+public interface Menu {
+    String ChangeMenu(String menuName);
 
-    public default void ShowCurrentMenu(){
+    default String ShowCurrentMenu() {
+        return "";
+    }
 
-    };
-
-    public default void exitMenu(){
-
-    };
+    default String exitMenu() {
+        return "";
+    }
 }

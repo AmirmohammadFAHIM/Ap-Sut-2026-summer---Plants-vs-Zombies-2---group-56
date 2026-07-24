@@ -6,9 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SettingsView extends View {
-    public SettingsView() {
-        menu = new Settings();
-    }
+    public SettingsView() { menu = new Settings(); }
 
     @Override
     public void input() {
@@ -17,11 +15,9 @@ public class SettingsView extends View {
         if (handleGlobalCommands(input)) return;
 
         Matcher difficultyMatcher = Pattern.compile(RegexHelper.SETTINGS_CHANGE_DIFFICULTY).matcher(input);
-        Settings settingsMenu = (Settings) menu;
 
         if (difficultyMatcher.matches()) {
-            int level = Integer.parseInt(difficultyMatcher.group("level"));
-            settingsMenu.ChangeHardness(level);
+            System.out.println(((Settings) menu).ChangeHardness(Integer.parseInt(difficultyMatcher.group("level"))));
         } else {
             System.out.println("Invalid command!");
         }

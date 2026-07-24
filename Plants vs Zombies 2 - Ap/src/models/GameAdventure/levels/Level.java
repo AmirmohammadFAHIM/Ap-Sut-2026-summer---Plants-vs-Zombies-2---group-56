@@ -31,6 +31,7 @@ public class Level implements Serializable {
         this.waves = waves;
         this.baseHardness = baseHardness;
         this.allowedZombies = new ArrayList<>();
+        this.unlockingPlants = new ArrayList<>();
     }
 
     public String getLevelType() {

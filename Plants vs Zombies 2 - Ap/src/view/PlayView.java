@@ -5,24 +5,17 @@ import controllers.menus.gameController.PlayMenu;
 import models.GameAdventure.Chapters;
 import models.User;
 import models.utils.RegexHelper;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PlayView extends View {
-
-    public PlayView() {
-        menu = new PlayMenu();
-    }
+    public PlayView() { menu = new PlayMenu(); }
 
     @Override
     public void input() {
         System.out.println("=== Play Menu ===");
         super.input();
-
-        if (handleGlobalCommands(input)) {
-            return;
-        }
+        if (handleGlobalCommands(input)) return;
 
         Matcher chapterMatcher = Pattern.compile(RegexHelper.PLAY_ENTER_CHAPTER).matcher(input);
         Matcher shortcutMatcher = Pattern.compile(RegexHelper.PLAY_SHORTCUTS).matcher(input);
@@ -30,36 +23,28 @@ public class PlayView extends View {
         Matcher playMatcher = Pattern.compile(RegexHelper.PLAY_LEVEL).matcher(input);
 
         if (chapterMatcher.matches()) {
-            String chapterName = chapterMatcher.group("chaptername");
             try {
-                Chapters selectedChapter = Chapters.valueOf(chapterName);
+                Chapters selectedChapter = Chapters.valueOf(chapterMatcher.group("chaptername"));
                 System.out.println(((PlayMenu) menu).changeChapter(selectedChapter));
             } catch (IllegalArgumentException e) {
                 System.out.println("Error: Chapter not found! Available chapters: AncientEgypt, FrozenCaves, BigWaveBeach, DarkAge");
             }
-        }
-        else if (shortcutMatcher.matches()) {
+        } else if (shortcutMatcher.matches()) {
             String shortcut = shortcutMatcher.group("shortcut").toLowerCase();
-            String targetMenu = "";
-
-            switch (shortcut) {
-                case "greenhouse": targetMenu = "Greenhouse menu"; break;
-                case "travel-log": targetMenu = "Quests menu"; break;
-                case "leaderboard": targetMenu = "Leaderboard menu"; break;
-                case "coin-wallet":
-                case "gem-wallet": targetMenu = "Wallet menu"; break;
-            }
+            String targetMenu = switch (shortcut) {
+                case "greenhouse" -> "Greenhouse menu";
+                case "travel-log" -> "Quests menu";
+                case "leaderboard" -> "Leaderboard menu";
+                case "coin-wallet", "gem-wallet" -> "Wallet menu";
+                default -> "";
+            };
             System.out.println(menu.ChangeMenu(targetMenu));
-        }
-        else if (playMatcher.matches()) {
-            int levelId = Integer.parseInt(playMatcher.group("level"));
-            System.out.println(((PlayMenu) menu).play(levelId));
-        }
-        else if (cheatMatcher.matches()) {
+        } else if (playMatcher.matches()) {
+            System.out.println(((PlayMenu) menu).play(Integer.parseInt(playMatcher.group("level"))));
+        } else if (cheatMatcher.matches()) {
             int amount = Integer.parseInt(cheatMatcher.group("amount"));
             String type = cheatMatcher.group("type").toLowerCase();
             User currentUser = Data.getCurrentUser();
-
             if (currentUser != null) {
                 if (type.startsWith("coin")) {
                     currentUser.addCoins(amount);
@@ -70,8 +55,7 @@ public class PlayView extends View {
                 }
                 Data.saveUser();
             }
-        }
-        else {
+        } else {
             System.out.println("Invalid command!");
         }
     }

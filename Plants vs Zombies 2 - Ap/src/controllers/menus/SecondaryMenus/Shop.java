@@ -13,67 +13,46 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Shop implements Menu {
-    private Seed DailyOffer;
-    private ArrayList<Seed> seeds;
-    private Pot pot;
-
     private String currentDailyPlant = "PEASHOOTER";
 
     @Override
-    public String ChangeMenu(String menuName) {
-        return "Invalid menu transition from Shop menu.";
-    }
+    public String ChangeMenu(String menuName) { return "Invalid menu transition from Shop menu."; }
 
     @Override
-    public void exitMenu() {
+    public String exitMenu() {
         App.setScreen(new view.GreenHouseView());
-        System.out.println("Returned to GreenHouse Menu.");
+        return "Returned to GreenHouse Menu.";
     }
 
     @Override
-    public void ShowCurrentMenu() {
-        System.out.println("--- Shop Menu---");
-    }
+    public String ShowCurrentMenu() { return "--- Shop Menu---"; }
 
-    public void purchase(String itemName, int count) {
+    public String purchase(String itemName, int count) {
         User user = Data.getCurrentUser();
-        if (user == null) {
-            System.out.println("Error: Please log in first.");
-            return;
-        }
+        if (user == null) return "Error: Please log in first.";
 
         switch (itemName.toLowerCase()) {
             case "pot":
                 int potCost = 2000 * count;
-                if (user.getUnlockedPots() + count > 20) {
-                    System.out.println("Error: Maximum of 20 pots reached.");
-                    break;
-                }
+                if (user.getUnlockedPots() + count > 20) return "Error: Maximum of 20 pots reached.";
                 if (canPurchase(potCost, "coin")) {
                     user.addCoins(-potCost);
                     user.addUnlockedPots(count);
                     Data.saveUser();
-                    System.out.println(count + " Pot(s) unlocked successfully.");
-                } else {
-                    System.out.println("Error: Not enough coins.");
+                    return count + " Pot(s) unlocked successfully.";
                 }
-                break;
+                return "Error: Not enough coins.";
 
             case "plantfood":
                 int foodCost = 3 * count;
-                if (user.getPlantFoods() + count > 3) {
-                    System.out.println("Error: Maximum of 3 Plant Foods can be stored.");
-                    break;
-                }
+                if (user.getPlantFoods() + count > 3) return "Error: Maximum of 3 Plant Foods can be stored.";
                 if (canPurchase(foodCost, "diamond")) {
                     user.addDiamonds(-foodCost);
                     user.addPlantFoods(count);
                     Data.saveUser();
-                    System.out.println(count + " Plant Food(s) purchased successfully.");
-                } else {
-                    System.out.println("Error: Not enough diamonds.");
+                    return count + " Plant Food(s) purchased successfully.";
                 }
-                break;
+                return "Error: Not enough diamonds.";
 
             case "exchange":
                 int exchangeCost = 5 * count;
@@ -81,82 +60,60 @@ public class Shop implements Menu {
                     user.addDiamonds(-exchangeCost);
                     user.addCoins(500 * count);
                     Data.saveUser();
-                    System.out.println("Currency exchanged successfully. Gained " + (500 * count) + " coins.");
-                } else {
-                    System.out.println("Error: Not enough diamonds.");
+                    return "Currency exchanged successfully. Gained " + (500 * count) + " coins.";
                 }
-                break;
+                return "Error: Not enough diamonds.";
 
             case "daily":
-                String today = LocalDate.now().toString(); // خواندن تاریخ سیستم
-                if (today.equals(user.getLastDailyPurchaseDate())) {
-                    System.out.println("Error: You have already purchased today's daily offer.");
-                    break;
-                }
-
-                int dailyCost = 1600; // 20% تخفیف از 2000
+                String today = LocalDate.now().toString();
+                if (today.equals(user.getLastDailyPurchaseDate())) return "Error: You have already purchased today's daily offer.";
+                int dailyCost = 1600;
                 if (canPurchase(dailyCost, "coin")) {
                     user.addCoins(-dailyCost);
                     user.addSpecificSeed(currentDailyPlant, 10);
-                    user.setLastDailyPurchaseDate(today); // ثبت تاریخ خرید برای جلوگیری از خرید مجدد در همین روز
+                    user.setLastDailyPurchaseDate(today);
                     Data.saveUser();
-                    System.out.println("Successfully bought the Daily Offer! 10x " + currentDailyPlant + " Seeds added.");
-                } else {
-                    System.out.println("Error: Not enough coins (1600 required).");
+                    return "Successfully bought the Daily Offer! 10x " + currentDailyPlant + " Seeds added.";
                 }
-                break;
+                return "Error: Not enough coins (1600 required).";
 
-            default:
-                System.out.println("Error: Invalid item.");
+            default: return "Error: Invalid item.";
         }
     }
 
     public boolean canPurchase(int cost, String currency) {
         User user = Data.getCurrentUser();
         if (user == null) return false;
-
-        if (currency.equalsIgnoreCase("coin")) {
-            return user.getCoins() >= cost;
-        } else if (currency.equalsIgnoreCase("diamond")) {
-            return user.getDiamonds() >= cost;
-        }
+        if (currency.equalsIgnoreCase("coin")) return user.getCoins() >= cost;
+        if (currency.equalsIgnoreCase("diamond")) return user.getDiamonds() >= cost;
         return false;
     }
 
-    public void setDailyOffer() {
-        // دریافت تمام گیاهان تعریف شده در بازی به صورت خودکار از طریق Enum
+    public String setDailyOffer() {
         PlantType[] allPlants = PlantType.values();
-
-        // انتخاب یک گیاه کاملاً تصادفی از بین تمام گیاهان
         currentDailyPlant = allPlants[new Random().nextInt(allPlants.length)].name();
-
-        System.out.println("Daily offer updated!");
-        System.out.println("Offer: 10x " + currentDailyPlant + " Seed Packets for 1600 Coins (20% OFF).");
+        return "Daily offer updated!\nOffer: 10x " + currentDailyPlant + " Seed Packets for 1600 Coins (20% OFF).";
     }
 
-    public void normalPurchase(String plantType) {
+    public String normalPurchase(String plantType) {
         User user = Data.getCurrentUser();
         if (user != null && canPurchase(5, "diamond")) {
             user.addDiamonds(-5);
-            user.addSpecificSeed(plantType, 10); // ثبت 10 عدد بذر برای این گیاه
+            user.addSpecificSeed(plantType, 10);
             Data.saveUser();
-            System.out.println("Bought 10 " + plantType + " Seeds for 5 Diamonds.");
-        } else {
-            System.out.println("Error: Not enough diamonds (5 required).");
+            return "Bought 10 " + plantType + " Seeds for 5 Diamonds.";
         }
+        return "Error: Not enough diamonds (5 required).";
     }
 
-    public void randomPurchase() {
+    public String randomPurchase() {
         User user = Data.getCurrentUser();
         if (user != null && canPurchase(1000, "coin")) {
             user.addCoins(-1000);
-            user.addRandomSeeds(5); // ثبت 5 عدد بذر تصادفی
+            user.addRandomSeeds(5);
             Data.saveUser();
-            System.out.println("Bought 5 Random Seeds for 1000 Coins.");
-        } else {
-            System.out.println("Error: Not enough coins (1000 required).");
+            return "Bought 5 Random Seeds for 1000 Coins.";
         }
+        return "Error: Not enough coins (1000 required).";
     }
-
-    public ArrayList<Seed> getSeeds() { return seeds; }
 }

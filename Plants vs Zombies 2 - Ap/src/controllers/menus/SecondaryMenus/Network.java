@@ -4,31 +4,23 @@ import controllers.menus.Menu;
 import models.App;
 
 public class Network implements Menu {
+    @Override
+    public String ChangeMenu(String menuName) { return "Invalid menu transition from this menu."; }
 
     @Override
-    public String ChangeMenu(String menuName) {
-        return "Invalid menu transition from this menu.";
-    }
-
-    @Override
-    public void exitMenu() {
+    public String exitMenu() {
         App.setScreen(new view.HomeView());
-        System.out.println("Returned to Home Menu.");
+        return "Returned to Home Menu.";
     }
 
     @Override
-    public void ShowCurrentMenu() {
-        System.out.println("--- Network Menu ---");
-        System.out.println("Network features will be fully available in the upcoming phases.");
+    public String ShowCurrentMenu() { return "--- Network Menu ---\nNetwork features will be fully available in the upcoming phases."; }
+
+    public String connectToServer(String ip, int port) {
+        return "Attempting to connect to server at " + ip + ":" + port + "...\nStatus: Waiting for Phase 2 implementation.";
     }
 
-    public void connectToServer(String ip, int port) {
-        System.out.println("Attempting to connect to server at " + ip + ":" + port + "...");
-        System.out.println("Status: Waiting for Phase 2 implementation.");
-    }
-
-    public void hostServer(int port) {
-        System.out.println("Starting server on port " + port + "...");
-        System.out.println("Status: Waiting for Phase 2 implementation.");
+    public String hostServer(int port) {
+        return "Starting server on port " + port + "...\nStatus: Waiting for Phase 2 implementation.";
     }
 }

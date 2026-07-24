@@ -5,10 +5,7 @@ import models.App;
 import models.entity.PlantCategory;
 import models.entity.PlantTags;
 import models.factory.plantSkills.*;
-import models.factory.plantSkills.skillDatas.ExplosionData;
-import models.factory.plantSkills.skillDatas.Modify;
-import models.factory.plantSkills.skillDatas.ShootingData;
-import models.factory.plantSkills.skillDatas.ShootingMood;
+import models.factory.plantSkills.skillDatas.*;
 import models.entity.BulletType;
 import models.entity.Plant;
 
@@ -17,11 +14,46 @@ import java.util.ArrayList;
 public enum PlantType {
 
     /// ---------Sun Producers------
-    SUNFLOWER,
-    TWIN_SUNFLOWER,
-    SUN_SHROOM,
-    PRIMAL_SUNFLOWER,
-    GOLD_BLOOM,
+    SUNFLOWER{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            SunProduceData data = new SunProduceData(25);
+            plant.getPlantfoodSkill().add(new SunProduce(data));
+            return super.allocateSkill(plant);
+        }
+    },
+    TWIN_SUNFLOWER{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            SunProduceData data = new SunProduceData(50);
+            plant.getPlantfoodSkill().add(new SunProduce(data));
+            return super.allocateSkill(plant);
+        }
+    },
+    SUN_SHROOM{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            SunProduceData data = new SunProduceData(15);
+            plant.getPlantfoodSkill().add(new SunProduce(data));
+            return super.allocateSkill(plant);
+        }
+    },
+    PRIMAL_SUNFLOWER{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            SunProduceData data = new SunProduceData(75);
+            plant.getPlantfoodSkill().add(new SunProduce(data));
+            return super.allocateSkill(plant);
+        }
+    },
+    GOLD_BLOOM{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            SunProduceData data = new SunProduceData(375 , true);
+            plant.getPlantfoodSkill().add(new SunProduce(data));
+            return super.allocateSkill(plant);
+        }
+    },
     /// ---------SHOOTERS----------
     PEASHOOTER{
         @Override

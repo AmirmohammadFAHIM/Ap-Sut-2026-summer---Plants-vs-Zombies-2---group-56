@@ -16,6 +16,7 @@ public class PlantBuilder {
     private final String damage = "$Dmg\\s+(?<amount>-?\\d+)^";
     private final String cooldown = "$Cooldown\\s+(?<amount>-?\\d+)^";
     private final String lifeSpan = "$Lifespan\\s+(?<>-?\\d+)\\s*s^";
+    private final String Speed = "$Speed\\s+(?<amount>-?\\d+)^";
     private final Plant plant = new Plant();
 
 
@@ -24,7 +25,7 @@ public class PlantBuilder {
         int level = App.getCurrentuser().getLevels().get(plantType);
         plant.setHp(upgradedHP(plantType , level));
         plant.setDamage(upgradedDamage(plantType , level));
-        plant.setActionInterval(upgradedCooldown(plantType , level));
+        plant.setActionInterval(upgradedSpeed(plantType , level));
         plantType.allocateSkill(plant);
         return plant;
     }
@@ -106,7 +107,7 @@ public class PlantBuilder {
     }
 
     public float upgradedCooldown(PlantType plantType , int level){
-        float cooldown = Data.getPlants().get(plantType).getActionInterval();
+        float cooldown = Data.getPlants().get(plantType).getRecharge();
         for (int i = 2; i <= level ; i++) {
             String effect = Data.getPlants().get(plantType).getUpgrades().get(i).getEffect();
             cooldown += effect.matches(this.cooldown) ?  cooldown(effect) : 0;
@@ -121,5 +122,20 @@ public class PlantBuilder {
             damage += effect.matches(this.damage) ? damage(effect) : 0;
         }
         return damage;
+    }
+
+    public float upgradedSpeed(PlantType plantType , int level){
+        float cooldown = Data.getPlants().get(plantType).getActionInterval();
+        for (int i = 2; i <= level ; i++) {
+            String effect = Data.getPlants().get(plantType).getUpgrades().get(i).getEffect();
+            cooldown += effect.matches(this.cooldown) ?  speed(effect) : 0;
+        }
+        return cooldown;
+    }
+
+    private float speed(String effect){
+        Matcher m = Pattern.compile(Speed).matcher(effect);
+        m.find();
+        return Float.parseFloat(m.group(1));
     }
 }

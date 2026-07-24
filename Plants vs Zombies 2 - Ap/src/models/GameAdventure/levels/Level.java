@@ -18,10 +18,6 @@ public class Level implements Serializable {
     private ArrayList<String> allowedZombies;
     private ArrayList<PlantType> unlockingPlants;
 
-    public ArrayList<PlantType> getUnlockingPlants() {
-        return unlockingPlants;
-    }
-
     public Level(int id, Chapters chapters, String levelType, boolean unlocked, int waves, float baseHardness) {
         this.id = id;
         this.chapters = chapters;
@@ -95,5 +91,13 @@ public class Level implements Serializable {
 
     public void setAllowedZombies(ArrayList<String> allowedZombies) {
         this.allowedZombies = allowedZombies;
+    }
+
+    public void setUnlockingPlants(ArrayList<PlantType> unlockingPlants) {
+        this.unlockingPlants = unlockingPlants;
+    }
+
+    public ArrayList<PlantType> getUnlockingPlants() {
+        return unlockingPlants;
     }
 }

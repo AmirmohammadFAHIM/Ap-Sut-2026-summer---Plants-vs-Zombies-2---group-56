@@ -7,9 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CollectionView extends View {
-    public CollectionView() {
-        menu = new Collection();
-    }
+    public CollectionView() { menu = new Collection(); }
 
     @Override
     public void input() {
@@ -28,25 +26,17 @@ public class CollectionView extends View {
 
         Collection collectionMenu = (Collection) menu;
 
-        if (unlockedPlantsMatcher.matches()) {
-            collectionMenu.showunlockedPlant();
-        } else if (unlockedZombiesMatcher.matches()) {
-            collectionMenu.showunlockedZombie();
-        } else if (allPlantsMatcher.matches()) {
-            collectionMenu.showAllPlants();
-        } else if (allZombiesMatcher.matches()) {
-            collectionMenu.showAllZombies();
-        } else if (showPlantMatcher.matches()) {
-            collectionMenu.showPlant(showPlantMatcher.group("name"));
-        } else if (showZombieMatcher.matches()) {
-            collectionMenu.showZombie(showZombieMatcher.group("name"));
-        } else if (buyPlantMatcher.matches()) {
-            collectionMenu.buyPlant(buyPlantMatcher.group("name"));
-        } else if (upgradePlantMatcher.matches()) {
+        if (unlockedPlantsMatcher.matches()) System.out.println(collectionMenu.showunlockedPlant());
+        else if (unlockedZombiesMatcher.matches()) System.out.println(collectionMenu.showunlockedZombie());
+        else if (allPlantsMatcher.matches()) System.out.println(collectionMenu.showAllPlants());
+        else if (allZombiesMatcher.matches()) System.out.println(collectionMenu.showAllZombies());
+        else if (showPlantMatcher.matches()) System.out.println(collectionMenu.showPlant(showPlantMatcher.group("name")));
+        else if (showZombieMatcher.matches()) System.out.println(collectionMenu.showZombie(showZombieMatcher.group("name")));
+        else if (buyPlantMatcher.matches()) System.out.println(collectionMenu.buyPlant(buyPlantMatcher.group("name")));
+        else if (upgradePlantMatcher.matches()) {
             String plantName = upgradePlantMatcher.group("name");
             try {
-                PlantType type = PlantType.valueOf(plantName.toUpperCase());
-                System.out.println(collectionMenu.upgradePlant(type));
+                System.out.println(collectionMenu.upgradePlant(PlantType.valueOf(plantName.toUpperCase())));
             } catch (IllegalArgumentException e) {
                 System.out.println("Error: Plant '" + plantName + "' not found.");
             }

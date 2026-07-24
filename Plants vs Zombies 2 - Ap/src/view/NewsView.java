@@ -6,9 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NewsView extends View {
-    public NewsView() {
-        menu = new News();
-    }
+    public NewsView() { menu = new News(); }
 
     @Override
     public void input() {
@@ -18,14 +16,9 @@ public class NewsView extends View {
 
         Matcher unreadMatcher = Pattern.compile(RegexHelper.NEWS_SHOW_UNREAD).matcher(input);
         Matcher allMatcher = Pattern.compile(RegexHelper.NEWS_SHOW_ALL).matcher(input);
-        News newsMenu = (News) menu;
 
-        if (unreadMatcher.matches()) {
-            newsMenu.ShowNews();
-        } else if (allMatcher.matches()) {
-            newsMenu.ShowAllNews();
-        } else {
-            System.out.println("Invalid command!");
-        }
+        if (unreadMatcher.matches()) System.out.println(((News) menu).ShowNews());
+        else if (allMatcher.matches()) System.out.println(((News) menu).ShowAllNews());
+        else System.out.println("Invalid command!");
     }
 }

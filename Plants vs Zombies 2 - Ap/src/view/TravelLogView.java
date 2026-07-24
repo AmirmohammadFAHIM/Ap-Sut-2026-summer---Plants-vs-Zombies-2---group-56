@@ -6,9 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TravelLogView extends View {
-    public TravelLogView() {
-        menu = new TravelLog();
-    }
+    public TravelLogView() { menu = new TravelLog(); }
 
     @Override
     public void input() {
@@ -19,12 +17,10 @@ public class TravelLogView extends View {
         Matcher changePageMatcher = Pattern.compile(RegexHelper.QUESTS_CHANGE_PAGE).matcher(input);
         Matcher showQuestsMatcher = Pattern.compile(RegexHelper.QUESTS_SHOW).matcher(input);
 
-        TravelLog travelLogMenu = (TravelLog) menu;
-
         if (changePageMatcher.matches()) {
-            travelLogMenu.changePage(changePageMatcher.group("pageName"));
+            System.out.println(((TravelLog) menu).changePage(changePageMatcher.group("pageName")));
         } else if (showQuestsMatcher.matches()) {
-            travelLogMenu.showQuests();
+            System.out.println(((TravelLog) menu).showQuests());
         } else {
             System.out.println("Invalid command!");
         }

@@ -7,59 +7,48 @@ import models.Quest;
 import models.User;
 
 public class TravelLog implements Menu {
-
     private String currentPage = "Adventure";
 
     @Override
-    public String ChangeMenu(String menuName) {
-        return "Invalid menu transition from this menu.";
-    }
+    public String ChangeMenu(String menuName) { return "Invalid menu transition from this menu."; }
 
     @Override
-    public void exitMenu() {
+    public String exitMenu() {
         App.setScreen(new view.PlayView());
-        System.out.println("Returned to Play Menu.");
+        return "Returned to Play Menu.";
     }
 
     @Override
-    public void ShowCurrentMenu() {
-        showQuests();
-    }
+    public String ShowCurrentMenu() { return "--- Travel Log Menu ---"; }
 
-    public void changePage(String pageName) {
-        if (pageName.equalsIgnoreCase("Adventure") ||
-                pageName.equalsIgnoreCase("Special") ||
-                pageName.equalsIgnoreCase("Minigame") ||
-                pageName.equalsIgnoreCase("Community") ||
-                pageName.equalsIgnoreCase("Challenge") ||
-                pageName.equalsIgnoreCase("Mystery")) {
-
+    public String changePage(String pageName) {
+        if (pageName.equalsIgnoreCase("Adventure") || pageName.equalsIgnoreCase("Special") ||
+                pageName.equalsIgnoreCase("Minigame") || pageName.equalsIgnoreCase("Community") ||
+                pageName.equalsIgnoreCase("Challenge") || pageName.equalsIgnoreCase("Mystery")) {
             this.currentPage = pageName;
-            System.out.println("Switched to Travel Log page: " + this.currentPage);
-        } else {
-            System.out.println("Error: Invalid page name. Available pages: Adventure, Special, Minigame, Community, Challenge, Mystery.");
+            return "Switched to Travel Log page: " + this.currentPage;
         }
+        return "Error: Invalid page name. Available pages: Adventure, Special, Minigame, Community, Challenge, Mystery.";
     }
 
-    public void showQuests() {
-        System.out.println("--- Travel Log : " + currentPage + " ---");
+    public String showQuests() {
+        StringBuilder sb = new StringBuilder("--- Travel Log : ").append(currentPage).append(" ---\n");
         User user = Data.getCurrentUser();
 
         if (user != null && currentPage.equalsIgnoreCase("Adventure")) {
             if (user.getActiveQuests() == null || user.getActiveQuests().isEmpty()) {
-                System.out.println("No active quests for this category yet.");
-                return;
+                return sb.append("No active quests for this category yet.").toString();
             }
-
             for (Quest quest : user.getActiveQuests()) {
                 if (quest.isDone()) {
-                    System.out.println("- [DONE] " + quest.getQuestName() + " (Rewards: " + quest.getRewardAmount() + " " + quest.getRewardType() + ")");
+                    sb.append("- [DONE] ").append(quest.getQuestName()).append(" (Rewards: ").append(quest.getRewardAmount()).append(" ").append(quest.getRewardType()).append(")\n");
                 } else {
-                    System.out.println("- " + quest.getQuestName() + " (" + (int)quest.getProgress() + "/" + (int)quest.getTarget() + ") (Rewards: " + quest.getRewardAmount() + " " + quest.getRewardType() + ")");
+                    sb.append("- ").append(quest.getQuestName()).append(" (").append((int)quest.getProgress()).append("/").append((int)quest.getTarget()).append(") (Rewards: ").append(quest.getRewardAmount()).append(" ").append(quest.getRewardType()).append(")\n");
                 }
             }
         } else {
-            System.out.println("No active quests for this category yet.");
+            sb.append("No active quests for this category yet.");
         }
+        return sb.toString().trim();
     }
 }

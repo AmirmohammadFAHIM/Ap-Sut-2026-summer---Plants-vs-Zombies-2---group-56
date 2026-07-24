@@ -64,9 +64,9 @@ public class GameController implements Controller{/// Main Brain of the game
         if(user.getLevelId() == 5){
             user.setLevelId(1);
             Chapters newChapter = switch (user.getChapter()){
-                case AncientEgypt -> Chapters.BigWaveBeach;
-                case BigWaveBeach -> Chapters.FrozenCaves;
-                case FrozenCaves -> Chapters.DarkAge;
+                case AncientEgypt -> Chapters.FrozenCaves;
+                case FrozenCaves -> Chapters.BigWaveBeach;
+                case BigWaveBeach -> Chapters.DarkAge;
                 default -> user.getChapter();
             };
             user.setChapter(newChapter);

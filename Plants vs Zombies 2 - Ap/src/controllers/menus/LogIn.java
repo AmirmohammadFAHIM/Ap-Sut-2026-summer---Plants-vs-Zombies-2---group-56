@@ -8,65 +8,45 @@ import view.HomeView;
 import java.security.MessageDigest;
 
 public class LogIn implements Menu {
-
     @Override
     public String ChangeMenu(String menuName) {
         return "Invalid menu transition from Log In menu.";
     }
 
     @Override
-    public void exitMenu() {
+    public String exitMenu() {
         App.setScreen(new view.SignUpView());
-        System.out.println("Returned to Sign Up Menu.");
+        return "Returned to Sign Up Menu.";
     }
 
     @Override
-    public void ShowCurrentMenu() {
-        System.out.println("--- Log In Menu ---");
+    public String ShowCurrentMenu() {
+        return "--- Log In Menu ---";
     }
 
-    public void login(String username, String password, boolean stayLoggedIn) {
+    public String login(String username, String password, boolean stayLoggedIn) {
         User user = Data.getUserByUsername(username);
-
-        if (user == null) {
-            System.out.println("Error: username does not exist.");
-            return;
-        }
+        if (user == null) return "Error: username does not exist.";
 
         String hashedInput = hashPassword(password);
-        if (!user.getPasswordHash().equals(hashedInput)) {
-            System.out.println("Error: incorrect password.");
-            return;
-        }
+        if (!user.getPasswordHash().equals(hashedInput)) return "Error: incorrect password.";
 
         user.setStayLoggedIn(stayLoggedIn);
         Data.setCurrentUser(user);
         Data.saveUser();
-        System.out.println("Logged in successfully.");
         App.setScreen(new HomeView());
+        return "Logged in successfully.";
     }
 
-    public void resetPassword(String username, String answer, String newPassword) {
+    public String resetPassword(String username, String answer, String newPassword) {
         User user = Data.getUserByUsername(username);
-
-        if (user == null) {
-            System.out.println("Error: username does not exist.");
-            return;
-        }
-
-        if (!user.checkSecurityAnswer(answer)) {
-            System.out.println("Error: incorrect security answer.");
-            return;
-        }
+        if (user == null) return "Error: username does not exist.";
+        if (!user.checkSecurityAnswer(answer)) return "Error: incorrect security answer.";
 
         String hashedNewPassword = hashPassword(newPassword);
         user.setPasswordHash(hashedNewPassword);
         Data.saveUser();
-
-        System.out.println("Password reset successfully. You can now log in.");
-    }
-
-    public void stayLoggedIn() {
+        return "Password reset successfully. You can now log in.";
     }
 
     private String hashPassword(String password) {

@@ -1,5 +1,6 @@
 package controllers.menus.gameController;
 
+import controllers.datacontroller.MiniGameLevelManager;
 import models.App;
 import models.games.miniGames.MinigameLevel;
 import models.games.miniGames.WallnutBowling;
@@ -7,11 +8,12 @@ import models.utils.Result;
 import view.TravelLogView;
 
 public class WallnutController implements Controller{
-    public WallnutController(){
-        //TODO: read the level from json
+    public WallnutController(int level){
+        this.level = MiniGameLevelManager.getLevelById(level);
+        game = new WallnutBowling(this.level);
     }
     MinigameLevel level;
-    WallnutBowling game = new WallnutBowling(level);
+    WallnutBowling game ;
 
 
     @Override

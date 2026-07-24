@@ -16,10 +16,11 @@ public class SeedPackage {
     }
 
     private boolean available;
-    public SeedPackage(PlantType plant, float recharge) {
+    public SeedPackage(PlantType plant, float recharge , float cost) {
         this.plant = plant;
         this.recharge = recharge;
         available = false;
+        this.cost = cost;
     }
 
     public void update(float delta){

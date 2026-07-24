@@ -15,7 +15,6 @@ public class Level implements Serializable {
     private boolean won = false;
     private int waves;
     private float baseHardness;
-    // TODO resolved: list of zombies names
     private ArrayList<String> allowedZombies;
     private ArrayList<PlantType> unlockingPlants;
 

@@ -4,6 +4,7 @@ import controllers.datacontroller.Data;
 import controllers.datacontroller.SeedPackage;
 import models.App;
 import models.factory.PlantFactory;
+import models.factory.builder.PlantBuilder;
 import models.factory.builder.PlantType;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class PlantSelection {
     }
 
 
+    PlantBuilder updates = new  PlantBuilder();
 
     public SeedPackage selectPlant(String plantName) {
         try {
@@ -29,8 +31,10 @@ public class PlantSelection {
             if(!plantsToChoose.contains(plantType)){
                 return null;
             }
-            return new SeedPackage(plantType , Data.getPlants().get(plantType).getRecharge());
-            ///  TODO : affect the updates
+            int level = App.getCurrentuser().getLevels().get(plantType);
+            float recharge = updates.upgradedCooldown(plantType , level);
+            float cost =  updates.upgradedCost(plantType , level);
+            return new SeedPackage(plantType ,recharge , cost );
         }catch (Exception e){
             return null;
         }

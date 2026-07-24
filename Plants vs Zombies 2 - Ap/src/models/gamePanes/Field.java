@@ -139,4 +139,8 @@ public class Field {
     public void setWaterCurrentSurface(int waterCurrentSurface) {
         this.waterCurrentSurface = waterCurrentSurface;
     }
+
+    public Tile getTileByCoordinats(int x, int y){
+                return tiles.get(y).get(x);
+    }
 }

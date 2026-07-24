@@ -6,6 +6,7 @@ import models.factory.plantSkills.Explosive;
 import models.factory.plantSkills.Skill;
 import models.factory.plantSkills.skillDatas.ExplosionData;
 import models.factory.plantSkills.skillDatas.PlantArmor;
+import models.gamePanes.Tile;
 import models.games.BaseGame;
 
 import java.util.ArrayList;
@@ -138,6 +139,7 @@ public class Plant extends Entity {
     }
 
     public void update(float delta , BaseGame game){
+        if(freezeLevel >= 3 || cat || frozen) heat(game ,delta); ;
         if(t <= 0){
             t = ActionInterval;
            if(Trap(game)) {
@@ -150,6 +152,11 @@ public class Plant extends Entity {
         }
         else{
             t -= delta;
+        }
+
+        if(plantFood){
+            for (Skill x : plantfoodSkill) x.do_skill(this , game);
+            plantFood = false;
         }
 
         if(lifeTime <= 0 && lifeTime >= -1){
@@ -172,9 +179,16 @@ public class Plant extends Entity {
     }
 
     public void dispose(BaseGame game){
+        if(type == PlantType.LILY_PAD){
+            Tile tile = game.getField().getTileByCoordinats(tileIndex , line);
+            tile.setPlantable(false);
+        }
+        if(tags.contains(PlantTags.EXPLOSIVE)){
+            ExplosionData data = new ExplosionData( 3 ,3);
+            new Explosive(data).do_skill(this , game);
+        }
         game.getPlants_inField().remove(this);
 
-        /// TO DO: Check for two tags : 1-Explosive , 2-MoveZombies: for each in skills , see if theirs disposable or no
     }
 
     public void setPlantFood(boolean plantFood , BaseGame game) {
@@ -193,7 +207,11 @@ public class Plant extends Entity {
     }
 
     public void setFreezeLevel(int freezeLevel) {
-        if(freezeLevel >= 3) freezeLevel = 3;
+        if(freezeLevel >= 3){
+            freezeLevel = 3;
+            frozen = true;
+            if(freezeHp <= 0) freezeHp = 700;
+        }
         this.freezeLevel = freezeLevel;
     }
 
@@ -219,14 +237,22 @@ public class Plant extends Entity {
         }
     }
 
-    private float nextStg = 24f;
-    private void grow(float delta){
-        if(nextStg <= 0){
-            if(tags.contains(PlantTags.SHROOM)){
+    float freezeHp;
 
-            }
-            else if(tags.contains(PlantTags.AoE)){
+    public void setFreezeHp(float freezeHp) {
+        if(freezeHp <= 0){
+            frozen = false;
+            freezeLevel = 0;
+        }
+        this.freezeHp = freezeHp;
+    }
 
+    private void heat(BaseGame game , float delta){
+        for (Plant x : game.getPlants_inField()){
+            float dx =  Math.abs(x.getX() - this.x);
+            float dy = Math.abs(x.getY() - this.y);
+            if(dx <= Tile.getWidth() * 1 && dy  <= Tile.getHeight() * 1){
+                setFreezeHp(freezeHp - 60 * delta);
             }
         }
     }

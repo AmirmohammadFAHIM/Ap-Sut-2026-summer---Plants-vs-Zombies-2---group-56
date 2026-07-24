@@ -10,8 +10,9 @@ public class PlantFactory {
         return null;
     }
 
+    PlantBuilder builder = new PlantBuilder();
     public  Plant CreatePlant(PlantType type) {
-        return null;
+        return builder.build(type);
     }
 
 

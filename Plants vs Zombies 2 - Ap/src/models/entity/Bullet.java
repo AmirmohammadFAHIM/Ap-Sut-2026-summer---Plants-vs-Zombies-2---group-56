@@ -27,7 +27,8 @@ public class Bullet {
     private boolean grounded = false;
     private boolean active;
     private float poisonDamage = Constants.poisonBaseDamage;
-    private final ArrayList<BulletType> bowling = new ArrayList<>(Arrays.asList(BulletType.ONION));
+    private final ArrayList<BulletType> bowling = new ArrayList<>(Arrays.asList(BulletType.ONION_1,
+            BulletType.ONION_2 , BulletType.ONION_3 , BulletType.Explosive_Onion));
 
 
     /// ------------BOOLEANS------------

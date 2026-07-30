@@ -13,11 +13,13 @@ public class Freeze implements Skill{
     @Override
     public void do_skill(Plant plant, BaseGame game) {
         switch (type){
-            case LINE:
-            case  TOUCH:
-            case  RANDOM:
+            case LINE -> line(plant, game);
+            case  TOUCH -> touch(plant, game);
+            case  RANDOM -> random(plant , game , 3);
         }
     }
+
+
 
     @Override
     public void all(Plant plant, BaseGame game) {
@@ -35,16 +37,20 @@ public class Freeze implements Skill{
     }
 
     private void touch(Plant plant , BaseGame game){
-        for (Zombie z : game.getCurrentWave().getZombies()){
-            if(z.getX() - plant.getX() + plant.getWidth() <= 20){
-                /// freeze this nigger
+        for (Zombie z : game.getZombies()) {
+            float dx = Math.abs(plant.getX() - z.getX());
+            float dy = Math.abs(plant.getY() - z.getY());
+            if(dx <= 20 && dy <= 20){
+                z.setFrozen(true);
             }
+            return;
         }
-        for (Zombie z : game.getPreviousWave().getZombies()){
-            if(z.getX() - plant.getX() + plant.getWidth() <= 20){
-                /// freeze this nigger
-            }
-        }
+    }
+
+    private void line(Plant plant ,  BaseGame game){
+       for (Zombie z : game.getZombies()) {
+           if(z.getLine() == plant.getLine()) z.setFrozen(true);
+       }
     }
 
 

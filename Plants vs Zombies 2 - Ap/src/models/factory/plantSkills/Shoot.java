@@ -44,6 +44,8 @@ public class Shoot implements Skill {
             case Random -> random(shooter , game , data.getRandomCount());
         }
         if(data.range > 0) midRange(shooter , game);
+        else if(random) random(shooter , game, data.getRandomCount());
+        else if(all) all(shooter , game);
     }
 
     float onionChange;
@@ -237,6 +239,7 @@ public class Shoot implements Skill {
                 for (int j = 1; j <= 5; j++) {
                     Bullet bullet = new Bullet(plant.getX() ,
                             plant.getY() + i * Tile.getHeight() - Tile.getHeight() / 2, data.getBullet());
+                    game.getBullets().add(bullet);
                 }
             }
         }

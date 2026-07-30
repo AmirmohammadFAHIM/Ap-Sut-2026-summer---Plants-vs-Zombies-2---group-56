@@ -1,5 +1,6 @@
 package models.factory.plantSkills;
 
+import models.entity.PlantTags;
 import models.factory.plantSkills.skillDatas.ExplosionData;
 import models.games.BaseGame;
 import models.entity.Plant;
@@ -34,11 +35,8 @@ public class Explosive implements Skill{
 
 
     public void all(Plant self, BaseGame game) {
-        for (Zombie z : game.getCurrentWave().getZombies()){
-            z.setHp(0);
-        }
-        for (Zombie z : game.getPreviousWave().getZombies()){
-            z.setHp(0);
+        for (Zombie z : game.getZombies()){
+            z.setHp(z.getHp() - self.getDamage());
         }
 
         game.getField().getTiles().get(self.getLine())
@@ -59,7 +57,7 @@ public class Explosive implements Skill{
         for (Zombie z : game.getZombies()){
             if(z.getX() <= self.getX() + self.getWidth()){
                 z.setHp(data.instaKill ? 0 : z.getHp() - self.getDamage());
-                return;
+                return; // why return? because we need one zombie to die
             }
         }
 
@@ -90,20 +88,11 @@ public class Explosive implements Skill{
     private void AoE(Plant self, BaseGame game) {
         int x = self.getTileIndex() - ((data.width - 1) / 2);
         int y = self.getLine() + ((data.height - 1) / 2);
-        for (int i = y; i < data.height; i++) {
-            for (int j = y; j < data.width; j++) {
-                for (Zombie z : game.getCurrentWave().getZombies()) {
-                    if (z.getLine() == i && z.getTileIndex() == j) {
-                        z.setHp(0);
-                    }
-                }
-                    for (Zombie zo : game.getPreviousWave().getZombies()) {
-                        if (zo.getLine() == i && zo.getTileIndex() == j) {
-                            zo.setHp(0);
-                        }
-                    }
-                }
+        for (Zombie zombie :  game.getZombies()) {
+            if(Math.abs(x) <= data.width && Math.abs(y) <= data.height ){
+                zombie.setHp(zombie.getHp() - self.getDamage());
             }
+        }
     }
 
 
@@ -111,7 +100,7 @@ public class Explosive implements Skill{
     public ArrayList<Zombie> random(Plant plant, BaseGame game, int numbers) {
         ArrayList<Zombie> randomZombies = Skill.super.random(plant, game, numbers);
         for (Zombie z : randomZombies) {
-            z.setHp(0);
+             z.setHp(0);
             /// heat effect as well
         }
         return  randomZombies;

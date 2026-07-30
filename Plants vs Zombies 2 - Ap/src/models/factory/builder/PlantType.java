@@ -62,7 +62,6 @@ public enum PlantType {
             plant.getBaseSkill().add(new Shoot(data));
             ShootingData pf = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 30);
             plant.getPlantfoodSkill().add(new Shoot(pf));
-            plant.getPlantfoodSkill().add(new Freeze(Freeze.Type.LINE));
             return super.allocateSkill(plant);
         }
     },
@@ -371,7 +370,17 @@ public enum PlantType {
             return super.allocateSkill(plant);
         }
     },
-    FUM_SHROOM,
+    FUM_SHROOM{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            ShootingData data = new ShootingData(BulletType.BUBBLE , ShootingMood.MID_RANGE , 1);
+            int level = App.getCurrentuser().getLevels().get(plant.getType());
+            data.range = level >= 2 ? 5 : 4;
+            plant.getBaseSkill().add(new Shoot(data));
+            plant.getPlantfoodSkill().add(new Modify());
+            return super.allocateSkill(plant);
+        }
+    },
     /// -----------MELEE---------------
     BONK_CHOY{
         @Override

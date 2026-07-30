@@ -6,7 +6,7 @@ import controllers.observer.*;
 
 import java.util.*;
 
-public class Zombie {
+public class Zombie extends Entity{
 
     // ====== CORE ======
     private final String id;
@@ -294,7 +294,7 @@ public class Zombie {
     // ====== GETTERS & SETTERS ======
     public String getId() { return id; }
     public String getType() { return type; }
-    public int getHp() { return hp; }
+    public float getHp() { return hp; }
     public int getMaxHp() { return maxHp; }
     public int getDamage() { return damage; }
     public float getSpeed() { return speed; }
@@ -314,8 +314,8 @@ public class Zombie {
     public void setRow(int row) { this.row = row; }
     public void setFrozen(boolean frozen) { this.frozen = frozen; }
     public void setHypnotized(boolean hypnotized) { this.hypnotized = hypnotized; }
-    public void setX(int x) { this.x = x;}
-    public void setY(int x) { this.y = x;}
+    public void setX(float x) { this.x = x;}
+    public void setY(float y) { this.y = y;}
     public int getTileIndex() { return tileIndex; }
     public void setTileIndex(int tileIndex) { this.tileIndex = tileIndex; }
 

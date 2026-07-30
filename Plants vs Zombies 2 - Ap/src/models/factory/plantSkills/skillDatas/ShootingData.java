@@ -3,11 +3,11 @@ package models.factory.plantSkills.skillDatas;
 import models.entity.BulletType;
 
 public class ShootingData {
-    private BulletType bullet;
-    private ShootingMood mood;
-    private int bulletNumber;
-    private int randomCount;
-    public int range;
+    private BulletType bullet; /// type of your bullet
+    private ShootingMood mood; /// how you wanna shoot
+    private int bulletNumber; /// how many bullets you wanna shoot each time
+    private int randomCount; /// random zombies to shoot
+    public int range; /// range for mid - ranged plants
 
     public ShootingData(BulletType type , ShootingMood mood ,  int bulletNumber) {
         this.bulletNumber = bulletNumber;

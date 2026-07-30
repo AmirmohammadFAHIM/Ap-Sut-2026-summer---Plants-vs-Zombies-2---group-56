@@ -34,6 +34,7 @@ public enum BulletType {
 
     GIANT_PEA, /// for repeater && split pod 's plant food skill
 
+    Explosive_Onion,
     ONION_1,
     ONION_2,
     ONION_3,

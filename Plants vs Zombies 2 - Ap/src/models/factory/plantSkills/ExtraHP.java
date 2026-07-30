@@ -55,7 +55,7 @@ public class ExtraHP implements Skill{
         int row = rand.nextInt(5);
         int col = rand.nextInt(9);
         Tile tile = game.getField().getTiles().get(row).get(col);
-        if(tile.isEmpty()){
+        if(tile.isEmpty() && tile.isPlantable()){
             PlantFactory factory = new PlantFactory();
             Plant clone = factory.CreatePlant(plant.getType());
             clone.setLine(row);

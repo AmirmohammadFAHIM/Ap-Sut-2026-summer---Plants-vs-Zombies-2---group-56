@@ -7,7 +7,6 @@ import java.util.Random;
 
 public class Wave {
     private ArrayList<Zombie> zombies = new ArrayList<>();
-    private boolean finished = false;
     private int zombieCount = 0;
     private float zombiesHP;
     private int id;
@@ -16,7 +15,7 @@ public class Wave {
 
     Random rand = new Random();
     public void initWave(ArrayList<Zombie> available){
-        if(cost == 0) return;
+        if(cost <= 0) return;
         int index = rand.nextInt(available.size());
         zombies.add(available.get(index));
         zombieCount++;
@@ -33,18 +32,12 @@ public class Wave {
         return totalHp <= 0.75f * zombiesHP;
     }
 
-    public void updateWave(){
 
-
-    }
 
     public void setZombies(ArrayList<Zombie> zombies) {
         this.zombies = zombies;
     }
 
-    public void setFinished(boolean finished) {
-        this.finished = finished;
-    }
 
     public int getZombieCount() {
         return zombieCount;

@@ -4,11 +4,12 @@ import models.Constants;
 import models.entity.Zombie;
 import models.factory.builder.PlantType;
 import models.games.BaseGame;
+import models.games.NormalGame;
 import models.utils.Result;
 
 import java.util.ArrayList;
 
-public class Deadline extends BaseGame implements SpecialGame {
+public class Deadline extends NormalGame implements SpecialGame {
     @Override
     public ArrayList<PlantType> filterPlants() {
         return null;

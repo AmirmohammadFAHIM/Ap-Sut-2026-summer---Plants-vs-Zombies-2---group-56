@@ -30,6 +30,7 @@ public class BaseGame implements Game {
     protected int sunCount = 0;
     protected int plantFoodsCount = 0;
     GridController gridController;
+    protected boolean day = true;
 
     public int getPlantFoodsCount() {
         return plantFoodsCount;
@@ -72,14 +73,9 @@ public class BaseGame implements Game {
         this.sunCount = sunCount;
     }
 
-    public void gameFinished(){
-        if(currentWave.getId() == waves.size()){
-            if(zombies.isEmpty()) won = true;
-        }
-    }
 
     @Override
-    public void initGame() {
+    public void initGame(Chapters chapter , int level) {
 
     }
 

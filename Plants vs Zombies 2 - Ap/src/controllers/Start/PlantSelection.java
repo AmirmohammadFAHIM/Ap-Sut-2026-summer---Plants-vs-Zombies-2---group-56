@@ -31,6 +31,7 @@ public class PlantSelection {
             if(!plantsToChoose.contains(plantType)){
                 return null;
             }
+
             int level = App.getCurrentuser().getLevels().get(plantType);
             float recharge = updates.upgradedCooldown(plantType , level);
             float cost =  updates.upgradedCost(plantType , level);
@@ -39,7 +40,6 @@ public class PlantSelection {
             return null;
         }
 
-        /// add an exception signature to this method so if the plant is not in it , It's a wrong decision
     }
 
 

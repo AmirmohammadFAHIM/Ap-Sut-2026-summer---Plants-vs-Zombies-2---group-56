@@ -3,11 +3,12 @@ package models.games.specialGames;
 import models.factory.builder.PlantType;
 import models.games.BaseGame;
 import models.entity.Plant;
+import models.games.NormalGame;
 import models.utils.Result;
 
 import java.util.ArrayList;
 
-public class SaveOurSeeds extends BaseGame implements SpecialGame {
+public class SaveOurSeeds extends NormalGame implements SpecialGame {
     ArrayList<Plant> toProtect;
     @Override
     public ArrayList<PlantType> filterPlants() {

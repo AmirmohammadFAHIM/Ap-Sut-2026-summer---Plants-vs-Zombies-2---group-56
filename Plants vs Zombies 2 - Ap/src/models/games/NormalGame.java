@@ -1,11 +1,13 @@
 package models.games;
 
 import controllers.datacontroller.SeedPackage;
+import models.GameAdventure.Chapters;
 import models.entity.Plant;
 import models.entity.PlantTags;
 import models.entity.Sun;
 import models.entity.Zombie;
 import models.factory.builder.PlantType;
+import models.gamePanes.Field;
 import models.gamePanes.Tile;
 import models.gamePanes.Wave;
 import models.utils.Result;
@@ -15,19 +17,20 @@ import java.util.ArrayList;
 public class NormalGame extends BaseGame{
 
     @Override
-    public void initGame() {
-        /// init field
+    public void initGame(Chapters chapter , int level) {
+        this.field = new Field().initField(chapter , level);
         initWaves();
 
     }
 
     private void initWaves(){
         int wavesCount = 0; ///get it from the file
-        int levelBaseHardness = 0;///get it from the file
+        float baseCost = 0;///get it from the file
         ArrayList<Zombie>  zombies = new ArrayList<>();///filtered zombies for this level
         for (int i = 0; i < wavesCount - 1; i++) {
             Wave wave = new Wave();
-            wave.setCost(waves.getLast().getCost() * 1.25f);
+            float lastCost = waves.getLast() == null ? baseCost : waves.getLast().getCost();
+            wave.setCost(lastCost * 1.25f);
             wave.initWave(zombies);
             waves.add(wave);
         }
@@ -110,9 +113,17 @@ public class NormalGame extends BaseGame{
     @Override
     public String add(String name) {
         if(available_plants.size() == 8) return "Impossible. Slots are full";
+        if(name.equalsIgnoreCase("Imitater")) name = available_plants.lastEntry().getKey().name();
         SeedPackage seedPackage = selection.selectPlant(name);
-        available_plants.put(seedPackage.getPlant(), seedPackage);
-        if(available_plants.size() == 8) plantSelection = true;
+       if(seedPackage != null){
+           available_plants.put(seedPackage.getPlant(), seedPackage);
+       }
+       else {
+           return "Nah bro there ain't no shit like this plant.";
+       }
+        if(available_plants.size() == 8) {
+            plantSelection = true;
+        }
         return "Plant added successfully";
     }
 }

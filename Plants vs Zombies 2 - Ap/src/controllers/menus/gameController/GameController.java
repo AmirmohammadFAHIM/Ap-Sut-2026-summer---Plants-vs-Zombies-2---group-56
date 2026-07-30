@@ -12,6 +12,8 @@ import models.entity.Zombie;
 import models.factory.builder.PlantType;
 import models.gamePanes.Tile;
 import models.games.BaseGame;
+import models.games.NormalGame;
+import models.games.specialGames.*;
 import models.utils.Result;
 import view.PlayView;
 
@@ -25,6 +27,19 @@ public class GameController implements Controller{/// Main Brain of the game
 public GameController(Chapters chapter , Level level){
     this.level = level;
     this.chapter = chapter;
+    game = switch (level.getLevelType().toLowerCase()){
+        case "night ops" -> new NightsOps();
+        case "plant what you get" -> new PlantWhatYouGet();
+        case "locked plants by category" -> new LockedPlants(LockedPlants.LockType.ByCategory);
+        case "conveyor belt" -> new ConveyorBelt();
+        case "deadline" -> new Deadline();
+        case "save our seeds" -> new SaveOurSeeds();
+        case "timed war"  -> new TimedWar();
+        case "love your plants" -> new LoveYourPlants();
+        default -> new NormalGame();
+    };
+    game.initGame(chapter , level.getId());
+
 }
 
     public String plant(String name , int x , int y){
@@ -63,8 +78,15 @@ public GameController(Chapters chapter , Level level){
 
     private void end(){
         User user = Data.getCurrentUser();
-        user.setLevelId(user.getLevelId()+1); /// you've unlocked new level!
-        user.setLevelsPassed(user.getLevelsPassed()+1);
+       if(chapter == user.getChapter() && level.getId() == user.getLevelId()){
+           user.setLevelId(user.getLevelId()+1);
+           user.setLevelsPassed(user.getLevelsPassed()+1);
+           for (PlantType x : level.getUnlockingPlants()){
+               user.getUnlockedPlants().add(x);
+               user.getUnreadNews().add("Congratulation , You've Unlocked new Plant " +
+                       ", " + x.name() + " !");
+           }
+       } /// you've unlocked new level!
         if(user.getLevelId() == 5){
             user.setLevelId(1);
             Chapters newChapter = switch (user.getChapter()){
@@ -75,16 +97,19 @@ public GameController(Chapters chapter , Level level){
             };
             user.setChapter(newChapter);
         }
-        for (PlantType x : level.getUnlockingPlants()){
-            user.getUnlockedPlants().add(x);
-            user.getUnreadNews().add("Congratulation , You've Unlocked new Plant " +
-                    ", " + x.name() + " !");
-        }
+
+
+        App.setScreen(new PlayView());
 
         // TODO : unlocking new zombies
 
 
 
+    }
+
+    public String gameEndCheat(){
+        end();
+        return "game ended. you won!";
     }
 
     public String showSunAmount(){
@@ -93,7 +118,7 @@ public GameController(Chapters chapter , Level level){
 
     public String cheatSunAmount(int amount){
         game.setSunCount(game.getSunCount()+amount);
-        return "==== >> Suns added by Cheat code : "  + amount;
+        return "==== >> Suns added by Cheat code : "  + amount + "\n now " + showSunAmount();
     }
 
     public String cheatZombieKiller(){
@@ -106,12 +131,16 @@ public GameController(Chapters chapter , Level level){
 
     public String showPlantsStatus(){
         StringBuilder output = new StringBuilder();
-        for (SeedPackage x : game.getAvailable_plants().values()) {
-            output.append(x.getPlant().name()).append("\n")
-                    .append("recharge remaining time = ").
-                    append(x.getRecharge()).append("\n").
-                    append("cost = ").append(x.getCost()).append("\n");
-        }
+       try {
+           for (SeedPackage x : game.getAvailable_plants().values()) {
+               output.append(x.getPlant().name()).append("\n")
+                       .append("recharge remaining time = ").
+                       append(x.getRecharge()).append("\n").
+                       append("cost = ").append(x.getCost()).append("\n");
+           }
+       }catch (RuntimeException e){
+           return "Something went wrong during showing plants! try again!...";
+       }
         return output.toString();
     }
 
@@ -132,7 +161,8 @@ public GameController(Chapters chapter , Level level){
         StringBuilder output = new StringBuilder("═════════════════TILE STATUS════════════════════");
         output.append("Tile Type : ").append(tile.getTileType().name()).append("\n");
         output.append("hp : ").append(tile.getHp()).append("\n");
-        output.append("Is this tile empty ? ").append(tile.isEmpty()).append("\n").append("Is it underwater ? ").append(tile.isWater()).append("\n")
+        output.append("Is this tile empty ? ").append(tile.isEmpty()).append("\n").append("Is it underwater ? ")
+                .append(tile.isWater()).append("\n")
                 .append("Is it plantable ? " + tile.isPlantable()).append("\n");
         boolean lilyPad = tile.isWater() && tile.isPlantable();
         output.append("══════\nIs there a lily pad here? ").append(lilyPad).append("\n");
@@ -149,8 +179,15 @@ public GameController(Chapters chapter , Level level){
             case "add-plant-food":
                 addPlantFood();
                 break;
+            case  "add-plant":
+                break;
+            case "add-sun":
+                break;
+            case "end":
+                gameEndCheat();
+                break;
         }
-        return "Oh ma man , cheatt , for real you nigga??? so bad , so bad , ain't tough ):";
+        return "Oh ma man , cheatttt , for real you nigga??? so bad , so bad , ain't tough ):";
     }
 
 
@@ -160,6 +197,7 @@ public GameController(Chapters chapter , Level level){
             x.setAvailable(true);
         }
     }
+
 
 
 

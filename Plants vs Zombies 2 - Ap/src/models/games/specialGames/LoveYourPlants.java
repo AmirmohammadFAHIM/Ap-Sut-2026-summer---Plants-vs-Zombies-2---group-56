@@ -2,11 +2,12 @@ package models.games.specialGames;
 
 import models.factory.builder.PlantType;
 import models.games.BaseGame;
+import models.games.NormalGame;
 import models.utils.Result;
 
 import java.util.ArrayList;
 
-public class LoveYourPlants extends BaseGame implements SpecialGame {
+public class LoveYourPlants extends NormalGame implements SpecialGame {
     int deadPlants = 0;
     @Override
     public ArrayList<PlantType> filterPlants() {

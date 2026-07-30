@@ -3,11 +3,12 @@ package models.games.specialGames;
 import models.entity.PlantCategory;
 import models.factory.builder.PlantType;
 import models.games.BaseGame;
+import models.games.NormalGame;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class LockedPlants extends BaseGame implements SpecialGame {
+public class LockedPlants extends NormalGame implements SpecialGame {
     public LockedPlants(LockType type) {
         this.lockType = type;
     }

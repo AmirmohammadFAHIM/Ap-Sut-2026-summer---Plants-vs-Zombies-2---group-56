@@ -15,20 +15,23 @@ import java.util.Random;
 public class Field {
     private int width;
     private int height;
-    private ArrayList<ArrayList<Tile>> tiles;
+    private ArrayList<ArrayList<Tile>> tiles = new ArrayList<>(5);
     private final ArrayList<Moaner>  moaners = new ArrayList<>(5);
     private int WaveLimitColumn;
     private int waterCurrentSurface;
 
-    public void initField(Chapters chapter , int level){
+    public Field initField(Chapters chapter , int level){
+        for (int i = 0; i < 5; i++) {
+            tiles.add(new ArrayList<Tile>());
+        }
             initFirstTwoColumns(chapter);
             int specialTiles = 3 * level;
             initSpecials(chapter ,  specialTiles);
-           if(chapter == Chapters.BigWaveBeach) initWater();
-        for (int i = 0; i < 5; i++) {
-            Moaner moaner = new Moaner(i);
-            moaners.add(moaner);
-        }
+           if(chapter == Chapters.BigWaveBeach) {
+               initWater();
+           }
+            initMoaners();
+            return this;
     }
 
 
@@ -84,6 +87,13 @@ public class Field {
                             }
                         }
                     }
+                }
+            }
+
+
+            private void initMoaners(){
+                for (int i = 0; i < 5; i++) {
+                    moaners.add(new Moaner(i));
                 }
             }
 

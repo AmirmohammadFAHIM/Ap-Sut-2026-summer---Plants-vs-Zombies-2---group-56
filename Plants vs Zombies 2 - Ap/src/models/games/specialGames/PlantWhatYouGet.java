@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PlantWhatYouGet extends NormalGame implements SpecialGame {
-    PlantWhatYouGet(){
+    public PlantWhatYouGet(){
         selection = new PlantSelection(filterPlants());
         sunCount = Constants.PlantWhatYouGet_StartingSunCount;
     }

@@ -6,11 +6,15 @@ import models.Constants;
 import models.entity.PlantTags;
 import models.factory.builder.PlantType;
 import models.games.BaseGame;
+import models.games.NormalGame;
 import models.utils.Result;
 
 import java.util.ArrayList;
 
-public class NightsOps extends BaseGame implements SpecialGame {
+public class NightsOps extends NormalGame implements SpecialGame {
+    public NightsOps(){
+        day = false;
+    }
     @Override
     public Result check_endGame() {
        return super.check_endGame();

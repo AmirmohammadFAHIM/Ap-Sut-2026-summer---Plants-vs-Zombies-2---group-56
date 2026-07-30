@@ -3,6 +3,7 @@ package models.games.specialGames;
 import models.App;
 import models.factory.builder.PlantType;
 import models.games.BaseGame;
+import models.games.NormalGame;
 import models.utils.Result;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class ConveyorBelt extends BaseGame implements SpecialGame {
+public class ConveyorBelt extends NormalGame implements SpecialGame {
     ArrayList<PlantType> belt =  new ArrayList<>();
     ArrayList<PlantType> plants =  new ArrayList<>();
 

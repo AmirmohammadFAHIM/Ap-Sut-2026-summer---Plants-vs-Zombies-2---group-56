@@ -1,7 +1,8 @@
 package controllers;
 
+import controllers.menus.gameController.GameController;
 import models.entity.*;
-import models.grid.GridItem;
+import models.gamePanes.*;
 import models.factory.ZombieFactory;
 import controllers.observer.WizardObserver;
 import models.entity.ability.SunRobbingAbility;
@@ -26,7 +27,7 @@ public class ZombieController {
     public void update(float deltaTime, GameController gameController) {
         // 1. Update all zombies
         for (Zombie zombie : zombies) {
-            zombie.update(deltaTime, gameController);
+            zombie.update(deltaTime, gameController.getGame());
         }
 
         // 2. Check dead wizards and release cats
@@ -38,7 +39,7 @@ public class ZombieController {
                 SunRobbingAbility sunAbility = zombie.getAbility(SunRobbingAbility.class);
                 if (sunAbility != null && sunAbility.getStolenSun() > 0) {
                     int released = sunAbility.getStolenSun() / 2;
-                    gameController.addSun(released);
+                    gameController.getGame().addSun(released);
                 }
             }
         }

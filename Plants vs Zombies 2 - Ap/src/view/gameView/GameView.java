@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GameView extends View {
-    private GameController controller;
+    private final GameController controller;
 
     public GameView(Chapters chapter , Level level) {
         this.controller = new GameController( chapter, level);
@@ -50,6 +50,7 @@ public class GameView extends View {
         Matcher zombiesInfoMatcher = Pattern.compile(RegexHelper.GAME_ZOMBIES_INFO).matcher(input);
         Matcher cheatSpawnZombieMatcher = Pattern.compile(RegexHelper.GAME_CHEAT_SPAWN_ZOMBIE).matcher(input);
         Matcher startWavesMatcher = Pattern.compile(RegexHelper.GAME_START_ZOMBIE_WAVES).matcher(input);
+
 
 
 
@@ -110,12 +111,14 @@ public class GameView extends View {
         } else if (feedPlantMatcher.matches()) {
             int x = Integer.parseInt(feedPlantMatcher.group("x"));
             int y = Integer.parseInt(feedPlantMatcher.group("y"));
-            // controller.feedPlant(x, y);
+            System.out.println(controller.boost(x, y));
             System.out.println("Feeding plant at (" + x + ", " + y + ")");
         } else if (cheatRemCooldownMatcher.matches()) {
             System.out.println(controller.cheat("remove-cooldown"));
         } else if (cheatAddFoodMatcher.matches()) {
             System.out.println(controller.cheat("add-plant-food"));
+        } else if (input.matches("$cheat\\s+end^")){
+            System.out.println(controller.cheat("end"));
         } else if (showMapMatcher.matches()) {
             // controller.showMap();
             System.out.println("Displaying map...");
@@ -134,9 +137,6 @@ public class GameView extends View {
             int y = Integer.parseInt(cheatSpawnZombieMatcher.group("y"));
             // controller.spawnZombie(type, x, y);
             System.out.println("Spawning " + type + " at (" + x + ", " + y + ")");
-        } else if (startWavesMatcher.matches()) {
-            // controller.startZombieWaves();
-            System.out.println("Starting zombie waves!");
         } else {
             System.out.println("Invalid command in Game Menu!");
         }

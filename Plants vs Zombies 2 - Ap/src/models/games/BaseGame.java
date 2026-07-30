@@ -38,21 +38,7 @@ public class BaseGame implements Game {
         this.plantFoodsCount = plantFoodsCount;
     }
 
-    public PlantFactory getPlantFactory() {
-        return plantFactory;
-    }
 
-    public void setPlantFactory(PlantFactory plantFactory) {
-        this.plantFactory = plantFactory;
-    }
-
-    public int getWaveID() {
-        return waveID;
-    }
-
-    public void setWaveID(int waveID) {
-        this.waveID = waveID;
-    }
 
     protected Field field ;
     protected ArrayList<Wave> waves;
@@ -68,9 +54,6 @@ public class BaseGame implements Game {
     protected ChapterSpecialEvent event;
     protected PlantFactory plantFactory = new PlantFactory();
 
-    public GameCommands getStartGameCommand() {
-        return StartGameCommand;
-    }
 
     public GameState getState() {
         return state;
@@ -283,53 +266,18 @@ public class BaseGame implements Game {
         return field;
     }
 
-    public void setField(Field field) {
-        this.field = field;
-    }
-
-    public ArrayList<Wave> getWaves() {
-        return waves;
-    }
-
-    public void setWaves(ArrayList<Wave> waves) {
-        this.waves = waves;
-    }
 
     public ArrayList<Plant> getPlants_inField() {
         return plants_inField;
     }
 
-    public void setPlants_inField(ArrayList<Plant> plants_inField) {
-        this.plants_inField = plants_inField;
-    }
 
-    public SunBuilder getSunBuilder() {
-        return sunBuilder;
-    }
-
-    public void setSunBuilder(SunBuilder sunBuilder) {
-        this.sunBuilder = sunBuilder;
-    }
-
-    public void setCurrentWave(Wave currentWave) {
-        this.currentWave = currentWave;
-    }
 
     public Wave getPreviousWave() {
         return previousWave;
     }
 
-    public void setPreviousWave(Wave previousWave) {
-        this.previousWave = previousWave;
-    }
 
-    public void setBullets(ArrayList<Bullet> bullets) {
-        this.bullets = bullets;
-    }
-
-    public void setSuns(ArrayList<Sun> suns) {
-        this.suns = suns;
-    }
 
     public ArrayList<Zombie> getZombies() {
         return zombies;
@@ -343,25 +291,14 @@ public class BaseGame implements Game {
         return selection;
     }
 
-    public void setSelection(PlantSelection selection) {
-        this.selection = selection;
-    }
 
     public LinkedHashMap<PlantType, SeedPackage> getAvailable_plants() {
         return available_plants;
     }
 
-    public void setAvailable_plants(LinkedHashMap<PlantType, SeedPackage> available_plants) {
-        this.available_plants = available_plants;
-    }
 
-    public void setStartGameCommand(GameCommands startGameCommand) {
-        StartGameCommand = startGameCommand;
-    }
 
-    public ChapterSpecialEvent getEvent() {
-        return event;
-    }
+
 
     public void setEvent(ChapterSpecialEvent event) {
         this.event = event;

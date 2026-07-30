@@ -4,6 +4,7 @@ import controllers.menus.gameController.GameController;
 import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
 import models.games.BaseGame;
+import models.games.specialGames.PlantWhatYouGet;
 import models.utils.RegexHelper;
 import view.View;
 
@@ -69,6 +70,17 @@ public class GameView extends View {
                 System.out.println("Boosting plant: " + type);
             } else if (startGameMatcher.matches()) {
                 System.out.println(controller.GameStart(input));
+            }
+            else System.out.println("Invalid input according to starting state of the game.");
+
+            return;
+        }
+        else if(input.matches("$start\\s+zombie\\s+waves^")){
+            try {
+                PlantWhatYouGet plantWhatYouGet = (PlantWhatYouGet) controller.getGame();
+                plantWhatYouGet.startWaves();
+            }catch (Exception e){
+                System.out.println("Bro I'm sure you trippin af , zombies are in front of you!!!");
             }
         }
         else if (advanceTimeMatcher.matches()) {

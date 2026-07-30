@@ -41,7 +41,7 @@ public GameController(Chapters chapter , Level level){
             game.setState(BaseGame.GameState.PLAYING);
             return "Ay Yoooooo ma homie , Game on baby!!!! Vamooosss!";
         }
-        return "Game Starting ...";
+        return "Cannot Start Game ... You ain't ready mate.";
     }
 
 

@@ -23,13 +23,31 @@ public class BowlingNut extends Entity {
         this.x += velocityX * delta;
         this.y += velocityY * delta;
         if(block()) velocityY *= -1;
-        else if(hit(game.getZombies())) velocityY *= -1;
+        else if(hit(game.getZombies())){
+            if(explosive){
+                dispose(game);
+                return;
+            }
+            velocityY *= -1;
+        }
         if(this.x >= 9 * Tile.getWidth()) dispose(game);
     }
 
-    private void dispose(BaseGame game) {
+    protected void dispose(BaseGame game) {
         WallnutBowling wallnutBowling = (WallnutBowling) game;
         wallnutBowling.nuts.remove(this);
+        if(explosive){
+            for (Zombie zombie : game.getZombies()) {
+                int dx = Math.abs(this.tileIndex - zombie.getTileIndex());
+                int dy = Math.abs(this.line - zombie.getLine());
+                if(dx <= 1 && dy <= 1){
+                    zombie.setHp(zombie.getHp() - damage);
+                    zombie.takeDamage((int) damage);
+                    zombie.setHurt(true);
+                }
+            }
+        }
+
     }
 
     private boolean block(){
@@ -42,7 +60,9 @@ public class BowlingNut extends Entity {
     private boolean hit(ArrayList<Zombie> zombies){
         for (Zombie z : zombies) {
             if(Constants.overlap(this , z)){
-                // TODO: deal damage
+                z.takeDamage((int) this.damage);
+                z.setHurt(true);
+                z.setAlive(false);
                 return true;
             }
         }

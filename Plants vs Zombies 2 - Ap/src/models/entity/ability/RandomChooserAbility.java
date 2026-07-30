@@ -1,5 +1,6 @@
 package models.entity.ability;
 
+import models.entity.ArmorType;
 import models.entity.Zombie;
 import models.entity.Plant;
 import models.games.BaseGame;

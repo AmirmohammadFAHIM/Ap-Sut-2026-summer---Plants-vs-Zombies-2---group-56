@@ -46,6 +46,7 @@ public class VaseBraker extends BaseGame {
         updatePlants(delta);
         updateZombies(delta);
         updateScene(delta);
+        return "game goes on ... ";
     }
 
     @Override

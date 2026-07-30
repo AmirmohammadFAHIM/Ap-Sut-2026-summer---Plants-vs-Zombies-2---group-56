@@ -31,7 +31,8 @@ public class WallnutBowling extends BaseGame {
         for (BowlingNut x : nuts){
             x.go(delta, this);
         }
-        attack(delta);
+       Result result = attack(delta);
+        return result.message();
     }
 
     @Override

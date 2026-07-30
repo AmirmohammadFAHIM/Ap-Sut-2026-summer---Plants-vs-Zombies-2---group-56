@@ -20,7 +20,6 @@ public class Bullet {
     private float destinationY;
     private float damage;
     private float AoEDamage;
-    private float AoE;
     private float x;
     private float y;
     private float pierce = 1;
@@ -46,6 +45,7 @@ public class Bullet {
         }
         if(tags.contains(PlantTags.ICE)) this.tags.add(Tag.ICE);
         if(tags.contains(PlantTags.MAGICAL)) this.tags.add(Tag.MAGICAL);
+        if(tags.contains(PlantTags.AoE)) this.tags.add(Tag.AoE);
     }
 
     public Bullet(float x, float y , float velocityX ,  float velocityY) {
@@ -84,35 +84,60 @@ public class Bullet {
 
         if(pierce <= 0) dispose(game);
         updateLocation(delta);
-        if(!tags.contains(Tag.MAGICAL) && toLockIn == null) block(game.getField());
+        if(!tags.contains(Tag.MAGICAL) && toLockIn == null) block(game);
         if(bowling.contains(this.type)){
             bowling(game.getField());
         }
+        checkHit(game);
 
     }
 
-    private void hit(BaseGame game){
+    private void checkHit(BaseGame game){
         if (toLockIn != null) {
-            toLockIn.notifyBulletObservers(this);
-            if (this.isActive()) {
-                toLockIn.takeDamage((int) this.damage);
+
+            if (overlaps(toLockIn)) {
+                hitZombie(toLockIn);
             }
             return;
         }
 
         for (Zombie z : game.getZombies()) {
             if (overlaps(z)) {
-                z.notifyBulletObservers(this);
-                if (this.isActive()) {
-                    z.takeDamage((int) this.damage);
-                    if (this.getTags().contains(Tag.ICE)) {
-                        z.addEffect(new Effect(EffectType.FROZEN, 3.0f));
-                    }
-                    if (this.getTags().contains(Tag.POISON)) {
-                        z.addEffect(new Effect(EffectType.POISONED, 5.0f));
-                    }
+                hitZombie(z);
+                if(tags.contains(Tag.AoE)){
+                    damageOnArea(1 , game);
                 }
                 break;
+            }
+        }
+    }
+
+    private void hitZombie(Zombie z){
+        this.pierce -= 1;
+        z.notifyBulletObservers(this);
+        if (this.isActive()) {
+            z.takeDamage((int) this.damage);
+            if (this.getTags().contains(Tag.ICE)) {
+                z.addEffect(new Effect(EffectType.FROZEN, 3.0f));
+            }
+            if (this.getTags().contains(Tag.POISON)) {
+                z.addEffect(new Effect(EffectType.POISONED, 5.0f));
+            }
+            if (this.getTags().contains(Tag.FIRE)) {
+                z.setFrozen(false);
+                z.setDynamiteFrozen(false);
+            }
+        }
+    }
+
+
+    private void damageOnArea(int radius , BaseGame  game){
+        for (Zombie z : game.getZombies()) {
+            float dx = Math.abs(z.getX() - this.x);
+            float dy = Math.abs(z.getY() - this.y);
+            if(dx <= Tile.getWidth() * radius && dy <= Tile.getHeight() * radius){
+                z.setHurt(true);
+                z.takeDamage((int) this.damage);
             }
         }
     }
@@ -120,9 +145,9 @@ public class Bullet {
         game.getBullets().remove(this);
     }
 
-    private void block(Field field){
+    private void block(BaseGame game){
         for (int i = 0; i < 5; i++) {
-            for (Tile tile : field.getTiles().get(i)){
+            for (Tile tile : game.getField().getTiles().get(i)){
                 if(overlaps(tile)){
                     if(tile.getTileType() == TileType.FROZEN && this.tags.contains(Tag.FIRE)){
                         tile.setTileType(TileType.CAVE_TILE);
@@ -135,6 +160,19 @@ public class Bullet {
                 }
             }
         }
+
+        for (Plant p : game.getPlants_inField()){
+            if(p.isFrozen()){
+                if(this.tags.contains(Tag.FIRE)){
+                    p.setFreezeHp(0);
+                }
+                else {
+                    p.setFreezeHp(p.freezeHp -  this.damage);
+                }
+            }
+        }
+        Zombie z ;
+
     }
 
     private void updateLocation(float delta){

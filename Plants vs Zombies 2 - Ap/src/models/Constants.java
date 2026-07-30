@@ -22,6 +22,7 @@ public class Constants {
     public final static float HomingVelocity = 250f;
     public final static int WallnutLimitLine = 3;
     public final static float BowlingWallnutVelocity = 200f;
+    public final static float MoanerSpeed = 300f;
 
     public static boolean overlap(Entity a ,Entity b){
         float cx  =a.getX() + a.getWidth()/2;

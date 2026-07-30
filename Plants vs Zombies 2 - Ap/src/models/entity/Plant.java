@@ -231,7 +231,7 @@ public class Plant extends Entity {
 
     private void dispose(Zombie eater , BaseGame game){
         if(tags.contains(PlantTags.SHROOM) && tags.contains(PlantTags.MAGICAL)){
-            /// TODO: make the zombie an opponent of other zombies
+           eater.setHypnotized(true);
         }
         else if(tags.contains(PlantTags.EXPLOSIVE)){
             if(App.getCurrentuser().getLevels().get(this.type) >= 3) damage += 200;

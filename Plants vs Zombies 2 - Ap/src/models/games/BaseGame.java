@@ -14,10 +14,7 @@ import models.factory.builder.SunBuilder;
 import models.gamePanes.*;
 import models.utils.Result;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 public class BaseGame implements Game {
@@ -103,8 +100,22 @@ public class BaseGame implements Game {
             if(event!=null){
                 event.run(this , delta);
             }
-            return output.toString();
 
+        Iterator<Plant> iterator = plants_inField.iterator();
+            while (iterator.hasNext()){
+                Plant p =  (Plant) iterator.next();
+                if(p.getHp() <= 0){
+                    iterator.remove();
+                    output.append("\n").append("Plant ")
+                            .append(p.getType()).append(" died at (")
+                            .append(p.getTileIndex()).append(" , ")
+                            .append(p.getLine()).append(")");
+
+                    Tile tile = field.getTileByCoordinats(p.getTileIndex(), p.getLine());
+                    tile.setEmpty(true);
+                }
+            }
+            return output.toString();
 
     }
 

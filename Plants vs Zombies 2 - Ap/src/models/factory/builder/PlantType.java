@@ -546,7 +546,8 @@ public enum PlantType {
 
 
     ///MINTS
-    MINT;
+    MINT,
+    MARIGOLD;
 
 
     public Plant allocateSkill(Plant plant){

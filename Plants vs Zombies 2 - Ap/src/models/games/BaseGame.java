@@ -87,6 +87,12 @@ public class BaseGame implements Game {
     public String playGame(float delta) {
         StringBuilder output = new StringBuilder();
             Result sunlight = sunBuilder.sunLight(delta , this);
+            for (Sun sun : suns){
+                sun.land(delta , this);
+            }
+            for (SeedPackage x : available_plants.values()){
+                x.update(delta);
+            }
             if(sunlight != null){
                 output.append(sunlight.message());
             }

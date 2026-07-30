@@ -206,7 +206,12 @@ public GameController(Chapters chapter , Level level){
         while(iterator.hasNext()){
             Sun sun = iterator.next();
             if(sun.getTileIndex() == x && sun.getLine() == y){
+                if(sun.isRadioActive()){
+                    sun.dispose(game);
+                    return "Boooooommmmmmmm !!!!! RadioActive Sun explode!";
+                }
                 game.setSunCount(game.getSunCount() + sun.getPrice());
+                sun.dispose(game);
                 iterator.remove();
                 return "Sun collected , you got " + sun.getPrice() + " suns!";
             }

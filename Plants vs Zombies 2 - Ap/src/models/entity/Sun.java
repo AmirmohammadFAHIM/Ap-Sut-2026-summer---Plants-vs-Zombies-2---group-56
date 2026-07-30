@@ -28,16 +28,13 @@ public class Sun {
 
 
     public Sun(int price, int remainingTime){}
-    public void updateTime(float delta , BaseGame game){
-        if(this.remainingTime > 0){
-            this.remainingTime -= delta;
-        }else{
-            game.getSuns().remove(this);
-        }
-    }
+
 
 
     public String land(float delta ,  BaseGame game){
+        if(producer != null){
+            producer.t = producer.getActionInterval();
+        }
         this.y -= delta * (groung ? Constants.SunDroppingVelocity : 0);
         if(this.y + Sun.height / 2 <= this.line * Tile.getHeight()
                 + Tile.getHeight() / 2  && !groung){
@@ -57,26 +54,30 @@ public class Sun {
         return null;
     }
 
-    private void dispose(BaseGame game){
+    public void dispose(BaseGame game){
 
+        if(radioActive) {
             float centreX = this.x + Sun.width / 2;
             float centreY = this.y + Sun.height / 2;
             for (Zombie zombie : game.getZombies()) {
                 float zCentreX = zombie.getX() + zombie.getWidth() / 2;
                 float zCentreY = zombie.getY() + zombie.getHeight() / 2;
-                if(Math.abs(centreX- zCentreX) <= Tile.getWidth() * 2 &&
-                Math.abs(centreY - zCentreY) <=  Tile.getHeight() * 2){
+                if (Math.abs(centreX - zCentreX) <= Tile.getWidth() * 2 &&
+                        Math.abs(centreY - zCentreY) <= Tile.getHeight() * 2) {
                     zombie.setHp(zombie.getHp() - 150);
                 }
             }
-            for (Plant x : game.getPlants_inField()){
+            for (Plant x : game.getPlants_inField()) {
                 float pCentreX = x.getX() + x.getWidth() / 2;
                 float pCentreY = x.getY() + x.getHeight() / 2;
-                if(Math.abs(centreX - pCentreX) <= Tile.getWidth() &&
-                Math.abs(centreY - pCentreY) <=   Tile.getHeight()){
+                if (Math.abs(centreX - pCentreX) <= Tile.getWidth() &&
+                        Math.abs(centreY - pCentreY) <= Tile.getHeight()) {
                     x.setHp(x.getHp() - 80);
                 }
             }
+        }
+
+            game.getSuns().remove(this);
 
     }
 

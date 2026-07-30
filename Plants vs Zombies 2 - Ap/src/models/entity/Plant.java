@@ -16,7 +16,7 @@ public class Plant extends Entity {
     private float damage;
     private int cost;
     private float ActionInterval;
-    private float t;
+    public float t;
     private PlantCategory category;
     private PlantType type;
     private ArrayList<PlantTags> tags;

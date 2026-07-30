@@ -1,5 +1,6 @@
 package models.games.miniGames;
 
+import controllers.datacontroller.SeedPackage;
 import models.entity.Plant;
 import models.entity.Zombie;
 import models.factory.PlantFactory;
@@ -7,6 +8,7 @@ import models.factory.builder.PlantType;
 import models.games.BaseGame;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class Vase {
@@ -26,25 +28,24 @@ public class Vase {
         // TODO: build the zombie and put in the game
     }
 
-    public void breakPlantVase(VaseBraker game , ArrayList<Plant> inGame) {
+    public void breakPlantVase(VaseBraker game , HashMap<PlantType , SeedPackage> seedPackageHashMap) {
         Random rand = new Random();
         int index = rand.nextInt(game.availablePlants.size());
-        PlantFactory  plantFactory = new PlantFactory();
-        Plant plant = plantFactory.CreatePlant(game.availablePlants.get(index));
-        plant.setLine(line);
-        plant.setTileIndex(tileIndex);
-        inGame.add(plant);
+        PlantType plant =  game.availablePlants.get(index);
+        seedPackageHashMap.compute(plant, (k, seedPackage) -> seedPackage);
     }
 
     public void breakVase(VaseBraker game) {
         Random rand = new Random();
         int i = rand.nextInt(3);
         if(i == 0){
-            
+            breakPlantVase(game , game.seedPackages);
         }
         else if(i == 1){
-
+            breakZombieVase(game , game.getZombies());
         }
+
+
     }
 
 

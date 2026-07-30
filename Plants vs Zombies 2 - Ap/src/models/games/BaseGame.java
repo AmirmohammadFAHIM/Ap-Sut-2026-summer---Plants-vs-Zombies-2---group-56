@@ -29,6 +29,7 @@ public class BaseGame implements Game {
     protected PlantSelection selection;
     protected int sunCount = 0;
     protected int plantFoodsCount = 0;
+    GridController gridController;
 
     public int getPlantFoodsCount() {
         return plantFoodsCount;
@@ -89,22 +90,23 @@ public class BaseGame implements Game {
 
     protected boolean plantSelection = false;
     public String add(String name){
-        if(available_plants.size() == 8) return "Impossible. Slots are full";
-        SeedPackage seedPackage = selection.selectPlant(name);
-        available_plants.put(seedPackage.getPlant(), seedPackage);
-        if(available_plants.size() == 8) plantSelection = true;
-        return "Plant added successfully";
+        return null;
     }
 
     @Override
     public void playGame(float delta) {
+        StringBuilder output = new StringBuilder();
             updatePlants(delta);
             updatePlants(delta);
             updateScene(delta);
             Result result = attack(delta);
+            if(result != null){
+                output.append(result.message());
+            }
             if(event!=null){
                 event.run(this , delta);
             }
+
     }
 
     @Override
@@ -120,7 +122,7 @@ public class BaseGame implements Game {
             zombie.update(delta, this);
         }
 
-        checkAndReleaseDeadWizards();
+       // checkAndReleaseDeadWizards();
 
         for (Zombie zombie : zombies) {
             if (zombie.isDead()) {
@@ -144,56 +146,15 @@ public class BaseGame implements Game {
 
     @Override
     public String plant(String plantName , int x , int y) {
-        String name = plantName.replaceAll(" " , "_").toUpperCase();
-        Result findPlant = plantAvailable(name);
-        if(!findPlant.success()) return findPlant.message();
-        Plant newPlant = plantFactory.CreatePlant(findPlant.plantType());
-        if(isEmpty(newPlant.getTags().contains(PlantTags.WATER) ,x, y)) return "The coordination is not empty or plantable.";
-        plants_inField.add(newPlant);
-        Tile tile = field.getTiles().get(y).get(x);
-        if(plantName.equals("LILY_PAD")){
-            tile.setPlantable(true);
-        } else {
-            tile.setEmpty(true);
-        }
-        else tile.setEmpty(true);
-        this.sunCount -= (int) available_plants.get(findPlant.plantType()).getCost();
-        return "New plant : " + findPlant.plantType().name() + " planted successfully at coordination :" +
-                " ( " + x + "," + y + ")";
+        return null;
 
     }
 
-    private Result plantAvailable(String plantName) {
-        try {
-            PlantType type = PlantType.valueOf(plantName.toUpperCase());
-            if(!available_plants.containsKey(type)) {
-                return new Result(false , "The plant doesn't exist on the available plants.",null);
-            }
-            return new Result(true, null,type);
 
-        } catch (IllegalArgumentException e) {
-            return new Result(false , "The plant doesn't exist on the available plants.",null);
-        }
-
-    }
-
-    private boolean isEmpty(boolean waterPlant , int x , int y){
-        Tile toPlantOn = field.getTiles().get(x).get(y);
-        boolean water = toPlantOn.isWater() || !waterPlant;
-        return toPlantOn.isEmpty() && toPlantOn.isPlantable() && water;
-    }
 
     @Override
     public String pluck(int x , int y) {
-            Tile  toPluckOn = field.getTiles().get(x).get(y);
-            for (Plant p : plants_inField){
-                if(p.getLine() == y && p.getTileIndex() == x){
-                    if(toPluckOn.isEmpty() && toPluckOn.isPlantable()
-                            && toPluckOn.isWater()) continue; // This is a lily pad!
-                    p.dispose(this);
-                }
-            }
-            return "Bro don't pluck the plants ):";
+            return null;
     }
 
    protected boolean won = false;
@@ -305,11 +266,6 @@ public class BaseGame implements Game {
     }
 
     public Plant findByCoordinates(int x , int y){
-        for (Plant p : this.plants_inField){
-            if(p.getLine() == y && p.getTileIndex() == x){
-                return p;
-            }
-        }
         return null;
     }
 
@@ -519,32 +475,9 @@ public class BaseGame implements Game {
     }
 
 
-    public String showAllZombies() {
-        if (zombies.isEmpty()) {
-            return "No active zombies in the game.";
-        }
-        StringBuilder sb = new StringBuilder("--- Active Zombies ---\n");
-        for (Zombie z : zombies) {
-            sb.append(formatZombieInfo(z)).append("\n");
-        }
-        return sb.toString().trim();
-    }
 
-    public String showZombie(String zombieName) {
-        Zombie target = null;
-        for (Zombie z : zombies) {
-            if (z.getId().equalsIgnoreCase(zombieName) || z.getType().equalsIgnoreCase(zombieName)) {
-                target = z;
-                break;
-            }
-        }
-        if (target == null) {
-            return "Zombie \"" + zombieName + "\" not found in the current game.";
-        }
-        return formatZombieInfo(target);
-    }
 
-    private String formatZombieInfo(Zombie zombie) {
+    public String formatZombieInfo(Zombie zombie) {
         StringBuilder sb = new StringBuilder();
         sb.append(zombie.getType()).append(": ");
 

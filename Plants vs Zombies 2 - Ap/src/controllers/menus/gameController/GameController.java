@@ -230,5 +230,32 @@ public GameController(Chapters chapter , Level level){
     public BaseGame getGame() {
         return game;
     }
+
+
+
+    public String showAllZombies() {
+        if (game.getZombies().isEmpty()) {
+            return "No active zombies in the game.";
+        }
+        StringBuilder sb = new StringBuilder("--- Active Zombies ---\n");
+        for (Zombie z : game.getZombies()) {
+            sb.append(game.formatZombieInfo(z)).append("\n");
+        }
+        return sb.toString().trim();
+    }
+
+    public String showZombie(String zombieName) {
+        Zombie target = null;
+        for (Zombie z : game.getZombies()) {
+            if (z.getId().equalsIgnoreCase(zombieName) || z.getType().equalsIgnoreCase(zombieName)) {
+                target = z;
+                break;
+            }
+        }
+        if (target == null) {
+            return "Zombie \"" + zombieName + "\" not found in the current game.";
+        }
+        return game.formatZombieInfo(target);
+    }
 }
 

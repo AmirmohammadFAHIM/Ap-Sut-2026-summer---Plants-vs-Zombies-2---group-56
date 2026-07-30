@@ -79,13 +79,13 @@ public class GameView extends View {
             try {
                 PlantWhatYouGet plantWhatYouGet = (PlantWhatYouGet) controller.getGame();
                 plantWhatYouGet.startWaves();
-            }catch (Exception e){
+            } catch (Exception e){
                 System.out.println("Bro I'm sure you trippin af , zombies are in front of you!!!");
             }
         }
         else if (advanceTimeMatcher.matches()) {
             int ticks = Integer.parseInt(advanceTimeMatcher.group("count"));
-            System.out.println(controller.playGame(ticks * 0.1f)); // پاس دادن زمان به کنترلر
+            System.out.println(controller.playGame(ticks * 0.1f));
         } else if (collectSunMatcher.matches()) {
             int x = Integer.parseInt(collectSunMatcher.group("x"));
             int y = Integer.parseInt(collectSunMatcher.group("y"));

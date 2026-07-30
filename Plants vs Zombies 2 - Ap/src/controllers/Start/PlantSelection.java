@@ -44,8 +44,12 @@ public class PlantSelection {
 
 
     public String removePlant(HashMap<PlantType , SeedPackage> packets, PlantType toRemove) {
-        packets.remove(toRemove);
-        return toRemove + " has been removed";
+       try {
+           packets.remove(toRemove);
+           return toRemove + " has been removed";
+       }catch (Exception e){
+           return "Plant doesn't exist on the slots.";
+       }
     }
 
     public void boostPlant() {

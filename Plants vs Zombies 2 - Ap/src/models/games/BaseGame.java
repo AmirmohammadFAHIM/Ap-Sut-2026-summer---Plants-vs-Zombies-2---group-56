@@ -4,7 +4,6 @@ import commands.GameCommands;
 import controllers.Start.PlantSelection;
 import controllers.datacontroller.SeedPackage;
 import models.App;
-import models.Constants;
 import models.GameAdventure.*;
 import models.entity.*;
 import models.entity.ability.SunRobbingAbility;
@@ -13,15 +12,13 @@ import models.factory.ZombieFactory;
 import models.factory.builder.PlantType;
 import models.factory.builder.SunBuilder;
 import models.gamePanes.*;
-import models.utils.RegexHelper;
 import models.utils.Result;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class BaseGame implements Game {
     public enum GameState{STARTING , PLAYING , PAUSE , END}
@@ -46,7 +43,7 @@ public class BaseGame implements Game {
     protected ArrayList<Wave> waves;
     protected ArrayList<Plant> plants_inField;
     protected LinkedHashMap<PlantType , SeedPackage> available_plants;
-    protected SunBuilder sunBuilder;
+    protected SunBuilder sunBuilder = new  SunBuilder();
     protected Wave currentWave;
     protected Wave previousWave;
     protected ArrayList<Zombie> zombies; ///combination of current wave and next wave
@@ -90,8 +87,12 @@ public class BaseGame implements Game {
     }
 
     @Override
-    public void playGame(float delta) {
+    public String playGame(float delta) {
         StringBuilder output = new StringBuilder();
+            Result sunlight = sunBuilder.sunLight(delta , this);
+            if(sunlight != null){
+                output.append(sunlight.message());
+            }
             updatePlants(delta);
             updatePlants(delta);
             updateScene(delta);
@@ -102,6 +103,8 @@ public class BaseGame implements Game {
             if(event!=null){
                 event.run(this , delta);
             }
+            return output.toString();
+
 
     }
 
@@ -172,7 +175,7 @@ public class BaseGame implements Game {
 
     protected int waveID = 0;
     protected Result attack(float delta) {
-        if(currentWave.isFinished()){
+        if(currentWave == null || currentWave.isFinished()){
             if(currentWave == waves.getLast()){
                 won = true;
                 return new Result(true , "Won" , null);

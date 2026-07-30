@@ -1,12 +1,10 @@
 package models.games.miniGames;
 
 import models.GameAdventure.Chapters;
-import models.entity.Plant;
 import models.entity.Zombie;
 import models.factory.builder.PlantType;
 import models.gamePanes.Tile;
 import models.games.BaseGame;
-import models.games.Game;
 import models.utils.Result;
 
 import java.util.ArrayList;
@@ -44,7 +42,7 @@ public class VaseBraker extends BaseGame {
     }
 
     @Override
-    public void playGame(float delta) {
+    public String playGame(float delta) {
         updatePlants(delta);
         updateZombies(delta);
         updateScene(delta);

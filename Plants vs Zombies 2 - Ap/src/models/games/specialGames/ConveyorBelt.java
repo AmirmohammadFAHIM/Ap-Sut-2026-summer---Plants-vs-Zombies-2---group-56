@@ -2,13 +2,9 @@ package models.games.specialGames;
 
 import models.App;
 import models.factory.builder.PlantType;
-import models.games.BaseGame;
 import models.games.NormalGame;
-import models.utils.Result;
 
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.Random;
 
 public class ConveyorBelt extends NormalGame implements SpecialGame {
@@ -20,9 +16,9 @@ public class ConveyorBelt extends NormalGame implements SpecialGame {
     }
 
     @Override
-    public void playGame(float delta) {
+    public String playGame(float delta) {
         updateBelt(delta);
-        super.playGame(delta);
+        return super.playGame(delta);
     }
 
     int counter = 8;

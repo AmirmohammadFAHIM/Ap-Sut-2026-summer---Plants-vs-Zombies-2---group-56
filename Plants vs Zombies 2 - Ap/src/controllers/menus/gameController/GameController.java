@@ -62,7 +62,8 @@ public GameController(Chapters chapter , Level level){
 
     @Override
     public String playGame(float delta) {
-            game.playGame(delta);
+
+            String log = game.playGame(delta);
             Result end = game.check_endGame();
             if(end.success()){
                 if(end.message().equals("Loss")) return "Brainzzzzzzzzzz!!!!! Deliciouzzzzzzz!!";
@@ -72,8 +73,7 @@ public GameController(Chapters chapter , Level level){
                 App.setScreen(new PlayView());
                 return "Sometimes in the life , I'm too competitive , It's good to be competitive.";
             }
-            return null;
-            // TODO: return the log
+            return log;
     }
 
     private void end(){

@@ -10,7 +10,7 @@ public class SunBuilder {
     private float timePassed = 0f;
     private float cooldownTillNextSun;
 
-    public Result SunLight(float delta , BaseGame game) {
+    public Result sunLight(float delta , BaseGame game) {
         this.timePassed += delta;
         if(cooldownTillNextSun <= 0){
             cooldownTillNextSun = Math.max(6 + 0.05f * timePassed , 12);

@@ -1,8 +1,6 @@
 package models.games.specialGames;
 
-import commands.GameCommands;
 import controllers.Start.PlantSelection;
-import controllers.datacontroller.SeedPackage;
 import models.App;
 import models.Constants;
 import models.entity.Plant;
@@ -10,13 +8,9 @@ import models.entity.PlantCategory;
 import models.factory.builder.PlantBuilder;
 import models.factory.builder.PlantType;
 import models.gamePanes.Tile;
-import models.games.BaseGame;
-import models.games.Game;
 import models.games.NormalGame;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PlantWhatYouGet extends NormalGame implements SpecialGame {
     public PlantWhatYouGet(){
@@ -45,10 +39,12 @@ public class PlantWhatYouGet extends NormalGame implements SpecialGame {
     }
 
     @Override
-    public void playGame(float delta) {
+    public String playGame(float delta) {
         if(selectionFinished &&  plantFinished){
-             super.playGame(delta);
+             return super.playGame(delta);
         }
+        return "No you cannot play game now , you gotta ask the cute zombies to come \n, they're a " +
+                "little bit shy :>";
     }
 
     @Override

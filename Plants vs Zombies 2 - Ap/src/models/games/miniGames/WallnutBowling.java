@@ -2,7 +2,6 @@ package models.games.miniGames;
 
 import models.Constants;
 import models.entity.Zombie;
-import models.factory.builder.PlantType;
 import models.games.BaseGame;
 import models.utils.Result;
 
@@ -28,7 +27,7 @@ public class WallnutBowling extends BaseGame {
 
 
     @Override
-    public void playGame(float delta) {
+    public String playGame(float delta) {
         for (BowlingNut x : nuts){
             x.go(delta, this);
         }

@@ -1,8 +1,7 @@
 package models.gamePanes;
 
-import java.util.ArrayList;
-import java.util.List;
-import models.entity.*;
+import models.entity.Zombie;
+import java.util.*;
 
 public class GridController {
 
@@ -25,26 +24,50 @@ public class GridController {
         return null;
     }
 
-    public GridItem getGridItemInFront(Zombie zombie, String type) {
-        int row = zombie.getRow();
-        int col = (int) ((zombie.getX() - 100) / 80) + 1;
-        if (col >= 9) return null;
-
-        GridItem item = getGridItem(row, col);
-        if (item != null && item.getType().equals(type) && item.isPushable()) {
-            return item;
-        }
-        return null;
+    public List<GridItem> getGridItems() {
+        return gridItems;
     }
 
-    public List<GridItem> getGridItemsByType(String type) {
-        List<GridItem> result = new ArrayList<>();
+    public void checkAndAttachZombies(List<Zombie> zombies) {
         for (GridItem item : gridItems) {
-            if (item.getType().equals(type)) {
-                result.add(item);
+            if (item.getOwner() != null || !item.isPushable()) continue;
+
+            for (Zombie z : zombies) {
+                if (!z.isAlive()) continue;
+
+                if (z.getRow() == item.getRow() && z.getTileIndex() == item.getCol()) {
+
+                    boolean canAttach = false;
+                    if (item.getType().equals("arcade") || z.getType().toLowerCase().contains("arcade")) {
+                        canAttach = true;
+                    } else if (item.getType().equals("ice") || z.getType().toLowerCase().contains("troglobite")) {
+                        canAttach = true;
+                    } else if (item.getType().equals("barrel") || z.getType().toLowerCase().contains("barrel")) {
+                        canAttach = true;
+                    }
+
+                    if (canAttach) {
+                        item.setOwner(z);
+                        break;
+                    }
+                }
             }
         }
-        return result;
+    }
+
+    public void updateItems() {
+        for (GridItem item : gridItems) {
+            if (item.getOwner() != null && item.getOwner().isAlive()) {
+                item.setX(item.getOwner().getX());
+                item.setY(item.getOwner().getY());
+                item.setRow(item.getOwner().getRow());
+                item.setCol(item.getOwner().getTileIndex() + 1);
+            }
+            else if (item.getOwner() != null && !item.getOwner().isAlive()) {
+                // killed zombie , no zombie
+                item.setOwner(null);
+            }
+        }
     }
 
     public void pushItem(GridItem item, int newCol) {

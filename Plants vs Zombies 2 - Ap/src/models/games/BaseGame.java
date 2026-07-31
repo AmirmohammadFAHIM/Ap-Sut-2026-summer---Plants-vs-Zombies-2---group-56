@@ -176,8 +176,8 @@ public class BaseGame implements Game {
         for (Zombie zombie : zombies) {
             zombie.update(delta, this);
         }
-
-        // return to this after fixes :checkAndReleaseDeadWizards();
+        gridController.checkAndAttachZombies(zombies);
+        gridController.updateItems();
 
         for (Zombie zombie : zombies) {
             if (zombie.isDead()) {
@@ -185,6 +185,13 @@ public class BaseGame implements Game {
                 if (sun != null && sun.getStolenSun() > 0) {
                     int released = sun.getStolenSun() / 2;
                     addSun(released);
+                }
+                String type = zombie.getType();
+                if (type.toLowerCase().contains("barrel")) {
+                    spawn(zombie, "imp", 2);
+                }
+                if (type.equals("wizard") || type.equals("ZombieWizard")) {
+                    wizardObserver.releaseCats(zombie);
                 }
             }
         }
@@ -299,14 +306,9 @@ public class BaseGame implements Game {
         return output.toString();
     }
 
-    // ====== WIZARD OBSERVER ======
     public void addCat(Zombie wizard, Plant plant) {
         wizardObserver.addCat(wizard, plant);
     }
-
-//    public void checkAndReleaseDeadWizards() {
-//        wizardObserver.checkAndReleaseDeadWizards();
-//    }
 
     public ArrayList<Bullet> getBullets() {
         return bullets;
@@ -431,20 +433,6 @@ public class BaseGame implements Game {
             if (dx <= range * 80) {
                 z.takeDamage(damage);
             }
-        }
-    }
-
-    public GridItem getPushableItemInFront(Zombie zombie) {
-        int row = zombie.getRow();
-        int col = zombie.getTileIndex() + 1;
-        if (col >= 9) return null;
-        return gridController.getGridItem(row, col);
-    }
-
-    public void pushItem(Zombie zombie, GridItem item) {
-        item.setCol(item.getCol() + 1);
-        if (item.getCol() >= 9) {
-            gridController.removeGridItem(item);
         }
     }
 

@@ -15,23 +15,23 @@ public class WizardObserver {
     }
 
     public void releaseCats(Zombie wizard) {
-        List<Plant> cats = wizardCats.remove(wizard); // فقط گربه‌های این جادوگر
+        List<Plant> cats = wizardCats.remove(wizard);
         if (cats != null) {
             for (Plant plant : cats) {
                 plant.setCat(false);
             }
         }
     }
-
-    public void checkAndReleaseDeadWizards() {
-        List<Zombie> deadWizards = new ArrayList<>();
-        for (Zombie wizard : wizardCats.keySet()) {
-            if (wizard.isDead()) {
-                deadWizards.add(wizard);
-            }
-        }
-        for (Zombie wizard : deadWizards) {
-            releaseCats(wizard); // فقط گربه‌های این جادوگر آزاد می‌شوند
-        }
-    }
+//
+//    public void checkAndReleaseDeadWizards() {
+//        List<Zombie> deadWizards = new ArrayList<>();
+//        for (Zombie wizard : wizardCats.keySet()) {
+//            if (wizard.isDead()) {
+//                deadWizards.add(wizard);
+//            }
+//        }
+//        for (Zombie wizard : deadWizards) {
+//            releaseCats(wizard);
+//        }
+//    }
 }

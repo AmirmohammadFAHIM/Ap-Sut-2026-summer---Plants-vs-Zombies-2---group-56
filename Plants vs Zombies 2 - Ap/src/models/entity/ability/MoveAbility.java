@@ -43,11 +43,6 @@ public class MoveAbility implements Ability {
         }
 
         switch (type) {
-            case PUSH_ARCADE:
-            case PUSH_ICE:
-            case PUSH_BARREL:
-                handlePush(zombie, game);
-                break;
             case PULL_PLANT:
                 handlePull(zombie, game);
                 break;
@@ -62,27 +57,10 @@ public class MoveAbility implements Ability {
         timer = cooldown;
     }
 
-    private void handlePush(Zombie zombie, BaseGame game) {
-        GridItem item = game.getPushableItemInFront(zombie);
-        if (item != null) {
-            isCarrying = true;
-            game.pushItem(zombie, item);
-        } else {
-            isCarrying = false;
-        }
-    }
-
     private void handlePull(Zombie zombie, BaseGame game) {
         Plant target = game.findPullablePlant(zombie);
         if (target != null) {
             game.pullPlant(zombie, target);
-        }
-    }
-
-    private void handleThrowOctopus(Zombie zombie, BaseGame game) {
-        Plant target = game.getRandomPlantInRange(zombie, 4.0f);
-        if (target != null) {
-            target.disable(); // octopus effect
         }
     }
 

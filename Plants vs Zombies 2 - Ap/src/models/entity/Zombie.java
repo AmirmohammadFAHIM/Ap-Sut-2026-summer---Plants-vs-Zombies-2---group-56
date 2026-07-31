@@ -15,6 +15,7 @@ public class Zombie extends Entity{
     private int hp;
     private final int maxHp;
     private int damage;
+    private int cost;
     private float speed;
     private float x, y;
     private int row;
@@ -49,13 +50,14 @@ public class Zombie extends Entity{
     private boolean isDynamiteFrozen = false;
 
     // ====== CONSTRUCTOR ======
-    public Zombie(String id, String type, int hp, int damage, float speed, int width, int height) {
+    public Zombie(String id, String type, int hp, int damage,  float speed, int cost, int width, int height) {
         this.id = id;
         this.type = type;
         this.hp = hp;
         this.maxHp = hp;
         this.damage = damage;
         this.speed = speed;
+        this.cost = cost;
         this.width = width;
         this.height = height;
         this.eatCooldown = calculateEatCooldown();
@@ -320,6 +322,8 @@ public class Zombie extends Entity{
     public void setY(float y) { this.y = y;}
     public int getTileIndex() { return tileIndex; }
     public void setTileIndex(int tileIndex) { this.tileIndex = tileIndex; }
+    public int getCost() { return cost; }
+    public void setCost(int cost) { this.cost = cost; }
 
     public List<Effect> getEffects() {
         return Collections.unmodifiableList(effects);

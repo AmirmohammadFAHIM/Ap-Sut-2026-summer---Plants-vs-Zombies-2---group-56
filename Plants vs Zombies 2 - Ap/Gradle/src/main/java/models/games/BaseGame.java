@@ -3,6 +3,7 @@ package models.games;
 import commands.GameCommands;
 import controllers.Start.PlantSelection;
 import controllers.datacontroller.SeedPackage;
+import controllers.observer.WizardObserver;
 import models.App;
 import models.GameAdventure.*;
 //import models.collection.ZombieRegistry;
@@ -51,27 +52,13 @@ public class BaseGame implements Game {
     protected PlantFactory plantFactory = new PlantFactory();
 
 
-    public GameState getState() {
-        return state;
-    }
-    public void setState(GameState state) {
-        this.state = state;
-    }
 
-    public int getSunCount() {
-        return sunCount;
-    }
-
-    public void setSunCount(int sunCount) {
-        this.sunCount = sunCount;
-    }
     // ====== WIZARD OBSERVER ======
     private final WizardObserver wizardObserver = new WizardObserver();
 
     // ====== GETTERS & SETTERS ======
     public GridController getGridController() { return gridController; }
-    public int getPlantFoodsCount() { return plantFoodsCount; }
-    public void setPlantFoodsCount(int plantFoodsCount) { this.plantFoodsCount = plantFoodsCount; }
+
     public PlantFactory getPlantFactory() { return plantFactory; }
     public void setPlantFactory(PlantFactory plantFactory) { this.plantFactory = plantFactory; }
     public int getWaveID() { return waveID; }
@@ -310,54 +297,7 @@ public class BaseGame implements Game {
         wizardObserver.addCat(wizard, plant);
     }
 
-    public ArrayList<Bullet> getBullets() {
-        return bullets;
-    }
 
-    public ArrayList<Sun> getSuns() {
-        return suns;
-    }
-
-    public Wave getCurrentWave() {
-        return currentWave;
-    }
-
-    public Field getField() {
-        return field;
-    }
-
-
-    public ArrayList<Plant> getPlants_inField() {
-        return plants_inField;
-    }
-
-
-
-    public Wave getPreviousWave() {
-        return previousWave;
-    }
-
-
-
-    public ArrayList<Zombie> getZombies() {
-        return zombies;
-    }
-
-    public void setZombies(ArrayList<Zombie> zombies) {
-        this.zombies = zombies;
-    }
-
-    public PlantSelection getSelection() {
-        return selection;
-    }
-
-    public LinkedHashMap<PlantType, SeedPackage> getAvailable_plants() {
-        return available_plants;
-    }
-
-    public void setEvent(ChapterSpecialEvent event) {
-        this.event = event;
-    }
 
     // ====== PLANT HELPERS ======
     public Plant findByCoordinates(int x, int y) {
@@ -559,68 +499,5 @@ public class BaseGame implements Game {
     public void addSun(int amount) {
         sunCount += amount;
     }
-
-// should go swh else
-//    public String showAllZombies() {
-//        if (zombies.isEmpty()) {
-//            return "No active zombies in the game.";
-//        }
-//        StringBuilder sb = new StringBuilder("--- Active Zombies ---\n");
-//        for (Zombie z : zombies) {
-//            sb.append(formatZombieInfo(z)).append("\n");
-//        }
-//        return sb.toString().trim();
-//    }
-//
-//    public String showZombie(String zombieName) {
-//        Zombie target = null;
-//        for (Zombie z : zombies) {
-//            if (z.getId().equalsIgnoreCase(zombieName) || z.getType().equalsIgnoreCase(zombieName)) {
-//                target = z;
-//                break;
-//            }
-//        }
-//        if (target == null) {
-//            return "Zombie \"" + zombieName + "\" not found in the current game.";
-//        }
-//        return formatZombieInfo(target);
-//    }
-//
-//    public String formatZombieInfo(Zombie zombie) {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append(zombie.getType()).append(": ");
-//
-//        int col = zombie.getTileIndex();
-//        int row = zombie.getRow();
-//        sb.append("position: (").append(row).append(", ").append(col).append(")  ");
-//        sb.append("health: ").append(zombie.getHp());
-//
-//        List<Armor> armors = zombie.getArmors();
-//        if (!armors.isEmpty()) {
-//            sb.append("  armors: ");
-//            for (int i = 0; i < armors.size(); i++) {
-//                Armor armor = armors.get(i);
-//                sb.append(armor.getType()).append(": ").append(armor.getHealth());
-//                if (i < armors.size() - 1) sb.append(", ");
-//            }
-//        }
-//
-//        List<Effect> effects = zombie.getEffects();
-//        if (!effects.isEmpty()) {
-//            sb.append("  effects: ");
-//            for (int i = 0; i < effects.size(); i++) {
-//                Effect effect = effects.get(i);
-//                sb.append(effect.getType().name().toLowerCase());
-//                float remaining = effect.getRemainingTime();
-//                if (remaining > 0) {
-//                    sb.append(": ").append(String.format("%.1f", remaining)).append("s");
-//                }
-//                if (i < effects.size() - 1) sb.append(", ");
-//            }
-//        }
-//
-//        return sb.toString();
-//    }
 }
 
-// has changed has changed

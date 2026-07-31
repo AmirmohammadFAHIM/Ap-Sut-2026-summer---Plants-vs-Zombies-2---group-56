@@ -6,9 +6,7 @@ import models.App;
 import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
 import models.User;
-import models.entity.Plant;
-import models.entity.Sun;
-import models.entity.Zombie;
+import models.entity.*;
 import models.factory.builder.PlantType;
 import models.gamePanes.Tile;
 import models.games.BaseGame;
@@ -19,6 +17,7 @@ import view.PlayView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class GameController implements Controller{
     private BaseGame game;

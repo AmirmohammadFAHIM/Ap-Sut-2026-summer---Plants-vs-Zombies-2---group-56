@@ -1,5 +1,6 @@
 package models.entity;
 
+import models.App;
 import models.games.BaseGame;
 import models.entity.ability.Ability;
 import controllers.observer.*;
@@ -188,9 +189,7 @@ public class Zombie extends Entity{
             return;
         }
         x += getActualSpeed() * movingDirection();
-        // بروزرسانی tileIndex بر اساس موقعیت x
         int newTile = (int) ((x - 100) / 50);
-        // MUST BE CHANGED   50 -> TILE WIDTH
         if (newTile < 0) newTile = 0;
         if (newTile > 8) newTile = 8;
 
@@ -242,6 +241,9 @@ public class Zombie extends Entity{
 
     public void die() {
         dead = true;
+        if (App.getCurrentuser() != null) {
+            App.getCurrentuser().updateQuestProgress("KILL_ZOMBIE", 1);
+        }
     }
 
     // ====== ABILITIES ======
@@ -322,7 +324,6 @@ public class Zombie extends Entity{
     public List<Effect> getEffects() {
         return Collections.unmodifiableList(effects);
     }
-
 
     public AllStarObserver getAllStarObserver() { return allStarObserver; }
     public NewspaperObserver getNewspaperObserver() { return newspaperObserver; }

@@ -20,27 +20,27 @@ import view.PlayView;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class GameController implements Controller{/// Main Brain of the game
+public class GameController implements Controller{
     private BaseGame game;
     private Level level;
     private Chapters chapter;
-public GameController(Chapters chapter , Level level){
-    this.level = level;
-    this.chapter = chapter;
-    game = switch (level.getLevelType().toLowerCase()){
-        case "night ops" -> new NightsOps();
-        case "plant what you get" -> new PlantWhatYouGet();
-        case "locked plants by category" -> new LockedPlants(LockedPlants.LockType.ByCategory);
-        case "conveyor belt" -> new ConveyorBelt();
-        case "deadline" -> new Deadline();
-        case "save our seeds" -> new SaveOurSeeds();
-        case "timed war"  -> new TimedWar();
-        case "love your plants" -> new LoveYourPlants();
-        default -> new NormalGame();
-    };
-    game.initGame(chapter , level.getId());
 
-}
+    public GameController(Chapters chapter , Level level){
+        this.level = level;
+        this.chapter = chapter;
+        game = switch (level.getLevelType().toLowerCase()){
+            case "night ops" -> new NightsOps();
+            case "plant what you get" -> new PlantWhatYouGet();
+            case "locked plants by category" -> new LockedPlants(LockedPlants.LockType.ByCategory);
+            case "conveyor belt" -> new ConveyorBelt();
+            case "deadline" -> new Deadline();
+            case "save our seeds" -> new SaveOurSeeds();
+            case "timed war"  -> new TimedWar();
+            case "love your plants" -> new LoveYourPlants();
+            default -> new NormalGame();
+        };
+        game.initGame(chapter , level.getId());
+    }
 
     public String plant(String name , int x , int y){
         return game.plant(name,x,y);
@@ -62,31 +62,30 @@ public GameController(Chapters chapter , Level level){
 
     @Override
     public String playGame(float delta) {
-
-            String log = game.playGame(delta);
-            Result end = game.check_endGame();
-            if(end.success()){
-                if(end.message().equals("Loss")) return "Brainzzzzzzzzzz!!!!! Deliciouzzzzzzz!!";
-            }
-            else if(game.isWon()){
-                end();
-                App.setScreen(new PlayView());
-                return "Sometimes in the life , I'm too competitive , It's good to be competitive.";
-            }
-            return log;
+        String log = game.playGame(delta);
+        Result end = game.check_endGame();
+        if(end.success()){
+            if(end.message().equals("Loss")) return "Brainzzzzzzzzzz!!!!! Deliciouzzzzzzz!!";
+        }
+        else if(game.isWon()){
+            end();
+            App.setScreen(new PlayView());
+            return "Sometimes in the life , I'm too competitive , It's good to be competitive.";
+        }
+        return log;
     }
 
     private void end(){
         User user = Data.getCurrentUser();
-       if(chapter == user.getChapter() && level.getId() == user.getLevelId()){
-           user.setLevelId(user.getLevelId()+1);
-           user.setLevelsPassed(user.getLevelsPassed()+1);
-           for (PlantType x : level.getUnlockingPlants()){
-               user.getUnlockedPlants().add(x);
-               user.getUnreadNews().add("Congratulation , You've Unlocked new Plant " +
-                       ", " + x.name() + " !");
-           }
-       } /// you've unlocked new level!
+        if(chapter == user.getChapter() && level.getId() == user.getLevelId()){
+            user.setLevelId(user.getLevelId()+1);
+            user.setLevelsPassed(user.getLevelsPassed()+1);
+            for (PlantType x : level.getUnlockingPlants()){
+                user.getUnlockedPlants().add(x);
+                user.getUnreadNews().add("Congratulation , You've Unlocked new Plant " +
+                        ", " + x.name() + " !");
+            }
+        }
         if(user.getLevelId() == 5){
             user.setLevelId(1);
             Chapters newChapter = switch (user.getChapter()){
@@ -98,13 +97,7 @@ public GameController(Chapters chapter , Level level){
             user.setChapter(newChapter);
         }
 
-
         App.setScreen(new PlayView());
-
-        // TODO : unlocking new zombies
-
-
-
     }
 
     public String gameEndCheat(){
@@ -128,19 +121,18 @@ public GameController(Chapters chapter , Level level){
         return "What You Said goddamn niggaZombie???";
     }
 
-
     public String showPlantsStatus(){
         StringBuilder output = new StringBuilder();
-       try {
-           for (SeedPackage x : game.getAvailable_plants().values()) {
-               output.append(x.getPlant().name()).append("\n")
-                       .append("recharge remaining time = ").
-                       append(x.getRecharge()).append("\n").
-                       append("cost = ").append(x.getCost()).append("\n");
-           }
-       }catch (RuntimeException e){
-           return "Something went wrong during showing plants! try again!...";
-       }
+        try {
+            for (SeedPackage x : game.getAvailable_plants().values()) {
+                output.append(x.getPlant().name()).append("\n")
+                        .append("recharge remaining time = ").
+                        append(x.getRecharge()).append("\n").
+                        append("cost = ").append(x.getCost()).append("\n");
+            }
+        }catch (RuntimeException e){
+            return "Something went wrong during showing plants! try again!...";
+        }
         return output.toString();
     }
 
@@ -170,7 +162,6 @@ public GameController(Chapters chapter , Level level){
 
     }
 
-
     public String cheat(String content){
         switch (content){
             case "remove-cooldown":
@@ -190,16 +181,12 @@ public GameController(Chapters chapter , Level level){
         return "Oh ma man , cheatttt , for real you nigga??? so bad , so bad , ain't tough ):";
     }
 
-
     private void removeCooldown(){
         for (SeedPackage x : game.getAvailable_plants().values()){
             x.setRecharge(0);
             x.setAvailable(true);
         }
     }
-
-
-
 
     public String collectSun(int x , int y){
         Iterator<Sun> iterator = game.getSuns().iterator();
@@ -211,6 +198,11 @@ public GameController(Chapters chapter , Level level){
                     return "Boooooommmmmmmm !!!!! RadioActive Sun explode!";
                 }
                 game.setSunCount(game.getSunCount() + sun.getPrice());
+
+                if (App.getCurrentuser() != null) {
+                    App.getCurrentuser().updateQuestProgress("COLLECT_SUN", sun.getPrice());
+                }
+
                 sun.dispose(game);
                 iterator.remove();
                 return "Sun collected , you got " + sun.getPrice() + " suns!";
@@ -218,7 +210,6 @@ public GameController(Chapters chapter , Level level){
         }
         return null;
     }
-
 
     public String availablePlants(){
         StringBuilder output = new StringBuilder();
@@ -244,15 +235,12 @@ public GameController(Chapters chapter , Level level){
         try {
             PlantType t = PlantType.valueOf(name);
             if(game.getState() != BaseGame.GameState.STARTING){
-                return game.getSelection().removePlant(game.getAvailable_plants() ,
-                        t);
+                return game.getSelection().removePlant(game.getAvailable_plants() , t);
             }
             return "Invalid command now.";
         } catch (RuntimeException e) {
             return "Plant not found.";
         }
-
-
     }
 
     public String addPlant(String name){
@@ -273,8 +261,6 @@ public GameController(Chapters chapter , Level level){
     public BaseGame getGame() {
         return game;
     }
-
-
 
     public String showAllZombies() {
         if (game.getZombies().isEmpty()) {
@@ -301,4 +287,3 @@ public GameController(Chapters chapter , Level level){
         return game.formatZombieInfo(target);
     }
 }
-

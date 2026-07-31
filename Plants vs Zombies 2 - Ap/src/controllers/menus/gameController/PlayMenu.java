@@ -44,13 +44,6 @@ public class PlayMenu implements Menu {
         currentChapter = chapter;
         StringBuilder output = new StringBuilder();
 
-        int base = switch (App.getCurrentuser().getChapter()) {
-            case DarkAge -> 12;
-            case BigWaveBeach -> 4;
-            case FrozenCaves -> 8;
-            default -> 0; // Ancient Egypt
-        };
-
         ArrayList<Level> chapterLevels = Data.getAllLevels().get(chapter);
 
         if (chapterLevels == null || chapterLevels.isEmpty()) {
@@ -58,12 +51,12 @@ public class PlayMenu implements Menu {
         }
 
         for (Level level : chapterLevels) {
-            int i = level.getId();
-            boolean unlocked = (App.getCurrentuser().getLevelsPassed() - base) >= (i - 1);
+            int levelId = level.getId();
+            boolean unlocked = App.getCurrentuser().getLevelsPassed() >= (levelId - 1);
 
-            output.append("══════════════ LEVEL ").append(i).append(" : ").append(unlocked ? "Unlocked" : "Locked");
+            output.append("══════════════ LEVEL ").append(levelId).append(" : ").append(unlocked ? "Unlocked" : "Locked");
 
-            if (i == App.getCurrentuser().getLevelId() && chapter == App.getCurrentuser().getChapter()) {
+            if (levelId == App.getCurrentuser().getLevelId() && chapter == App.getCurrentuser().getChapter()) {
                 output.append(" (You are here now)");
             }
             output.append(" ══════════════\n");
@@ -91,13 +84,7 @@ public class PlayMenu implements Menu {
             return "Error: Level " + levelId + " does not exist in " + currentChapter.name() + ".";
         }
 
-        int base = switch (currentChapter) {
-            case DarkAge -> 12;
-            case BigWaveBeach -> 4;
-            case FrozenCaves -> 8;
-            default -> 0;
-        };
-        boolean isUnlocked = (App.getCurrentuser().getLevelsPassed() - base) >= (levelId - 1);
+        boolean isUnlocked = App.getCurrentuser().getLevelsPassed() >= (levelId - 1);
 
         if (!isUnlocked) {
             return "Error: You haven't unlocked Level " + levelId + " yet!";

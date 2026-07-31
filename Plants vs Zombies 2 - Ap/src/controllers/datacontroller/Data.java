@@ -37,6 +37,8 @@ public class Data {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(USERS_FILE))) {
             allUsers = (ArrayList<User>) ois.readObject();
         } catch (Exception e) {
+            System.err.println("Warning: Could not load user data or file is corrupted. Starting fresh.");
+            e.printStackTrace();
             allUsers = new ArrayList<>();
         }
     }
@@ -111,12 +113,14 @@ public class Data {
                     if (level.getUnlockingPlants() == null) level.setUnlockingPlants(new ArrayList<>());
                     if (level.getAllowedZombies() == null) level.setAllowedZombies(new ArrayList<>());
 
-                    allLevels.get(level.getChapters()).add(level);
+                    if (level.getChapters() != null) {
+                        allLevels.get(level.getChapters()).add(level);
+                    }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Something went wrong while reading levels data file. \n " + e.getMessage());
+            System.err.println("Something went wrong while reading levels.json \n " + e.getMessage());
         }
     }
 

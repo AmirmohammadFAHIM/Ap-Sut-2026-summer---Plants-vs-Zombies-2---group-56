@@ -3,17 +3,16 @@ package controllers.menus.SecondaryMenus;
 import controllers.datacontroller.Data;
 import controllers.menus.Menu;
 import models.App;
-import models.Pot;
 import models.User;
-import models.entity.Seed;
 import models.factory.builder.PlantType;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Shop implements Menu {
-    private String currentDailyPlant = "PEASHOOTER";
+
+    private static String currentDailyPlant = "PEASHOOTER";
+    private static String lastUpdatedDate = "";
 
     @Override
     public String ChangeMenu(String menuName) { return "Invalid menu transition from Shop menu."; }
@@ -90,8 +89,12 @@ public class Shop implements Menu {
     }
 
     public String setDailyOffer() {
-        PlantType[] allPlants = PlantType.values();
-        currentDailyPlant = allPlants[new Random().nextInt(allPlants.length)].name();
+        String today = LocalDate.now().toString();
+        if (!today.equals(lastUpdatedDate)) {
+            PlantType[] allPlants = PlantType.values();
+            currentDailyPlant = allPlants[new Random().nextInt(allPlants.length)].name();
+            lastUpdatedDate = today;
+        }
         return "Daily offer updated!\nOffer: 10x " + currentDailyPlant + " Seed Packets for 1600 Coins (20% OFF).";
     }
 

@@ -2,7 +2,6 @@ package models.entity.ability;
 
 import models.entity.*;
 import models.gamePanes.GridItem;
-import models.grid.GridItem;
 import models.games.BaseGame;
 
 public class MoveAbility implements Ability {

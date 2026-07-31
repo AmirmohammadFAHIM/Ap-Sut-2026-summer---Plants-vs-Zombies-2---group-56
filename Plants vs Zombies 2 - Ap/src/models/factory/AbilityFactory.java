@@ -1,6 +1,7 @@
 package models.factory;
 
 import models.config.AbilityConfig;
+import models.entity.BulletType;
 import models.entity.ability.*;
 import models.entity.ability.MoveAbility.MoveType;
 import models.entity.ability.SpeedChangeAbility.TriggerType;

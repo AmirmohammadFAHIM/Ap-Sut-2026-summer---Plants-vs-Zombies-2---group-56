@@ -1,13 +1,14 @@
 package view;
 
 import controllers.menus.Menu;
+import models.App;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class View implements MenuView {
     protected Menu menu;
-    public static Scanner scanner = new Scanner(System.in);
+    public static Scanner scanner = App.getInput();
     protected String input;
 
     @Override
@@ -25,7 +26,11 @@ public class View implements MenuView {
             System.out.println(menu.exitMenu());
             return true;
         } else if (enterMatcher.matches()) {
-            String targetMenu = enterMatcher.group("menuName");
+            String targetMenu = enterMatcher.group("menuName").trim();
+            targetMenu = targetMenu.substring(0, 1).toUpperCase() + targetMenu.substring(1).toLowerCase();
+            if (!targetMenu.endsWith(" menu")) {
+                targetMenu += " menu";
+            }
             System.out.println(menu.ChangeMenu(targetMenu));
             return true;
         }

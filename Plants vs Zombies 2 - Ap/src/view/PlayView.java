@@ -23,12 +23,22 @@ public class PlayView extends View {
         Matcher playMatcher = Pattern.compile(RegexHelper.PLAY_LEVEL).matcher(input);
 
         if (chapterMatcher.matches()) {
-            try {
-                Chapters selectedChapter = Chapters.valueOf(chapterMatcher.group("chaptername"));
+            String chapterInput = chapterMatcher.group("chaptername");
+            Chapters selectedChapter = null;
+
+            for (Chapters c : Chapters.values()) {
+                if (c.name().equalsIgnoreCase(chapterInput)) {
+                    selectedChapter = c;
+                    break;
+                }
+            }
+
+            if (selectedChapter != null) {
                 System.out.println(((PlayMenu) menu).changeChapter(selectedChapter));
-            } catch (IllegalArgumentException e) {
+            } else {
                 System.out.println("Error: Chapter not found! Available chapters: AncientEgypt, FrozenCaves, BigWaveBeach, DarkAge");
             }
+
         } else if (shortcutMatcher.matches()) {
             String shortcut = shortcutMatcher.group("shortcut").toLowerCase();
             String targetMenu = switch (shortcut) {

@@ -3,6 +3,7 @@ package models;
 import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
 import models.factory.builder.PlantType;
+import models.entity.ZombieRegistry;
 import models.QuestObserver;
 
 import java.io.Serializable;
@@ -51,6 +52,8 @@ public class User implements Serializable, QuestObserver {
 
     private ArrayList<Quest> activeQuests;
 
+    private ZombieRegistry zombieRegistry;
+
     public User(String name, String passwordHash, String nickname, String email, String gender) {
         this.name = name;
         this.passwordHash = passwordHash;
@@ -63,8 +66,19 @@ public class User implements Serializable, QuestObserver {
         this.readNews = new ArrayList<>();
         this.levelId = 1;
         this.chapter = Chapters.AncientEgypt;
+
+        this.zombieRegistry = new ZombieRegistry();
+
+        this.levels = new HashMap<>();
+
         this.unlockedPlants = new ArrayList<>(Arrays.asList(PlantType.PEASHOOTER , PlantType.SNOW_PEA,
                 PlantType.REPEATER , PlantType.CHOMPER , PlantType.WALL_NUT));
+
+        for (PlantType plant : this.unlockedPlants) {
+            this.levels.put(plant, 1);
+            this.unlockedPlantsNames.add(plant.name());
+        }
+
         this.activeQuests = new ArrayList<>();
         this.activeQuests.add(new Quest("Finish Dark Ages Pt.2", 1, "KILL_ZOMBIE", 50, "Gems", 15));
         this.activeQuests.add(new Quest("Adventure Extra: Daytime Dark Ages", 2, "COLLECT_SUN", 2000, "Coins", 4000));
@@ -79,10 +93,14 @@ public class User implements Serializable, QuestObserver {
         }
     }
 
-    public ArrayList<Quest> getActiveQuests() {
-        return activeQuests;
+    public ZombieRegistry getZombieRegistry() {
+        if (zombieRegistry == null) {
+            zombieRegistry = new ZombieRegistry();
+        }
+        return zombieRegistry;
     }
 
+    public ArrayList<Quest> getActiveQuests() { return activeQuests; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getPasswordHash() { return passwordHash; }
@@ -92,37 +110,26 @@ public class User implements Serializable, QuestObserver {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getGender() { return gender; }
+
     public void setSecurityQuestion(int questionNumber, String answer) {
         this.securityQuestionNumber = questionNumber;
         this.securityAnswer = answer;
     }
 
-    public int getVaseBreaker() {
-        return vaseBreaker;
-    }
-
+    public int getVaseBreaker() { return vaseBreaker; }
     public void setVaseBreaker(int vaseBreaker) {
         if(vaseBreaker >= 3) vaseBreaker = 3;
         this.vaseBreaker = vaseBreaker;
     }
 
-    public int getWallNutBowling() {
-        return wallNutBowling;
-    }
-
+    public int getWallNutBowling() { return wallNutBowling; }
     public void setWallNutBowling(int wallNutBowling) {
         if(wallNutBowling >= 3) wallNutBowling =3;
         this.wallNutBowling = wallNutBowling;
     }
 
-    public int getIZombie() {
-        return IZombie;
-    }
-
-    public void setIZombie(int IZombie) {
-        this.IZombie = IZombie;
-    }
-
+    public int getIZombie() { return IZombie; }
+    public void setIZombie(int IZombie) { this.IZombie = IZombie; }
     public int getSecurityQuestionNumber() { return securityQuestionNumber; }
     public boolean checkSecurityAnswer(String answer) { return this.securityAnswer.equals(answer); }
     public int getCoins() { return coins; }

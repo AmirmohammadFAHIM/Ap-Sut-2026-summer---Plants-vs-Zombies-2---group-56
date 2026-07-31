@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Chapter implements Serializable {
-    private ArrayList<Level> levels;
     private Chapters chapterType;
+    private ArrayList<Level> levels;
 
     public Chapter(Chapters chapterType) {
         this.chapterType = chapterType;
@@ -18,32 +18,20 @@ public class Chapter implements Serializable {
         }
     }
 
-    public void unlockNextLevel() {
-        for (int i = 0; i < levels.size() - 1; i++) {
-            Level currentLevel = levels.get(i);
-            Level nextLevel = levels.get(i + 1);
-
-            if (currentLevel.isWon() && !nextLevel.isUnlocked()) {
-                nextLevel.setUnlocked(true);
-                System.out.println("Level " + nextLevel.getId() + " in " + chapterType.name() + " is now unlocked!");
-                return;
-            }
-        }
+    public Chapters getChapterType() {
+        return chapterType;
     }
 
     public ArrayList<Level> getLevels() {
         return levels;
     }
 
-    public void setLevels(ArrayList<Level> levels) {
-        this.levels = levels;
-    }
-
-    public Chapters getChapterType() {
-        return chapterType;
-    }
-
-    public void setChapterType(Chapters chapterType) {
-        this.chapterType = chapterType;
+    public Level getLevelById(int id) {
+        for (Level level : levels) {
+            if (level.getId() == id) {
+                return level;
+            }
+        }
+        return null;
     }
 }

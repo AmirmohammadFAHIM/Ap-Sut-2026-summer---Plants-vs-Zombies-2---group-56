@@ -5,14 +5,14 @@ import controllers.Start.PlantSelection;
 import controllers.datacontroller.SeedPackage;
 import models.App;
 import models.GameAdventure.*;
+//import models.collection.ZombieRegistry;
 import models.entity.*;
-import models.entity.ability.SunRobbingAbility;
-import models.factory.PlantFactory;
-import models.factory.ZombieFactory;
+import models.factory.*;
 import models.factory.builder.PlantType;
 import models.factory.builder.SunBuilder;
 import models.gamePanes.*;
 import models.utils.Result;
+import models.entity.ability.*;
 
 import java.util.*;
 
@@ -54,7 +54,6 @@ public class BaseGame implements Game {
     public GameState getState() {
         return state;
     }
-
     public void setState(GameState state) {
         this.state = state;
     }
@@ -66,7 +65,47 @@ public class BaseGame implements Game {
     public void setSunCount(int sunCount) {
         this.sunCount = sunCount;
     }
+    // ====== WIZARD OBSERVER ======
+    private final WizardObserver wizardObserver = new WizardObserver();
 
+    // ====== GETTERS & SETTERS ======
+    public GridController getGridController() { return gridController; }
+    public int getPlantFoodsCount() { return plantFoodsCount; }
+    public void setPlantFoodsCount(int plantFoodsCount) { this.plantFoodsCount = plantFoodsCount; }
+    public PlantFactory getPlantFactory() { return plantFactory; }
+    public void setPlantFactory(PlantFactory plantFactory) { this.plantFactory = plantFactory; }
+    public int getWaveID() { return waveID; }
+    public void setWaveID(int waveID) { this.waveID = waveID; }
+    public GameCommands getStartGameCommand() { return StartGameCommand; }
+    public GameState getState() { return state; }
+    public void setState(GameState state) { this.state = state; }
+    public int getSunCount() { return sunCount; }
+    public void setSunCount(int sunCount) { this.sunCount = sunCount; }
+    public ArrayList<Bullet> getBullets() { return bullets; }
+    public ArrayList<Sun> getSuns() { return suns; }
+    public Wave getCurrentWave() { return currentWave; }
+    public Field getField() { return field; }
+    public void setField(Field field) { this.field = field; }
+    public ArrayList<Wave> getWaves() { return waves; }
+    public void setWaves(ArrayList<Wave> waves) { this.waves = waves; }
+    public ArrayList<Plant> getPlants_inField() { return plants_inField; }
+    public void setPlants_inField(ArrayList<Plant> plants_inField) { this.plants_inField = plants_inField; }
+    public SunBuilder getSunBuilder() { return sunBuilder; }
+    public void setSunBuilder(SunBuilder sunBuilder) { this.sunBuilder = sunBuilder; }
+    public void setCurrentWave(Wave currentWave) { this.currentWave = currentWave; }
+    public Wave getPreviousWave() { return previousWave; }
+    public void setPreviousWave(Wave previousWave) { this.previousWave = previousWave; }
+    public void setBullets(ArrayList<Bullet> bullets) { this.bullets = bullets; }
+    public void setSuns(ArrayList<Sun> suns) { this.suns = suns; }
+    public ArrayList<Zombie> getZombies() { return zombies; }
+    public void setZombies(ArrayList<Zombie> zombies) { this.zombies = zombies; }
+    public PlantSelection getSelection() { return selection; }
+    public void setSelection(PlantSelection selection) { this.selection = selection; }
+    public LinkedHashMap<PlantType, SeedPackage> getAvailable_plants() { return available_plants; }
+    public void setAvailable_plants(LinkedHashMap<PlantType, SeedPackage> available_plants) { this.available_plants = available_plants; }
+    public void setStartGameCommand(GameCommands startGameCommand) { StartGameCommand = startGameCommand; }
+    public ChapterSpecialEvent getEvent() { return event; }
+    public void setEvent(ChapterSpecialEvent event) { this.event = event; }
 
     @Override
     public void initGame(Chapters chapter , int level) {
@@ -138,7 +177,7 @@ public class BaseGame implements Game {
             zombie.update(delta, this);
         }
 
-       // checkAndReleaseDeadWizards();
+        // return to this after fixes :checkAndReleaseDeadWizards();
 
         for (Zombie zombie : zombies) {
             if (zombie.isDead()) {
@@ -161,22 +200,58 @@ public class BaseGame implements Game {
 
 
     @Override
-    public String plant(String plantName , int x , int y) {
-        return null;
-
+    public String plant(String plantName, int x, int y) {
+        String name = plantName.replaceAll(" ", "_").toUpperCase();
+        Result findPlant = plantAvailable(name);
+        if (!findPlant.success()) return findPlant.message();
+        Plant newPlant = plantFactory.CreatePlant(findPlant.plantType());
+        if (isEmpty(newPlant.getTags().contains(PlantTags.WATER), x, y)) {
+            return "The coordination is not empty or plantable.";
+        }
+        plants_inField.add(newPlant);
+        Tile tile = field.getTiles().get(y).get(x);
+        if (plantName.equals("LILY_PAD")) {
+            tile.setPlantable(true);
+        } else {
+            tile.setEmpty(true);
+        }
+        this.sunCount -= (int) available_plants.get(findPlant.plantType()).getCost();
+        return "New plant : " + findPlant.plantType().name() + " planted successfully at coordination : ( " + x + "," + y + ")";
     }
 
+    private Result plantAvailable(String plantName) {
+        try {
+            PlantType type = PlantType.valueOf(plantName.toUpperCase());
+            if (!available_plants.containsKey(type)) {
+                return new Result(false, "The plant doesn't exist on the available plants.", null);
+            }
+            return new Result(true, null, type);
+        } catch (IllegalArgumentException e) {
+            return new Result(false, "The plant doesn't exist on the available plants.", null);
+        }
+    }
 
+    private boolean isEmpty(boolean waterPlant, int x, int y) {
+        Tile toPlantOn = field.getTiles().get(x).get(y);
+        boolean water = toPlantOn.isWater() || !waterPlant;
+        return toPlantOn.isEmpty() && toPlantOn.isPlantable() && water;
+    }
 
     @Override
-    public String pluck(int x , int y) {
-            return null;
+    public String pluck(int x, int y) {
+        Tile toPluckOn = field.getTiles().get(x).get(y);
+        for (Plant p : plants_inField) {
+            if (p.getLine() == y && p.getTileIndex() == x) {
+                if (toPluckOn.isEmpty() && toPluckOn.isPlantable() && toPluckOn.isWater()) continue;
+                p.dispose(this);
+            }
+        }
+        return "Bro don't pluck the plants ):";
     }
 
-   protected boolean won = false;
-    public boolean isWon() {
-        return won;
-    }
+    protected boolean won = false;
+    public boolean isWon() { return won; }
+
     @Override
     public Result check_endGame() {
         for (Zombie z : zombies) {
@@ -186,9 +261,7 @@ public class BaseGame implements Game {
     }
 
     @Override
-    public void endGame() {
-
-    }
+    public void endGame() {}
 
     protected int waveID = 0;
     protected Result attack(float delta) {
@@ -212,20 +285,28 @@ public class BaseGame implements Game {
         return new  Result(false, null,null);
     }
 
-
-    protected String setTheWaveZombies(){
+    protected String setTheWaveZombies() {
         StringBuilder output = new StringBuilder();
         int line = 0;
         for (Zombie z : zombies) {
-            z.setLine(line % 5);
+            z.setRow(line % 5);
             z.setTileIndex(8);
-            z.setX(9 * Tile.getWidth() + 200);
-            z.setY(line * Tile.getHeight());
+            z.setX((int)(9 * Tile.getWidth() + 200));
+            z.setY((int)(line * Tile.getHeight()));
             line++;
             output.append("Zombie spawned at line " + line + " , watch out human!\n");
         }
         return output.toString();
     }
+
+    // ====== WIZARD OBSERVER ======
+    public void addCat(Zombie wizard, Plant plant) {
+        wizardObserver.addCat(wizard, plant);
+    }
+
+//    public void checkAndReleaseDeadWizards() {
+//        wizardObserver.checkAndReleaseDeadWizards();
+//    }
 
     public ArrayList<Bullet> getBullets() {
         return bullets;
@@ -268,20 +349,21 @@ public class BaseGame implements Game {
         return selection;
     }
 
-
     public LinkedHashMap<PlantType, SeedPackage> getAvailable_plants() {
         return available_plants;
     }
-
-
-
-
 
     public void setEvent(ChapterSpecialEvent event) {
         this.event = event;
     }
 
-    public Plant findByCoordinates(int x , int y){
+    // ====== PLANT HELPERS ======
+    public Plant findByCoordinates(int x, int y) {
+        for (Plant p : this.plants_inField) {
+            if (p.getLine() == y && p.getTileIndex() == x) {
+                return p;
+            }
+        }
         return null;
     }
 
@@ -490,29 +572,67 @@ public class BaseGame implements Game {
         sunCount += amount;
     }
 
-
-
-
-    public String formatZombieInfo(Zombie zombie) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(zombie.getType()).append(": ");
-
-        int col = zombie.getTileIndex();
-        int row = zombie.getRow();
-        sb.append("position: (").append(row).append(", ").append(col).append(")  ");
-        sb.append("health: ").append(zombie.getHp());
-
-        List<Armor> armors = zombie.getArmors();
-        if (!armors.isEmpty()) {
-            sb.append("  armors: ");
-            for (int i = 0; i < armors.size(); i++) {
-                Armor armor = armors.get(i);
-                sb.append(armor.getType()).append(": ").append(armor.getHealth());
-                if (i < armors.size() - 1) sb.append(", ");
-            }
-        }
-
-
-        return "";
-    }
+// should go swh else
+//    public String showAllZombies() {
+//        if (zombies.isEmpty()) {
+//            return "No active zombies in the game.";
+//        }
+//        StringBuilder sb = new StringBuilder("--- Active Zombies ---\n");
+//        for (Zombie z : zombies) {
+//            sb.append(formatZombieInfo(z)).append("\n");
+//        }
+//        return sb.toString().trim();
+//    }
+//
+//    public String showZombie(String zombieName) {
+//        Zombie target = null;
+//        for (Zombie z : zombies) {
+//            if (z.getId().equalsIgnoreCase(zombieName) || z.getType().equalsIgnoreCase(zombieName)) {
+//                target = z;
+//                break;
+//            }
+//        }
+//        if (target == null) {
+//            return "Zombie \"" + zombieName + "\" not found in the current game.";
+//        }
+//        return formatZombieInfo(target);
+//    }
+//
+//    public String formatZombieInfo(Zombie zombie) {
+//        StringBuilder sb = new StringBuilder();
+//        sb.append(zombie.getType()).append(": ");
+//
+//        int col = zombie.getTileIndex();
+//        int row = zombie.getRow();
+//        sb.append("position: (").append(row).append(", ").append(col).append(")  ");
+//        sb.append("health: ").append(zombie.getHp());
+//
+//        List<Armor> armors = zombie.getArmors();
+//        if (!armors.isEmpty()) {
+//            sb.append("  armors: ");
+//            for (int i = 0; i < armors.size(); i++) {
+//                Armor armor = armors.get(i);
+//                sb.append(armor.getType()).append(": ").append(armor.getHealth());
+//                if (i < armors.size() - 1) sb.append(", ");
+//            }
+//        }
+//
+//        List<Effect> effects = zombie.getEffects();
+//        if (!effects.isEmpty()) {
+//            sb.append("  effects: ");
+//            for (int i = 0; i < effects.size(); i++) {
+//                Effect effect = effects.get(i);
+//                sb.append(effect.getType().name().toLowerCase());
+//                float remaining = effect.getRemainingTime();
+//                if (remaining > 0) {
+//                    sb.append(": ").append(String.format("%.1f", remaining)).append("s");
+//                }
+//                if (i < effects.size() - 1) sb.append(", ");
+//            }
+//        }
+//
+//        return sb.toString();
+//    }
 }
+
+// has changed has changed

@@ -7,7 +7,7 @@ import java.util.*;
 
 public class WizardObserver {
 
-    // هر جادوگر → لیست گربه‌های خودش
+
     private final Map<Zombie, List<Plant>> wizardCats = new HashMap<>();
 
     public void addCat(Zombie wizard, Plant plant) {

@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.databind.deser.std.ArrayBlockingQueueDeserializer;
 import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
 import models.factory.builder.PlantType;
@@ -49,6 +50,7 @@ public class User implements Serializable, QuestObserver {
     private ArrayList<String> unlockedPlantsNames;
     private ArrayList<String> unreadNews;
     private ArrayList<String> readNews;
+    private ArrayList<PlantType> boostList;
 
     private ArrayList<Quest> activeQuests;
 
@@ -64,6 +66,7 @@ public class User implements Serializable, QuestObserver {
         this.unlockedPlantsNames = new ArrayList<>();
         this.unreadNews = new ArrayList<>();
         this.readNews = new ArrayList<>();
+        this.boostList = new ArrayList<>();
         this.levelId = 1;
         this.chapter = Chapters.AncientEgypt;
 
@@ -163,10 +166,15 @@ public class User implements Serializable, QuestObserver {
         if (this.specificSeeds == null) this.specificSeeds = new HashMap<>();
         this.specificSeeds.put(plantType, this.specificSeeds.getOrDefault(plantType, 0) + amount);
     }
+    public void addToBoostList(PlantType seedling){
+        this.boostList.add(seedling);
+    }
     public int getSpecificSeedCount(String plantType) { return this.specificSeeds != null ? this.specificSeeds.getOrDefault(plantType, 0) : 0; }
     public ArrayList<String> getUnlockedPlantsNames() { return unlockedPlantsNames; }
     public ArrayList<String> getUnreadNews() { return unreadNews; }
     public ArrayList<String> getReadNews() { return readNews; }
+    public ArrayList<PlantType> getBoostList() { return boostList;
+    }
     public ArrayList<PlantType> getUnlockedPlants() { return unlockedPlants; }
     public void setUnlockedPlants(ArrayList<PlantType> unlockedPlants) { this.unlockedPlants = unlockedPlants; }
     public HashMap<PlantType, Integer> getLevels() { return levels; }

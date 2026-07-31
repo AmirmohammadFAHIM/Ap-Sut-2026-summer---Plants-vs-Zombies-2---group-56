@@ -63,7 +63,7 @@ public class Pot {
             System.out.println("500 seke moft!");
         }
         else{
-            user.addToList(seedling);
+            user.addToBoostList(seedling);
             //addToList must check if it is tekrary
         }
         this.seedling = null;

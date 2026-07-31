@@ -45,9 +45,6 @@ public class MoveAbility implements Ability {
             case PULL_PLANT:
                 handlePull(zombie, game);
                 break;
-            case THROW_OCTOPUS:
-                handleThrowOctopus(zombie, game);
-                break;
             case SWAP_ZOMBIE:
                 handleSwap(zombie, game);
                 break;
@@ -71,5 +68,6 @@ public class MoveAbility implements Ability {
     }
 
     public boolean isCarrying() { return isCarrying; }
+
     public MoveType getType() { return type; }
 }

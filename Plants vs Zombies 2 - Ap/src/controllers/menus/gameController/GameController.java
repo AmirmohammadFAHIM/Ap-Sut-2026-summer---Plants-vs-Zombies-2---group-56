@@ -263,27 +263,98 @@ public class GameController implements Controller{
     }
 
     public String showAllZombies() {
-        if (game.getZombies().isEmpty()) {
+        List<Zombie> zombies = game.getZombies();
+        if (zombies.isEmpty()) {
             return "No active zombies in the game.";
         }
-        StringBuilder sb = new StringBuilder("--- Active Zombies ---\n");
-        for (Zombie z : game.getZombies()) {
-            sb.append(game.formatZombieInfo(z)).append("\n");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("--- Active Zombies (").append(zombies.size()).append(") ---\n");
+
+        for (int i = 0; i < zombies.size(); i++) {
+            Zombie z = zombies.get(i);
+            sb.append(i + 1).append(". ");
+            sb.append(formatZombieInfo(z));
+            if (i < zombies.size() - 1) {
+                sb.append("\n");
+            }
         }
+
         return sb.toString().trim();
     }
 
     public String showZombie(String zombieName) {
         Zombie target = null;
         for (Zombie z : game.getZombies()) {
-            if (z.getId().equalsIgnoreCase(zombieName) || z.getType().equalsIgnoreCase(zombieName)) {
+            if (z.getId().equalsIgnoreCase(zombieName) ||
+                    z.getType().equalsIgnoreCase(zombieName)) {
                 target = z;
                 break;
             }
         }
+
         if (target == null) {
             return "Zombie \"" + zombieName + "\" not found in the current game.";
         }
-        return game.formatZombieInfo(target);
+
+        return formatZombieInfo(target);
+    }
+
+    private String formatZombieInfo(Zombie zombie) {
+        StringBuilder sb = new StringBuilder();
+
+        // 1. Name
+        sb.append(zombie.getType());
+
+        // 2. Position (tile position)
+        int col = zombie.getTileIndex();
+        int row = zombie.getRow();
+        sb.append("  position: (").append(row).append(", ").append(col).append(")");
+
+        // 3. Health
+        sb.append("  health: ").append(zombie.getHp()).append("/").append(zombie.getMaxHp());
+
+        // 4. Armors
+        List<Armor> armors = zombie.getArmors();
+        if (!armors.isEmpty()) {
+            sb.append("  armors: ");
+            for (int i = 0; i < armors.size(); i++) {
+                Armor armor = armors.get(i);
+                sb.append(armor.getType()).append(": ").append(armor.getHealth());
+                if (armor.isBroken()) {
+                    sb.append("(BROKEN)");
+                }
+                if (i < armors.size() - 1) {
+                    sb.append(", ");
+                }
+            }
+        }
+
+        // 5. Effects
+        List<Effect> effects = zombie.getEffects();
+        if (!effects.isEmpty()) {
+            sb.append("  effects: ");
+            for (int i = 0; i < effects.size(); i++) {
+                Effect effect = effects.get(i);
+                sb.append(effect.getType().name().toLowerCase());
+                float remaining = effect.getRemainingTime();
+                if (remaining > 0) {
+                    sb.append(": ").append(String.format("%.1f", remaining)).append("s");
+                }
+                if (i < effects.size() - 1) {
+                    sb.append(", ");
+                }
+            }
+        }
+
+        // 6. State flags
+        if (zombie.isHypnotized()) {
+            sb.append("  hypnotized: YES");
+        }
+        if (zombie.isFrozen()) {
+            sb.append("  frozen: YES");
+        }
+
+        return sb.toString();
     }
 }

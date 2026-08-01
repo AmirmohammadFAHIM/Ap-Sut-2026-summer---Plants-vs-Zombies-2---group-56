@@ -1,14 +1,11 @@
 package models.gamePanes;
 
-import models.GameAdventure.Chapter;
 import models.GameAdventure.Chapters;
-import models.GameAdventure.levels.Level;
 import models.entity.Moaner;
 import models.entity.Plant;
 import models.entity.PlantTags;
 import models.games.BaseGame;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -81,7 +78,7 @@ public class Field {
                             for (Plant x : game.getPlants_inField()){
                                 int dx = Math.abs(x.getTileIndex() - tile.getCol());
                                 int dy = Math.abs(x.getLine() - tile.getLine());
-                                if(dx <= 1 && dy <= 1 && x.getTags().contains(PlantTags.FIRE)){
+                                if(dx <= 1 && dy <= 1 && x.getTags().contains(PlantTags.Fire)){
                                     tile.setHp(tile.getHp() - delta * 60);
                                 }
                             }

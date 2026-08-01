@@ -5,7 +5,6 @@ import controllers.datacontroller.SeedPackage;
 import models.Constants;
 import models.entity.PlantTags;
 import models.factory.builder.PlantType;
-import models.games.BaseGame;
 import models.games.NormalGame;
 import models.utils.Result;
 
@@ -27,7 +26,7 @@ public class NightsOps extends NormalGame implements SpecialGame {
             return false;
         }
         else{
-            if(Data.getPlants().get(selected.getPlant()).getTags().contains(PlantTags.DAY)){
+            if(Data.getPlants().get(selected.getPlant()).getTags().contains(PlantTags.Day)){
                 available_plants.put(selected.getPlant() , selected);
                 /// here you print a warning that this plant gonna be sleeping the whole game
             }

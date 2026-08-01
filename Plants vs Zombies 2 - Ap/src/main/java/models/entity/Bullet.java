@@ -37,13 +37,13 @@ public class Bullet {
     /// for homing plants_inField of course!
     private Zombie toLockIn;
     public void setTags(ArrayList<PlantTags> tags){
-        if(tags.contains(PlantTags.FIRE)){
+        if(tags.contains(PlantTags.Fire)){
             this.tags.add(Tag.FIRE);
         }
         if(tags.contains(PlantTags.POISON)){
             this.tags.add(Tag.POISON);
         }
-        if(tags.contains(PlantTags.ICE)) this.tags.add(Tag.ICE);
+        if(tags.contains(PlantTags.Ice)) this.tags.add(Tag.ICE);
         if(tags.contains(PlantTags.MAGICAL)) this.tags.add(Tag.MAGICAL);
         if(tags.contains(PlantTags.AoE)) this.tags.add(Tag.AoE);
     }

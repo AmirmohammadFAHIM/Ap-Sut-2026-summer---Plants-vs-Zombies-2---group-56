@@ -226,7 +226,7 @@ public enum PlantType {
     PRIMAL_POTATO_MINE{
         @Override
         public Plant allocateSkill(Plant plant) {
-            ExplosionData data = new ExplosionData(3 ,3); /// this plant has TRAP tag , so by default just when a zombie is close to it , it explodes
+            ExplosionData data = new ExplosionData(3 ,3); /// this plant has Trap tag , so by default just when a zombie is close to it , it explodes
             plant.getBaseSkill().add(new Explosive(data));
             ExtraHP clone = new ExtraHP(ExtraHP.Type.CLONE);
             clone.cloneNumber = 2;
@@ -299,6 +299,14 @@ public enum PlantType {
             plant.getBaseSkill().add(new Freeze(Freeze.Type.TOUCH));
             plant.getPlantfoodSkill().add(new Freeze(Freeze.Type.ALL));
             return  super.allocateSkill(plant);
+        }
+    },
+
+    ICE_SHROOM{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            plant.getBaseSkill().add(new Freeze(Freeze.Type.ALL));
+            return   super.allocateSkill(plant);
         }
     },
     HOT_POTATO{
@@ -411,7 +419,7 @@ public enum PlantType {
             return super.allocateSkill(plant);
         }
     },
-    WASSABI_WHIP{
+    WASABI_WHIP{
         @Override
         public Plant allocateSkill(Plant plant) {
             int level =  App.getCurrentuser().getLevels().get(plant.getType());
@@ -546,7 +554,15 @@ public enum PlantType {
 
 
     ///MINTS
-    MINT,
+    ENLIGHTEN_MINT,
+    APPEASE_MINT,
+    ARMA_MINT,
+    BOMBARD_MINT,
+    ENFORCE_MINT,
+    REINFORCE_MINT,
+    ENCHANT_MINT,
+    PIERCE_MINT,
+    CATTAIL_MINT,
     MARIGOLD;
 
 

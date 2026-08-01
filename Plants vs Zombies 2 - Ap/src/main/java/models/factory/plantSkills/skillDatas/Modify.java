@@ -18,7 +18,7 @@ public class Modify implements Skill {
     @Override
     public void do_skill(Plant plant, BaseGame game) {
         if(plant.getCategory() == PlantCategory.StrikeThrough) runBack(plant, game);
-        else if(plant.getTags().contains(PlantTags.FIRE)) fire(plant, game);
+        else if(plant.getTags().contains(PlantTags.Fire)) fire(plant, game);
         else if(plant.getTags().contains(PlantTags.WATER)) lilyPad(plant, game);
     }
 

@@ -2,27 +2,29 @@ package models.entity;
 
 public enum PlantTags {
 
+    Insta_kill,
+
     MOVE_ZOMBIES,
 
     ONCE_USAGE,
 
     MAGICAL,
 
-    FIRE,
+    Fire,
 
-    ICE,
+    Ice,
 
     POISON,
 
-    NIGHT,
+    Night,
 
-    DAY,
+    Day,
 
-    SHROOM,
+    Shroom,
 
-    WRAP_UP,
+    Wramp_up,
 
-    TRAP,
+    Trap,
 
     EXPLOSIVE,
 

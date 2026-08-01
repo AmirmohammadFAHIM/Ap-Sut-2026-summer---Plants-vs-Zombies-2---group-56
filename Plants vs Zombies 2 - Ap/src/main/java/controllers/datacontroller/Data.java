@@ -112,7 +112,7 @@ public class Data {
                 System.out.println(plants.length);
                 if (plants != null) {
                     for (PlantData plant : plants) {
-                        PlantType type = PlantType.valueOf(plant.getName());
+                        PlantType type = PlantType.valueOf(plant.getName().toUpperCase());
                         Data.getPlants().put(type, plant);
                     }
                     System.out.println("دیتای گیاهان با موفقیت لود شد! تعداد: " + plants.length);

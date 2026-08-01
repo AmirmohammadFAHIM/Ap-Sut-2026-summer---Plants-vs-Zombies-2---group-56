@@ -170,7 +170,7 @@ public class Plant extends Entity {
     }
 
     private boolean Trap(BaseGame game){
-        if(!this.tags.contains(PlantTags.TRAP)){
+        if(!this.tags.contains(PlantTags.Trap)){
             return true;
         }
 
@@ -230,7 +230,7 @@ public class Plant extends Entity {
     }
 
     private void dispose(Zombie eater , BaseGame game){
-        if(tags.contains(PlantTags.SHROOM) && tags.contains(PlantTags.MAGICAL)){
+        if(tags.contains(PlantTags.Shroom) && tags.contains(PlantTags.MAGICAL)){
            eater.setHypnotized(true);
         }
         else if(tags.contains(PlantTags.EXPLOSIVE)){

@@ -128,32 +128,41 @@ public class Data {
         }
     }
 
-    public static void loadLevelsFromJson(String filePath) {
+    public static void loadLevelsFromJson(String fileName) {
         Gson gson = new Gson();
-        try (FileReader reader = new FileReader(filePath)) {
-            Type levelListType = new TypeToken<List<Level>>() {}.getType();
-            List<Level> levelsList = gson.fromJson(reader, levelListType);
 
-            if (levelsList != null) {
-                for (Chapters chapter : Chapters.values()) {
-                    allLevels.put(chapter, new ArrayList<>());
-                }
+        // استفاده از ClassLoader برای خواندن امن فایل از پوشه resources
+        try (InputStream inputStream = Data.class.getClassLoader().getResourceAsStream(fileName)) {
 
-                for (Level level : levelsList) {
-                    if (level.getUnlockingPlants() == null) level.setUnlockingPlants(new ArrayList<>());
-                    if (level.getAllowedZombies() == null) level.setAllowedZombies(new ArrayList<>());
+            if (inputStream == null) {
+                System.err.println("File not found in resources: " + fileName);
+                return;
+            }
 
-                    if (level.getChapters() != null) {
-                        allLevels.get(level.getChapters()).add(level);
+            try (Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+                Type levelListType = new TypeToken<List<Level>>() {}.getType();
+                List<Level> levelsList = gson.fromJson(reader, levelListType);
+
+                if (levelsList != null) {
+                    for (Chapters chapter : Chapters.values()) {
+                        allLevels.put(chapter, new ArrayList<>());
+                    }
+
+                    for (Level level : levelsList) {
+                        if (level.getUnlockingPlants() == null) level.setUnlockingPlants(new ArrayList<>());
+                        if (level.getAllowedZombies() == null) level.setAllowedZombies(new ArrayList<>());
+
+                        if (level.getChapters() != null) {
+                            allLevels.get(level.getChapters()).add(level);
+                        }
                     }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Something went wrong while reading levels.json \n " + e.getMessage());
+            System.err.println("Something went wrong while reading " + fileName + "\n " + e.getMessage());
         }
     }
-
     public static HashMap<Chapters, ArrayList<Level>> getAllLevels() {
         return allLevels;
     }

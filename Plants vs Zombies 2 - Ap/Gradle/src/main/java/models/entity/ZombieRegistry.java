@@ -1,8 +1,9 @@
 package models.entity;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class ZombieRegistry {
+public class ZombieRegistry implements Serializable {
 
     // ====== ALL ZOMBIE TYPES IN THE GAME ======
     public enum ZombieType {

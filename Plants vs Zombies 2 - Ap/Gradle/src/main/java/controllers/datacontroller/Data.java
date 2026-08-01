@@ -2,6 +2,7 @@ package controllers.datacontroller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.sun.tools.javac.Main;
 import models.App;
 import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
@@ -9,12 +10,19 @@ import models.User;
 import models.factory.builder.PlantType;
 import view.HomeView;
 import view.SignUpView;
-
+import com.google.gson.Gson;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Data {
     private static final String USERS_FILE = "users_data.dat";
@@ -34,11 +42,17 @@ public class Data {
 
     @SuppressWarnings("unchecked")
     public static void deserializeUser() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(USERS_FILE))) {
+        File userFile = new File(USERS_FILE);
+
+        if (!userFile.exists()) {
+            allUsers = new ArrayList<>();
+            return;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(userFile))) {
             allUsers = (ArrayList<User>) ois.readObject();
         } catch (Exception e) {
             System.err.println("Warning: Could not load user data or file is corrupted. Starting fresh.");
-            e.printStackTrace();
             allUsers = new ArrayList<>();
         }
     }
@@ -50,9 +64,11 @@ public class Data {
                 if(user.isStayLoggedIn()){
                     currentUser = user;
                     App.setScreen(new HomeView());
+                    return;
                 }
             }
         }
+        App.setScreen(new SignUpView());
     }
 
     public static void addUser(User user) {
@@ -78,23 +94,37 @@ public class Data {
         return null;
     }
 
-    public static void loadPlantsFromJson(String filePath) {
-        Gson gson = new Gson();
 
-        try (FileReader reader = new FileReader(filePath)) {
-            Type plantListType = new TypeToken<List<PlantData>>() {}.getType();
-            List<PlantData> plantsList = gson.fromJson(reader, plantListType);
+    public static void loadPlantsFromJson() {
+        try (InputStream inputStream = Data.class.getResourceAsStream("/plants.json")) {
 
-            if (plantsList != null) {
-                for (PlantData plant : plantsList) {
-                    PlantType type = PlantType.valueOf(plant.getName());
-                    plants.put(type, plant);
-                }
+            if (inputStream == null) {
+                System.err.println("خطا: فایل plants.json در پوشه resources پیدا نشد!");
+                return;
             }
 
-        } catch (IOException e) {
+            try (Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+
+                Gson gson = new Gson();
+
+                PlantData[] plants = gson.fromJson(reader, PlantData[].class);
+
+                System.out.println(plants.length);
+                if (plants != null) {
+                    for (PlantData plant : plants) {
+                        PlantType type = PlantType.valueOf(plant.getName());
+                        Data.getPlants().put(type, plant);
+                    }
+                    System.out.println("دیتای گیاهان با موفقیت لود شد! تعداد: " + plants.length);
+                } else {
+                    System.out.println("فایل plants.json خالی است یا درست خوانده نشد.");
+                    System.out.println(plants.length);
+                }
+
+            }
+        } catch (Exception e) {
+            System.err.println("یک مشکل غیرمنتظره در زمان خواندن فایل گیاهان رخ داد:");
             e.printStackTrace();
-            System.err.println("Something went wrong while reading plants data file. \n " + e.getMessage());
         }
     }
 

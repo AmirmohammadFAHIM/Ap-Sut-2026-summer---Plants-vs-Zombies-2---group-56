@@ -17,8 +17,8 @@ public class SunBuilder {
             cooldownTillNextSun = Math.max(6 + 0.05f * timePassed , 12);
             Sun product = drop();
             game.getSuns().add(product);
-            String type = product.getPrice() == 100 ? "Radio Active" : product.getPrice() == 50 ?
-                    "Special" : "Normal";
+            String type = product.getPrice() == 100 ? "Special" : product.getPrice() == 50 ?
+                    "Big" : product.isRadioActive() ? "Radio Active" : "Normal";
             return new Result(true , "Sun " + type + " is dropping at ("
                     + product.getTileIndex() + " , " + product.getLine() + ")" , null);
         }else{

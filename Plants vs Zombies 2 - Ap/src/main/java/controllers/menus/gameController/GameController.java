@@ -315,7 +315,8 @@ public class GameController implements Controller , Menu {
         // 2. Position (tile position)
         int col = zombie.getTileIndex();
         int row = zombie.getRow();
-        sb.append("  position: (").append(row).append(", ").append(col).append(")");
+        sb.append("  position: (").append(row).append(", ").append(col).append(")\n");
+        sb.append("x : ").append(zombie.getX()).append(" , y : ").append(zombie.getY()).append("\n");
 
         // 3. Health
         sb.append("  health: ").append(zombie.getHp()).append("/").append(zombie.getMaxHp());
@@ -381,6 +382,19 @@ public class GameController implements Controller , Menu {
         for (Bullet bullet : game.getBullets()){
             sb.append("=====\n").append("type : " + bullet.getType()).append("\n")
                     .append("location " + "(" + bullet.getX() + "," + bullet.getY() + ")" + "\n");
+        }
+        return  sb.toString();
+    }
+
+    public String showSuns(){
+        if(game.getSuns().isEmpty()){
+            return "No suns in the game.";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Sun sun : game.getSuns()){
+            sb.append(" price : " + sun.getPrice()).append("\n")
+                    .append("remainingTime : " + sun.getRemainingTime()).append("\n")
+                    .append(" is radio active ? " + sun.isRadioActive() ).append("\n");
         }
         return  sb.toString();
     }

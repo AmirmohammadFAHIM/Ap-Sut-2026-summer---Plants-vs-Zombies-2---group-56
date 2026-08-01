@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class Bullet {
+public class Bullet implements Cloneable {
     private BulletType type;
     private float velocityX;
     private float velocityY;
@@ -289,13 +289,23 @@ public class Bullet {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Object o = super.clone();
-        Bullet clone = new Bullet(this.x , this.y , this.type);
-        clone.setVelocityX(this.velocityX);
-        clone.setVelocityY(this.velocityY);
-        clone.setDestinationX(this.destinationX);
-        clone.setDestinationY(this.destinationY);
-        clone.setDamage(this.damage);
+        Bullet clone = (Bullet) super.clone();
+
+        if (this.tags != null) {
+            clone.tags = new ArrayList<>(this.tags);
+        } else {
+            clone.tags = new ArrayList<>();
+        }
+
+        clone.width = this.width;
+        clone.height = this.height;
+        clone.AoEDamage = this.AoEDamage;
+        clone.pierce = this.pierce;
+        clone.grounded = this.grounded;
+        clone.active = this.active;
+        clone.poisonDamage = this.poisonDamage;
+        clone.toLockIn = this.toLockIn;
+
         return clone;
     }
     public boolean overlaps(Tile tile){

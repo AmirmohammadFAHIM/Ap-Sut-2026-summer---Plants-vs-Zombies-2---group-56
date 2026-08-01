@@ -26,7 +26,7 @@ public class Shoot implements Skill {
         try {
             shoot(shooter , data, game);
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("man kharam");
         }
     }
 

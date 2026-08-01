@@ -145,8 +145,18 @@ public class Plant extends Entity {
         if(t <= 0){
             t = ActionInterval;
            if(Trap(game)) {
-               if(skillObserver != null && skillObserver.observe(this , game)){
-                   for (Skill x : baseSkill) x.do_skill(this , game);
+               System.out.println("here nigger");
+               if(skillObserver != null) {
+                   if(skillObserver.observe(this , game)){
+                       for (Skill skill : baseSkill) {
+                           skill.do_skill(this ,game);
+                       }
+                   }
+               }
+               else {
+                   for (Skill skill : baseSkill) {
+                       skill.do_skill(this ,game);
+                   }
                }
                if(tags.contains(PlantTags.ONCE_USAGE)){
                    dispose(game);

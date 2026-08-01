@@ -3,10 +3,7 @@ package models.games;
 import controllers.datacontroller.SeedPackage;
 import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
-import models.entity.Plant;
-import models.entity.PlantTags;
-import models.entity.Sun;
-import models.entity.Zombie;
+import models.entity.*;
 import models.factory.ZombieFactory;
 import models.factory.builder.PlantType;
 import models.gamePanes.Field;
@@ -15,7 +12,7 @@ import models.gamePanes.Wave;
 import models.utils.Result;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Iterator;
 
 public class NormalGame extends BaseGame{
 
@@ -58,20 +55,27 @@ public class NormalGame extends BaseGame{
             } catch (Exception e){
                 lastCost = baseCost;
             }
+            wave.setId(i + 1);
             wave.setCost(lastCost * 1.25f);
             wave.initWave(zombies);
             waves.add(wave);
         }
 
         Wave finalWave = new Wave();
+        finalWave.setId(wavesCount);
         finalWave.setCost(waves.getLast().getCost() * 2);
         finalWave.initWave(zombies);
     }
 
-    public void updateSuns(float delta){
-        for (Sun sun : suns){
-            if(sun.getProducer() == null) sun.setRemainingTime(sun.getRemainingTime() - delta);
+
+    @Override
+    public String playGame(float delta) {
+        Iterator<Bullet> iterator = bullets.iterator();
+        while (iterator.hasNext()){
+            Bullet bullet = iterator.next();
+            bullet.run(delta , this);
         }
+        return super.playGame(delta);
     }
 
     @Override

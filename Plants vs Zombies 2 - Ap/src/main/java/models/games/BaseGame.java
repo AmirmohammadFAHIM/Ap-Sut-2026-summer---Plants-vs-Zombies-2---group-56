@@ -25,7 +25,7 @@ public class BaseGame implements Game {
     protected PlantSelection selection =  new PlantSelection();
     protected int sunCount = 0;
     protected int plantFoodsCount = 0;
-    GridController gridController;
+    GridController gridController = new  GridController();
     protected boolean day = true;
 
     public int getPlantFoodsCount() {
@@ -127,7 +127,7 @@ public class BaseGame implements Game {
             if(sunlight != null){
                 output.append(sunlight.message());
             }
-            updatePlants(delta);
+            updateZombies(delta);
             updatePlants(delta);
             updateScene(delta);
             Result result = attack(delta);
@@ -158,6 +158,9 @@ public class BaseGame implements Game {
 
     }
 
+
+
+
     protected void pickSuns(){
        ArrayList<Sun> deads = new ArrayList<>();
        for (Sun x : suns){
@@ -170,9 +173,15 @@ public class BaseGame implements Game {
 
     @Override
     public void updatePlants(float delta) {
+        System.out.println(plants_inField.size());
         for (Iterator<Plant> iterator = plants_inField.iterator(); iterator.hasNext(); ) {
             Plant p = iterator.next();
+            System.out.println(p.getType() + " is fighting");
             p.update(delta, this);
+            System.out.println("remainig to do the skill : " + p.t);
+            if(p.getHp() <= 0){
+                p.dispose(this);
+            }
         }
     }
 
@@ -258,12 +267,12 @@ public class BaseGame implements Game {
                case BigWaveBeach -> new Water(this);
                default -> new GraveSpawner(this);
             };*/
-           return new Result(true , setTheWaveZombies() , null);
+           return new Result(true , setTheWaveZombies(waveID == waves.size()) , null);
         }
         return new  Result(false, null,null);
     }
 
-    protected String setTheWaveZombies() {
+    protected String setTheWaveZombies(boolean last) {
         StringBuilder output = new StringBuilder();
         int line = 0;
         for (Zombie z : zombies) {
@@ -274,6 +283,10 @@ public class BaseGame implements Game {
             line++;
             output.append("Zombie spawned at line " + line + " , watch out human!\n");
         }
+        String waveFlag = "wave " + waveID + " is approaching ... ";
+        String lastWave = "final Wave is coming , be ready to be eaten!!! ar ara rararararara";
+        if(!last) output.append(waveFlag);
+        else output.append(lastWave);
         return output.toString();
     }
 

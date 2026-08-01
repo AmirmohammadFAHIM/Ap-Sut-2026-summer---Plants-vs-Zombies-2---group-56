@@ -100,7 +100,7 @@ public class PlantBuilder {
 
     public float  upgradedCost(PlantType plantType , int level){
         float cost = Data.getPlants().get(plantType).getCost();
-        for (int i = 2; i <= cost ; i++) {
+        for (int i = 2; i <= level ; i++) {
             String effect = Data.getPlants().get(plantType).getUpgrades().get(i).getEffect();
             cost += effect.matches(this.cost) ?  cost(effect) : 0;
         }

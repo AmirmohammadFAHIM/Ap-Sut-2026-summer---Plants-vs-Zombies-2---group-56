@@ -22,7 +22,7 @@ import java.util.*;
 public class BaseGame implements Game {
     public enum GameState{STARTING , PLAYING , PAUSE , END}
     protected GameState state =  GameState.STARTING;
-    protected PlantSelection selection;
+    protected PlantSelection selection =  new PlantSelection();
     protected int sunCount = 0;
     protected int plantFoodsCount = 0;
     GridController gridController;
@@ -41,7 +41,7 @@ public class BaseGame implements Game {
     protected Field field ;
     protected ArrayList<Wave> waves;
     protected ArrayList<Plant> plants_inField;
-    protected LinkedHashMap<PlantType , SeedPackage> available_plants;
+    protected LinkedHashMap<PlantType , SeedPackage> available_plants = new  LinkedHashMap<>();
     protected SunBuilder sunBuilder = new  SunBuilder();
     protected Wave currentWave;
     protected Wave previousWave;
@@ -102,7 +102,7 @@ public class BaseGame implements Game {
 
     @Override
     public boolean startGame(String plantName) {
-        return plantSelection;
+        return available_plants.size() == 8;
     }
 
     protected boolean plantSelection = false;

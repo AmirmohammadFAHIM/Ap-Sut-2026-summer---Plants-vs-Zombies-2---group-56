@@ -16,7 +16,7 @@ public class GameView extends View {
 
     public GameView(Chapters chapter , Level level) {
         this.controller = new GameController( chapter, level);
-        this.menu = (controllers.menus.Menu) this.controller;
+        //this.menu = (controllers.menus.Menu) this.controller;
     }
 
     @Override

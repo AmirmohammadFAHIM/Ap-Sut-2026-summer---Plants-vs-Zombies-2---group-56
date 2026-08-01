@@ -12,6 +12,11 @@ public class Wave {
     private int id;
     private int hardness;
     private float cost;
+    public Wave(){}
+    public Wave(int id, int hardness, float cost){
+        this.id = id;
+        this.hardness = hardness;
+    }
 
     Random rand = new Random();
     public void initWave(ArrayList<Zombie> available){

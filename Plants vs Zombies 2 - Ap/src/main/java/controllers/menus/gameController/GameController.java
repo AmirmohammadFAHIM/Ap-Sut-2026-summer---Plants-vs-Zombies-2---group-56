@@ -245,6 +245,10 @@ public class GameController implements Controller{
     public String addPlant(String name){
         try {
             SeedPackage seedPackage = game.getSelection().selectPlant(name);
+            if(game.getAvailable_plants().containsKey(seedPackage.getPlant())){
+                return "The plant is already selected , can't select twice.";
+            }
+            game.getAvailable_plants().put(seedPackage.getPlant(), seedPackage);
             return "added plant " + seedPackage.getPlant();
         } catch (RuntimeException e) {
             return "Plant not found.";

@@ -7,6 +7,7 @@ import models.entity.Plant;
 import models.entity.PlantTags;
 import models.entity.Sun;
 import models.entity.Zombie;
+import models.factory.ZombieFactory;
 import models.factory.builder.PlantType;
 import models.gamePanes.Field;
 import models.gamePanes.Tile;
@@ -14,6 +15,7 @@ import models.gamePanes.Wave;
 import models.utils.Result;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class NormalGame extends BaseGame{
 
@@ -28,8 +30,19 @@ public class NormalGame extends BaseGame{
                         " )" + " , type : " + tile.getTileType());
             }
         }
-        initWaves(level);
+        //initWaves(level);
+        initTestWave();
 
+    }
+
+
+    private void initTestWave(){
+        waves = new ArrayList<>();
+        Wave wave = new Wave(1,200,300);
+
+        for (int i = 0; i < 7; i++) {
+            wave.getZombies().add(ZombieFactory.createZombie("normal"));
+        }
     }
 
     private void initWaves(Level level){

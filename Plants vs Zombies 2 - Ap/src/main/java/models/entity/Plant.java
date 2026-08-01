@@ -20,14 +20,14 @@ public class Plant extends Entity {
     private PlantCategory category;
     private PlantType type;
     private ArrayList<PlantTags> tags;
-    private ArrayList<Skill> baseSkill;
-    private ArrayList<Skill> plantfoodSkill;
+    private ArrayList<Skill> baseSkill = new ArrayList<>();
+    private ArrayList<Skill> plantfoodSkill = new ArrayList<>();
     private boolean frozen = false;
     private boolean cat = false;
     public boolean onLilyPad = false;
-    private float lifeTime;
+    private float lifeTime = -5;
     private int freezeLevel = 0;
-    private ArrayList<PlantArmor> armor;
+    private ArrayList<PlantArmor> armor =  new ArrayList<>();
     private Observer skillObserver;
 
     public ArrayList<PlantArmor> getArmor() {
@@ -145,7 +145,7 @@ public class Plant extends Entity {
         if(t <= 0){
             t = ActionInterval;
            if(Trap(game)) {
-               if(skillObserver.observe(this , game)){
+               if(skillObserver != null && skillObserver.observe(this , game)){
                    for (Skill x : baseSkill) x.do_skill(this , game);
                }
                if(tags.contains(PlantTags.ONCE_USAGE)){

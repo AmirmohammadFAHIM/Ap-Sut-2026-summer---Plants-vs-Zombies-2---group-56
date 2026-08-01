@@ -117,7 +117,7 @@ public class GameView extends View {
             System.out.println(controller.cheat("remove-cooldown"));
         } else if (cheatAddFoodMatcher.matches()) {
             System.out.println(controller.cheat("add-plant-food"));
-        } else if (input.matches("$cheat\\s+end^")){
+        } else if (input.matches("^cheat\\s+end$")){
             System.out.println(controller.cheat("end"));
         } else if (showMapMatcher.matches()) {
             // controller.showMap();
@@ -129,14 +129,16 @@ public class GameView extends View {
             int y = Integer.parseInt(showTileStatMatcher.group("y"));
             System.out.println(controller.tileStatus(x, y));
         } else if (zombiesInfoMatcher.matches()) {
-            // controller.showZombiesInfo();
-            System.out.println("Displaying zombies info...");
+            System.out.println(controller.showAllZombies());
         } else if (cheatSpawnZombieMatcher.matches()) {
             String type = cheatSpawnZombieMatcher.group("type");
             int x = Integer.parseInt(cheatSpawnZombieMatcher.group("x"));
             int y = Integer.parseInt(cheatSpawnZombieMatcher.group("y"));
             // controller.spawnZombie(type, x, y);
             System.out.println("Spawning " + type + " at (" + x + ", " + y + ")");
+        }
+        else if(input.matches("^show\\s+plants\\s+in\\s+field$")){
+            System.out.println(controller.showPlants());
         } else {
             System.out.println("Invalid command in Game Menu!");
         }

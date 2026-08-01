@@ -39,15 +39,15 @@ public class BaseGame implements Game {
 
 
     protected Field field ;
-    protected ArrayList<Wave> waves;
-    protected ArrayList<Plant> plants_inField;
+    protected ArrayList<Wave> waves = new ArrayList<>();
+    protected ArrayList<Plant> plants_inField = new  ArrayList<>();
     protected LinkedHashMap<PlantType , SeedPackage> available_plants = new  LinkedHashMap<>();
     protected SunBuilder sunBuilder = new  SunBuilder();
     protected Wave currentWave;
     protected Wave previousWave;
-    protected ArrayList<Zombie> zombies; ///combination of current wave and next wave
-    protected ArrayList<Bullet>  bullets;
-    protected ArrayList<Sun> suns;
+    protected ArrayList<Zombie> zombies = new ArrayList<>(); ///combination of current wave and next wave
+    protected ArrayList<Bullet>  bullets =  new ArrayList<>();
+    protected ArrayList<Sun> suns =  new ArrayList<>();
     protected GameCommands StartGameCommand;
     protected ChapterSpecialEvent event;
     protected PlantFactory plantFactory = new PlantFactory();
@@ -102,7 +102,7 @@ public class BaseGame implements Game {
 
     @Override
     public boolean startGame(String plantName) {
-        return available_plants.size() == 8;
+        return available_plants.size() == 5;
     }
 
     protected boolean plantSelection = false;
@@ -114,9 +114,10 @@ public class BaseGame implements Game {
     public String playGame(float delta) {
         StringBuilder output = new StringBuilder();
             Result sunlight = sunBuilder.sunLight(delta , this);
-            for (Sun sun : suns){
-                sun.land(delta , this);
-            }
+        for (Iterator<Sun> iterator = suns.iterator(); iterator.hasNext(); ) {
+            Sun sun = iterator.next();
+            sun.land(delta, this);
+        }
             for (SeedPackage x : available_plants.values()){
                 x.update(delta);
             }
@@ -131,7 +132,7 @@ public class BaseGame implements Game {
                 output.append(result.message());
             }
             if(event!=null){
-                event.run(this , delta);
+               // event.run(this , delta);
             }
 
         Iterator<Plant> iterator = plants_inField.iterator();
@@ -154,7 +155,8 @@ public class BaseGame implements Game {
 
     @Override
     public void updatePlants(float delta) {
-        for (Plant p : plants_inField) {
+        for (Iterator<Plant> iterator = plants_inField.iterator(); iterator.hasNext(); ) {
+            Plant p = iterator.next();
             p.update(delta, this);
         }
     }
@@ -192,45 +194,11 @@ public class BaseGame implements Game {
         field.updateScene(delta , this);
     }
 
-
-
     @Override
     public String plant(String plantName, int x, int y) {
-        String name = plantName.replaceAll(" ", "_").toUpperCase();
-        Result findPlant = plantAvailable(name);
-        if (!findPlant.success()) return findPlant.message();
-        Plant newPlant = plantFactory.CreatePlant(findPlant.plantType());
-        if (isEmpty(newPlant.getTags().contains(PlantTags.WATER), x, y)) {
-            return "The coordination is not empty or plantable.";
-        }
-        plants_inField.add(newPlant);
-        Tile tile = field.getTiles().get(y).get(x);
-        if (plantName.equals("LILY_PAD")) {
-            tile.setPlantable(true);
-        } else {
-            tile.setEmpty(true);
-        }
-        this.sunCount -= (int) available_plants.get(findPlant.plantType()).getCost();
-        return "New plant : " + findPlant.plantType().name() + " planted successfully at coordination : ( " + x + "," + y + ")";
+        return "";
     }
 
-    private Result plantAvailable(String plantName) {
-        try {
-            PlantType type = PlantType.valueOf(plantName.toUpperCase());
-            if (!available_plants.containsKey(type)) {
-                return new Result(false, "The plant doesn't exist on the available plants.", null);
-            }
-            return new Result(true, null, type);
-        } catch (IllegalArgumentException e) {
-            return new Result(false, "The plant doesn't exist on the available plants.", null);
-        }
-    }
-
-    private boolean isEmpty(boolean waterPlant, int x, int y) {
-        Tile toPlantOn = field.getTiles().get(x).get(y);
-        boolean water = toPlantOn.isWater() || !waterPlant;
-        return toPlantOn.isEmpty() && toPlantOn.isPlantable() && water;
-    }
 
     @Override
     public String pluck(int x, int y) {
@@ -261,7 +229,7 @@ public class BaseGame implements Game {
     protected int waveID = 0;
     protected Result attack(float delta) {
         if(currentWave == null || currentWave.isFinished()){
-            if(currentWave == waves.getLast()){
+            if(currentWave!= null && currentWave == waves.getLast()){
                 won = true;
                 return new Result(true , "Won" , null);
             }
@@ -269,12 +237,12 @@ public class BaseGame implements Game {
             currentWave = waves.get(waveID);
             zombies.addAll(currentWave.getZombies());
             waveID += 1;
-           event = switch (App.getCurrentuser().getChapter()){
+          /* event = switch (App.getCurrentuser().getChapter()){
                case AncientEgypt -> new Tornado(this);
                case FrozenCaves -> new IcyWind(this);
                case BigWaveBeach -> new Water(this);
                default -> new GraveSpawner(this);
-            };
+            };*/
            return new Result(true , setTheWaveZombies() , null);
         }
         return new  Result(false, null,null);

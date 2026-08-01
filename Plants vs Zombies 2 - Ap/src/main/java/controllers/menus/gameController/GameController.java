@@ -96,6 +96,7 @@ public class GameController implements Controller{
             user.setChapter(newChapter);
         }
 
+        Data.saveUser();
         App.setScreen(new PlayView());
     }
 
@@ -162,6 +163,7 @@ public class GameController implements Controller{
     }
 
     public String cheat(String content){
+        String output = null;
         switch (content){
             case "remove-cooldown":
                 removeCooldown();
@@ -174,10 +176,10 @@ public class GameController implements Controller{
             case "add-sun":
                 break;
             case "end":
-                gameEndCheat();
+                output = gameEndCheat();
                 break;
         }
-        return "Oh ma man , cheatttt , for real you nigga??? so bad , so bad , ain't tough ):";
+        return "Oh ma man , cheatttt , for real you nigga??? so bad , so bad , ain't tough ):\n" + output;
     }
 
     private void removeCooldown(){
@@ -359,5 +361,16 @@ public class GameController implements Controller{
         }
 
         return sb.toString();
+    }
+
+
+    public String showPlants(){
+        StringBuilder sb = new StringBuilder();
+        for (Plant x : game.getPlants_inField()){
+            sb.append("=====\n").append("type : " + x.getType()).append("\n")
+                    .append("hp : " + x.getHp()).append("\n")
+                    .append("location : x = " + x.getTileIndex() + " , y = " + x.getLine());
+        }
+        return  sb.toString();
     }
 }

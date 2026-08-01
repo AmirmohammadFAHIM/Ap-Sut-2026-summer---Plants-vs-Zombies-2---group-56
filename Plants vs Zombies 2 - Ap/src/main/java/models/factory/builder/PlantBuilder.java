@@ -26,6 +26,8 @@ public class PlantBuilder {
         plant.setHp(upgradedHP(plantType , level));
         plant.setDamage(upgradedDamage(plantType , level));
         plant.setActionInterval(upgradedSpeed(plantType , level));
+        plant.setTags(Data.getPlants().get(plantType).getTags());
+        explodeOnFinish();
         plantType.allocateSkill(plant);
         return plant;
     }
@@ -95,6 +97,7 @@ public class PlantBuilder {
                 hp += hp(effect);
             }
         }
+        System.out.println("upgradedHP: " + hp);
         return hp;
     }
 

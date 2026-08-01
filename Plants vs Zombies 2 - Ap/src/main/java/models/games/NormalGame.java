@@ -30,8 +30,8 @@ public class NormalGame extends BaseGame{
                         " )" + " , type : " + tile.getTileType());
             }
         }
-        //initWaves(level);
-        initTestWave();
+        initWaves(level);
+        //initTestWave();
 
     }
 
@@ -43,12 +43,13 @@ public class NormalGame extends BaseGame{
         for (int i = 0; i < 7; i++) {
             wave.getZombies().add(ZombieFactory.createZombie("normal"));
         }
+        waves.add(wave);
     }
 
     private void initWaves(Level level){
         int wavesCount = level.getWaves();
         float baseCost = level.getBaseHardness();
-        ArrayList<Zombie>  zombies = new ArrayList<>();///filtered zombies for this level
+        ArrayList<String>  zombies = level.getAllowedZombies();///filtered zombies for this level
         for (int i = 0; i < wavesCount - 1; i++) {
             Wave wave = new Wave();
             float lastCost ;
@@ -77,16 +78,31 @@ public class NormalGame extends BaseGame{
     public String plant(String plantName, int x, int y) {
         String name = plantName.replaceAll(" " , "_").toUpperCase();
         Result findPlant = plantAvailable(name);
-        if(!findPlant.success()) return findPlant.message();
-        Plant newPlant = plantFactory.CreatePlant(findPlant.plantType());
-        if(isEmpty(newPlant.getTags().contains(PlantTags.WATER) ,x, y)) return "The coordination is not empty or plantable.";
+        if(!findPlant.success()){
+            return findPlant.message();
+        }
+        try {
+            if(available_plants.get(findPlant.plantType()).getCost() > sunCount){
+                return "I hoped you wanna talk about business and " +
+                        "you can't even effort a fuckin plant?";
+            }
+        }catch (Exception e){
+            return "This plant , you haven't selected!\n - Yoda";
+        }
+
+            Plant newPlant = plantFactory.CreatePlant(findPlant.plantType());
+        if(!isEmpty(newPlant.getTags().contains(PlantTags.WATER) ,x, y)) {
+            return "The coordination is not empty or plantable.";
+        }
         plants_inField.add(newPlant);
         Tile tile = field.getTiles().get(y).get(x);
         if(plantName.equals("LILY_PAD")){
             tile.setPlantable(true);
         } else {
-            tile.setEmpty(true);
+            tile.setEmpty(false);
         }
+        newPlant.setLine(y);
+        newPlant.setTileIndex(x);
         this.sunCount -= (int) available_plants.get(findPlant.plantType()).getCost();
         return "New plant : " + findPlant.plantType().name() + " planted successfully at coordination :" +
                 " ( " + x + "," + y + ")";
@@ -126,16 +142,6 @@ public class NormalGame extends BaseGame{
         return "Bro don't pluck the plants ):";
     }
 
-
-    @Override
-    public Plant findByCoordinates(int x, int y) {
-        for (Plant p : this.plants_inField){
-            if(p.getLine() == y && p.getTileIndex() == x){
-                return p;
-            }
-        }
-        return null;
-    }
 
     @Override
     public String add(String name) {

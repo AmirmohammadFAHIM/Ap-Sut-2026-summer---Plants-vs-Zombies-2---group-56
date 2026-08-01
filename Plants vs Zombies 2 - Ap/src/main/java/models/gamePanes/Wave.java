@@ -1,6 +1,7 @@
 package models.gamePanes;
 
 import models.entity.Zombie;
+import models.factory.ZombieFactory;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,10 +20,10 @@ public class Wave {
     }
 
     Random rand = new Random();
-    public void initWave(ArrayList<Zombie> available){
+    public void initWave(ArrayList<String> available){
         if(cost <= 0) return;
         int index = rand.nextInt(available.size());
-        zombies.add(available.get(index));
+        zombies.add(ZombieFactory.createZombie(available.get(index)));
         zombieCount++;
         zombiesHP += zombies.getLast().getHp();
         cost -= zombies.getLast().getCost();

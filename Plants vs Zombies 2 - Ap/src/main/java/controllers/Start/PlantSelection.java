@@ -33,13 +33,12 @@ public class PlantSelection {
                 return null;
             }
 
-            System.out.println("Kobe");
+
             int level = App.getCurrentuser().getLevels().get(plantType);
-            System.out.println("level");
             float recharge = updates.upgradedCooldown(plantType , level);
-            System.out.println("recharge");
+
             float cost =  updates.upgradedCost(plantType , level);
-            System.out.println("cost");
+
             return new SeedPackage(plantType ,recharge , cost );
         }catch (Exception e){
             return null;

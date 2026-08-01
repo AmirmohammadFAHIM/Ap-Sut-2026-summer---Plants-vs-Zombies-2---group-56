@@ -19,8 +19,9 @@ public class Field {
 
     public Field initField(Chapters chapter , int level){
         for (int i = 0; i < 5; i++) {
-            tiles.add(new ArrayList<Tile>());
+            tiles.add(new ArrayList<Tile>(9));
         }
+        System.out.println("rows are initialized , rows count : " + tiles.size());
             initFirstTwoColumns(chapter);
             int specialTiles = 3 * level;
             initSpecials(chapter ,  specialTiles);
@@ -45,6 +46,11 @@ public class Field {
                         this.tiles.get(j).add(new Tile(type , j , i));
                     }
                 }
+        for (int i = 2; i < 9; i++) {
+            for (int j = 0; j < 5; j++) {
+                tiles.get(j).add(new Tile(TileType.EGYPTIAN_TILE, j , i));
+            }
+        }
             }
 
             Random rand = new Random();
@@ -53,8 +59,10 @@ public class Field {
                     int row  = rand.nextInt(5);
                     int col = rand.nextInt(9);
                     int tile = rand.nextInt(chapter.getSpecialTiles().size());
-                    if(tiles.get(row).get(col) == null){
-                        tiles.get(row).add(col , tiles.get(row).get(col));
+                    TileType specialTile = chapter.getSpecialTiles().get(tile) ;
+                //System.out.println("row " + row + " col " + col);
+                    if(col >= 2 && tiles.get(row).get(col).getTileType() == TileType.EGYPTIAN_TILE){
+                        tiles.get(row).get(col).setTileType(specialTile);
                         i--;
                     }
                     initSpecials(chapter, i);

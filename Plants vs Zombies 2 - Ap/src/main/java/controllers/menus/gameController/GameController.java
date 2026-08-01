@@ -38,7 +38,7 @@ public class GameController implements Controller{
             case "love your plants" -> new LoveYourPlants();
             default -> new NormalGame();
         };
-        game.initGame(chapter , level.getId());
+        game.initGame(chapter , level);
     }
 
     public String plant(String name , int x , int y){

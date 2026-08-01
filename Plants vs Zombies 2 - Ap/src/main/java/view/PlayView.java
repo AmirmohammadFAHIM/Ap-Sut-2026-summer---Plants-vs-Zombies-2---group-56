@@ -34,7 +34,11 @@ public class PlayView extends View {
             }
 
             if (selectedChapter != null) {
-                System.out.println(((PlayMenu) menu).changeChapter(selectedChapter));
+                try {
+                    System.out.println(((PlayMenu) menu).changeChapter(selectedChapter));
+                }catch (Exception e){
+                    System.err.println("Error: Chapter not found! Available chapters: AncientEgypt, FrozenCaves, BigWaveBeach, DarkAge");
+                }
             } else {
                 System.out.println("Error: Chapter not found! Available chapters: AncientEgypt, FrozenCaves, BigWaveBeach, DarkAge");
             }

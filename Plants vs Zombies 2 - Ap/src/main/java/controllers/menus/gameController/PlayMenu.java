@@ -54,12 +54,12 @@ public class PlayMenu implements Menu {
             int levelId = level.getId();
             boolean unlocked = App.getCurrentuser().getLevelsPassed() >= (levelId - 1);
 
-            output.append("══════════════ LEVEL ").append(levelId).append(" : ").append(unlocked ? "Unlocked" : "Locked");
+            output.append("═════════════════════════ LEVEL ").append(levelId).append(" : ").append(unlocked ? "Unlocked" : "Locked");
 
             if (levelId == App.getCurrentuser().getLevelId() && chapter == App.getCurrentuser().getChapter()) {
                 output.append(" (You are here now)");
             }
-            output.append(" ══════════════\n");
+            output.append(" ═════════════════════════\n");
         }
 
         return "Welcome to " + chapter.name() + "\n" + output.toString();

@@ -1,11 +1,12 @@
 package models.games;
 
 import models.GameAdventure.Chapters;
+import models.GameAdventure.levels.Level;
 import models.utils.Result;
 
 public interface Game {
 
-    public void initGame(Chapters chapter , int level);
+    public void initGame(Chapters chapter , Level level);
     public boolean startGame(String input);
     public String playGame(float delta);
     public void updatePlants(float delta);

@@ -2,6 +2,7 @@ package models.games;
 
 import controllers.datacontroller.SeedPackage;
 import models.GameAdventure.Chapters;
+import models.GameAdventure.levels.Level;
 import models.entity.Plant;
 import models.entity.PlantTags;
 import models.entity.Sun;
@@ -17,19 +18,32 @@ import java.util.ArrayList;
 public class NormalGame extends BaseGame{
 
     @Override
-    public void initGame(Chapters chapter , int level) {
-        this.field = new Field().initField(chapter , level);
-        initWaves();
+    public void initGame(Chapters chapter , Level level) {
+        waves = new  ArrayList<>();
+        this.field = new Field().initField(chapter , level.getId());
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 9; j++) {
+                Tile tile = field.getTileByCoordinats(j , i);
+                System.out.println("coordinates (" + tile.getCol()+ ", " + tile.getLine() +
+                        " )" + " , type : " + tile.getTileType());
+            }
+        }
+        initWaves(level);
 
     }
 
-    private void initWaves(){
-        int wavesCount = 0; ///get it from the file
-        float baseCost = 0;///get it from the file
+    private void initWaves(Level level){
+        int wavesCount = level.getWaves();
+        float baseCost = level.getBaseHardness();
         ArrayList<Zombie>  zombies = new ArrayList<>();///filtered zombies for this level
         for (int i = 0; i < wavesCount - 1; i++) {
             Wave wave = new Wave();
-            float lastCost = waves.getLast() == null ? baseCost : waves.getLast().getCost();
+            float lastCost ;
+            try {
+                lastCost = waves.getLast() == null ? baseCost : waves.getLast().getCost();
+            } catch (Exception e){
+                lastCost = baseCost;
+            }
             wave.setCost(lastCost * 1.25f);
             wave.initWave(zombies);
             waves.add(wave);

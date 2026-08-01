@@ -7,6 +7,7 @@ import controllers.observer.WizardObserver;
 import models.App;
 import models.GameAdventure.*;
 //import models.collection.ZombieRegistry;
+import models.GameAdventure.levels.Level;
 import models.entity.*;
 import models.factory.*;
 import models.factory.builder.PlantType;
@@ -95,7 +96,7 @@ public class BaseGame implements Game {
     public void setEvent(ChapterSpecialEvent event) { this.event = event; }
 
     @Override
-    public void initGame(Chapters chapter , int level) {
+    public void initGame(Chapters chapter , Level level) {
 
     }
 

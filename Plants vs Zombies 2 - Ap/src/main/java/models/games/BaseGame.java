@@ -116,7 +116,10 @@ public class BaseGame implements Game {
             Result sunlight = sunBuilder.sunLight(delta , this);
         for (Iterator<Sun> iterator = suns.iterator(); iterator.hasNext(); ) {
             Sun sun = iterator.next();
-            sun.land(delta, this);
+            String sunLanding = sun.land(delta, this);
+            if(sunLanding != null){
+                output.append(sunLanding);
+            }
         }
             for (SeedPackage x : available_plants.values()){
                 x.update(delta);
@@ -148,9 +151,21 @@ public class BaseGame implements Game {
                     Tile tile = field.getTileByCoordinats(p.getTileIndex(), p.getLine());
                     tile.setEmpty(true);
                 }
+
             }
+            pickSuns();
             return output.toString();
 
+    }
+
+    protected void pickSuns(){
+       ArrayList<Sun> deads = new ArrayList<>();
+       for (Sun x : suns){
+           if(x.getRemainingTime() <= 0) deads.add(x);
+       }
+       for (Sun x : deads){
+           x.dispose(this);
+       }
     }
 
     @Override

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a75b644f-c754-43e8-9be1-9402df2c84a0" name="Changes" comment="fixed starting game bug">
+    <list default="true" id="a75b644f-c754-43e8-9be1-9402df2c84a0" name="Changes" comment="fixed planting plant">
       <change beforePath="$PROJECT_DIR$/.gradle/9.0.0/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0.0/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0.0/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0.0/fileHashes/fileHashes.bin" afterDir="false" />
@@ -13,38 +13,18 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controllers/Start/PlantSelection.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controllers/Start/PlantSelection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controllers/menus/gameController/GameController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controllers/menus/gameController/GameController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/controllers/menus/gameController/GameController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controllers/menus/gameController/GameController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/entity/Plant.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/entity/Plant.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/gamePanes/Wave.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/gamePanes/Wave.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/BaseGame$1.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/BaseGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/games/BaseGame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/NormalGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/games/NormalGame.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/view/gameView/GameView.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/view/gameView/GameView.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ConveyorBelt.class.uniqueId4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/Deadline.class.uniqueId9" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/GameController$1.class.uniqueId5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/GameController.class.uniqueId11" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/GameView.class.uniqueId3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/LockedPlants$LockType.class.uniqueId1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/LockedPlants.class.uniqueId10" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/LoveYourPlants.class.uniqueId12" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/NightsOps.class.uniqueId7" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/NormalGame.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/PlantWhatYouGet.class.uniqueId2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/SaveOurSeeds.class.uniqueId8" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/TimedWar.class.uniqueId6" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/plants.json" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/plants.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/Start/PlantSelection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/Start/PlantSelection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/controllers/menus/gameController/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/menus/gameController/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/entity/Plant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/entity/Plant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/factory/builder/PlantBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/factory/builder/PlantBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/gamePanes/Wave.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/gamePanes/Wave.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/entity/Sun.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/entity/Sun.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/factory/builder/SunBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/factory/builder/SunBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/gamePanes/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/gamePanes/Tile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/models/games/BaseGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/games/BaseGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/games/NormalGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/games/NormalGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/view/gameView/GameView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/gameView/GameView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plants.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plants.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +124,8 @@
       <workItem from="1785582911426" duration="4019000" />
       <workItem from="1785586990358" duration="264000" />
       <workItem from="1785591172887" duration="3646000" />
-      <workItem from="1785597749583" duration="1930000" />
+      <workItem from="1785597749583" duration="2139000" />
+      <workItem from="1785612452772" duration="4304000" />
     </task>
     <task id="LOCAL-00001" summary="fixed gradle issue">
       <option name="closed" value="true" />
@@ -186,7 +167,15 @@
       <option name="project" value="LOCAL" />
       <updated>1785592501509</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="fixed planting plant">
+      <option name="closed" value="true" />
+      <created>1785599891769</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1785599891769</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -198,6 +187,7 @@
     <MESSAGE value="fixed levels loading bugs" />
     <MESSAGE value="fixed field init bugs" />
     <MESSAGE value="fixed starting game bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed starting game bug" />
+    <MESSAGE value="fixed planting plant" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed planting plant" />
   </component>
 </project>

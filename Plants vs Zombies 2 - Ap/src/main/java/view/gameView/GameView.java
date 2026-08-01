@@ -16,7 +16,7 @@ public class GameView extends View {
 
     public GameView(Chapters chapter , Level level) {
         this.controller = new GameController( chapter, level);
-        //this.menu = (controllers.menus.Menu) this.controller;
+        this.menu =  this.controller;
     }
 
     @Override
@@ -139,7 +139,10 @@ public class GameView extends View {
         }
         else if(input.matches("^show\\s+plants\\s+in\\s+field$")){
             System.out.println(controller.showPlants());
-        } else {
+        }
+        else if(input.matches("^show\\s+bullets$")){
+            System.out.println(controller.showBullets());
+        }else {
             System.out.println("Invalid command in Game Menu!");
         }
     }

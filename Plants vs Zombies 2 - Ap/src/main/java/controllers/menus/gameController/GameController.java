@@ -2,6 +2,7 @@ package controllers.menus.gameController;
 
 import controllers.datacontroller.Data;
 import controllers.datacontroller.SeedPackage;
+import controllers.menus.Menu;
 import models.App;
 import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class GameController implements Controller{
+public class GameController implements Controller , Menu {
     private BaseGame game;
     private Level level;
     private Chapters chapter;
@@ -205,7 +206,7 @@ public class GameController implements Controller{
                 }
 
                 sun.dispose(game);
-                iterator.remove();
+                //iterator.remove();
                 return "Sun collected , you got " + sun.getPrice() + " suns!";
             }
         }
@@ -372,5 +373,20 @@ public class GameController implements Controller{
                     .append("location : x = " + x.getTileIndex() + " , y = " + x.getLine());
         }
         return  sb.toString();
+    }
+
+
+    public String showBullets(){
+        StringBuilder sb = new StringBuilder();
+        for (Bullet bullet : game.getBullets()){
+            sb.append("=====\n").append("type : " + bullet.getType()).append("\n")
+                    .append("location " + "(" + bullet.getX() + "," + bullet.getY() + ")" + "\n");
+        }
+        return  sb.toString();
+    }
+
+    @Override
+    public String ChangeMenu(String menuName) {
+        return "";
     }
 }

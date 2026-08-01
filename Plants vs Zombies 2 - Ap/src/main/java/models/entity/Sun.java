@@ -3,21 +3,16 @@ package models.entity;
 import models.Constants;
 import models.gamePanes.Tile;
 import models.games.BaseGame;
-import models.utils.Result;
 
-public class Sun {
+public class Sun extends Entity{
     Plant producer;
      float velocity = 70f;
-    static float width;
-    static float height;
+    static float width = 50;
+    static float height = 50;
     private int price;
     private boolean radioActive = false;
-    boolean groung = false;
+    boolean ground = false;
     private float remainingTime;
-    private float x;
-    private float y;
-    private int line;
-    private int tileIndex;
     public Sun(){}
     public Sun(int price, float remainingTime, float x, float y) {
         this.price = price;
@@ -35,23 +30,25 @@ public class Sun {
         if(producer != null){
             producer.t = producer.getActionInterval();
         }
-        this.y -= delta * (groung ? Constants.SunDroppingVelocity : 0);
+        if(!ground)
+        {
+            this.y -= delta * Constants.SunDroppingVelocity;
         if(this.y + Sun.height / 2 <= this.line * Tile.getHeight()
-                + Tile.getHeight() / 2  && !groung){
-            groung = true;
+                + Tile.getHeight() / 2 ){
+            ground = true;
             if(radioActive) {
                radioActive = false;
             }
             return "Sun landed at " + this.tileIndex +
                     " , " + this.line;
         }
-        if(groung){
-           if(remainingTime <= 0){
-               game.getSuns().remove(this);
-           }
-           else remainingTime  -= delta;
-        }
         return null;
+        }
+        if(ground){
+            remainingTime  -= delta;
+        }
+        return "sun is waiting in (" + this.tileIndex + " , " + this.line + ")" +
+                "\n time remaining: " + remainingTime ;
     }
 
     public void dispose(BaseGame game){
@@ -105,25 +102,7 @@ public class Sun {
         this.remainingTime = remainingTime;
     }
 
-    public float getX() {
-        return x;
-    }
 
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
-    public int getLine() {
-        return line;
-    }
 
     public void setLine(int line) {
         this.line = line;
@@ -146,28 +125,14 @@ public class Sun {
         this.velocity = velocity;
     }
 
-    public static float getWidth() {
-        return width;
+
+
+    public boolean isGround() {
+        return ground;
     }
 
-    public static void setWidth(float width) {
-        Sun.width = width;
-    }
-
-    public static float getHeight() {
-        return height;
-    }
-
-    public static void setHeight(float height) {
-        Sun.height = height;
-    }
-
-    public boolean isGroung() {
-        return groung;
-    }
-
-    public void setGroung(boolean groung) {
-        this.groung = groung;
+    public void setGround(boolean ground) {
+        this.ground = ground;
     }
 
     public int getTileIndex() {

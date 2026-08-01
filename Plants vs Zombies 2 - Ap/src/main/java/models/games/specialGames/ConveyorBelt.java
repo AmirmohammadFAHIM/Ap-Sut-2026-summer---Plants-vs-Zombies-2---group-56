@@ -13,6 +13,7 @@ public class ConveyorBelt extends NormalGame implements SpecialGame {
 
     public  ConveyorBelt() {
 
+        state = GameState.PLAYING;
     }
 
     @Override

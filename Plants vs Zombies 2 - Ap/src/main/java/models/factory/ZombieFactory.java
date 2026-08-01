@@ -10,12 +10,12 @@ public class ZombieFactory {
 
         // ====== 1. NORMAL ======
         if (type.equals("normal") || type.equals("ZombieDefault")) {
-            return new Zombie(type, type, 190, 100, 0.185f, 100, 32, 95);
+            return new Zombie(type, type, 190, 100, -185f, 100, 32, 95);
         }
 
         // ====== 2. CONEHEAD ======
         if (type.equals("cone") || type.equals("ZombieArmor1")) {
-            Zombie z = new Zombie(type, type, 190, 100, 0.185f, 200, 32, 95);
+            Zombie z = new Zombie(type, type, 190, 100, -185f, 200, 32, 95);
             z.addArmor(ArmorType.CONE.create());
             return z;
         }

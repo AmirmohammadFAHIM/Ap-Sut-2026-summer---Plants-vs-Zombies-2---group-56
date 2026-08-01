@@ -145,7 +145,6 @@ public class Plant extends Entity {
         if(t <= 0){
             t = ActionInterval;
            if(Trap(game)) {
-               System.out.println("here nigger");
                if(skillObserver != null) {
                    if(skillObserver.observe(this , game)){
                        for (Skill skill : baseSkill) {
@@ -201,7 +200,7 @@ public class Plant extends Entity {
             ExplosionData data = new ExplosionData( 3 ,3);
             new Explosive(data).do_skill(this , game);
         }
-        game.getPlants_inField().remove(this);
+        //game.getPlants_inField().remove(this);
 
     }
 

@@ -109,13 +109,11 @@ public class Data {
 
                 PlantData[] plants = gson.fromJson(reader, PlantData[].class);
 
-                System.out.println(plants.length);
                 if (plants != null) {
                     for (PlantData plant : plants) {
                         PlantType type = PlantType.valueOf(plant.getName().toUpperCase());
                         Data.getPlants().put(type, plant);
                     }
-                    System.out.println("دیتای گیاهان با موفقیت لود شد! تعداد: " + plants.length);
                 } else {
                     System.out.println("فایل plants.json خالی است یا درست خوانده نشد.");
                     System.out.println(plants.length);

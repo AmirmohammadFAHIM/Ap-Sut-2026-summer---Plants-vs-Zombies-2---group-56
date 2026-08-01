@@ -6,6 +6,14 @@ public class SeedPackage {
     private PlantType plant;
     private float recharge;
     private float cost;
+    private boolean boost = false;
+
+    public void setBoost(boolean boost) {
+        this.boost = boost;
+    }
+    public boolean getBoost() {
+        return this.boost;
+    }
 
     public float getCost() {
         return cost;

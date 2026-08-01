@@ -74,6 +74,9 @@ public class NormalGame extends BaseGame{
         while (iterator.hasNext()){
             Bullet bullet = iterator.next();
             bullet.run(delta , this);
+            if(bullet.getPierce() <= 0){
+                iterator.remove();
+            }
         }
         return super.playGame(delta);
     }
@@ -156,7 +159,7 @@ public class NormalGame extends BaseGame{
            available_plants.put(seedPackage.getPlant(), seedPackage);
        }
        else {
-           return "Nah bro there ain't no shit like this plant.";
+           return "This plant is not on the list.";
        }
         if(available_plants.size() == 8) {
             plantSelection = true;

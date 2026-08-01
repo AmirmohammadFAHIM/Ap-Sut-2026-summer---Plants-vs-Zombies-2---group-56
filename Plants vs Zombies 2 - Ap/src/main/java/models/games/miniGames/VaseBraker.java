@@ -31,7 +31,7 @@ public class VaseBraker extends BaseGame {
         Iterator<Vase> iterator = vases.iterator();
         while (iterator.hasNext()){
             Vase v =  iterator.next();
-            if(v.line == y && v.line == x){
+            if(v.line == y && v.tileIndex == x){
                 switch (v.type) {
                     case PLANT -> v.breakPlantVase(this, seedPackages);
                     case ZOMBIE -> v.breakZombieVase(this, zombies);

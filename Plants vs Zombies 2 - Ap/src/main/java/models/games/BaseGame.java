@@ -110,23 +110,17 @@ public class BaseGame implements Game {
         return null;
     }
 
+    StringBuilder output = new StringBuilder();
     @Override
     public String playGame(float delta) {
-        StringBuilder output = new StringBuilder();
-            Result sunlight = sunBuilder.sunLight(delta , this);
-        for (Iterator<Sun> iterator = suns.iterator(); iterator.hasNext(); ) {
-            Sun sun = iterator.next();
-            String sunLanding = sun.land(delta, this);
-            if(sunLanding != null){
-                output.append(sunLanding);
-            }
-        }
+        output = new StringBuilder();
+
+
             for (SeedPackage x : available_plants.values()){
                 x.update(delta);
             }
-            if(sunlight != null){
-                output.append(sunlight.message());
-            }
+
+            updateSuns(output , delta);
             updateZombies(delta);
             updatePlants(delta);
             updateScene(delta);
@@ -138,50 +132,51 @@ public class BaseGame implements Game {
                // event.run(this , delta);
             }
 
-        Iterator<Plant> iterator = plants_inField.iterator();
-            while (iterator.hasNext()){
-                Plant p =  (Plant) iterator.next();
-                if(p.getHp() <= 0){
-                    iterator.remove();
-                    output.append("\n").append("Plant ")
-                            .append(p.getType()).append(" died at (")
-                            .append(p.getTileIndex()).append(" , ")
-                            .append(p.getLine()).append(")");
 
-                    Tile tile = field.getTileByCoordinats(p.getTileIndex(), p.getLine());
-                    tile.setEmpty(true);
-                }
-
-            }
-            pickSuns();
             return output.toString();
 
     }
 
 
-
-
-    protected void pickSuns(){
-       ArrayList<Sun> deads = new ArrayList<>();
-       for (Sun x : suns){
-           if(x.getRemainingTime() <= 0) deads.add(x);
-       }
-       for (Sun x : deads){
-           x.dispose(this);
-       }
+    protected void updateSuns(StringBuilder output , float delta){
+        for (Iterator<Sun> iterator = suns.iterator(); iterator.hasNext(); ) {
+            Sun sun = iterator.next();
+            String sunLanding = sun.land(delta, this);
+            if(sunLanding != null){
+                output.append(sunLanding);
+            }
+            if(sun.getRemainingTime() <= 0){
+                sun.dispose(this);
+                iterator.remove();
+            }
+        }
+        Result sunlight = sunBuilder.sunLight(delta , this);
+        if(sunlight != null){
+            output.append(sunlight.message());
+        }
     }
 
+
+
+
     @Override
-    public void updatePlants(float delta) {
-        System.out.println(plants_inField.size());
-        for (Iterator<Plant> iterator = plants_inField.iterator(); iterator.hasNext(); ) {
-            Plant p = iterator.next();
-            System.out.println(p.getType() + " is fighting");
-            p.update(delta, this);
-            System.out.println("remainig to do the skill : " + p.t);
+    public void updatePlants(float delta ) {
+        Iterator<Plant> iterator = plants_inField.iterator();
+        while (iterator.hasNext()){
+            Plant p =  (Plant) iterator.next();
+            p.update(delta,this);
             if(p.getHp() <= 0){
                 p.dispose(this);
+                iterator.remove();
+                output.append("\n").append("Plant ")
+                        .append(p.getType()).append(" died at (")
+                        .append(p.getTileIndex()).append(" , ")
+                        .append(p.getLine()).append(")");
+
+                Tile tile = field.getTileByCoordinats(p.getTileIndex(), p.getLine());
+                tile.setEmpty(true);
             }
+
         }
     }
 

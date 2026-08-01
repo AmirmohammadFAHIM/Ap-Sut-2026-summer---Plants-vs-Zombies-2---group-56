@@ -14,8 +14,8 @@ public class Bullet implements Cloneable {
     private BulletType type;
     private float velocityX;
     private float velocityY;
-    private float width;
-    private float height;
+    private float width = 50;
+    private float height = 50;
     private float destinationX;
     private float destinationY;
     private float damage;
@@ -23,7 +23,7 @@ public class Bullet implements Cloneable {
     private float x;
     private float y;
     private float pierce = 1;
-    private boolean grounded = false;
+    private boolean grounded = true;
     private boolean active;
     private float poisonDamage = Constants.poisonBaseDamage;
     private final ArrayList<BulletType> bowling = new ArrayList<>(Arrays.asList(BulletType.ONION_1,
@@ -32,7 +32,7 @@ public class Bullet implements Cloneable {
 
     /// ------------BOOLEANS------------
     public enum Tag{MAGICAL,ICE,FIRE,POISON,HOMING,AoE}
-    ArrayList<Tag> tags;
+    ArrayList<Tag> tags = new  ArrayList<>();
     private boolean proved = false;
     /// for homing plants_inField of course!
     private Zombie toLockIn;
@@ -81,6 +81,10 @@ public class Bullet implements Cloneable {
     }
 
     public void run(float delta , BaseGame game){
+
+        if(!grounded){
+            velocityY -= Constants.gravity * delta;
+        }
 
         if(pierce <= 0) dispose(game);
         updateLocation(delta);
@@ -313,7 +317,7 @@ public class Bullet implements Cloneable {
         float centreY = this.y + this.height /2 ;
         boolean x = centreX >= tile.getX() && centreX <= tile.getX() + Tile.getWidth();
         boolean y = centreY >= tile.getY() && centreY <= tile.getY() + Tile.getHeight();
-        return x & y;
+        return x && y;
     }
 
     public boolean overlaps(Zombie zombie){
@@ -321,7 +325,7 @@ public class Bullet implements Cloneable {
         float centreY = this.y + this.height /2 ;
         boolean x = centreX >= zombie.getX() && centreX <= zombie.getX() + zombie.getWidth();
         boolean y = centreY >= zombie.getY() && centreY <= zombie.getY() + zombie.getHeight();
-        return x & y;
+        return x && y;
     }
 
     public void setPierce(float pierce) {
@@ -333,5 +337,9 @@ public class Bullet implements Cloneable {
     }
     public void setActive(boolean active){
         this.active = active;
+    }
+
+    public float getPierce() {
+        return pierce;
     }
 }

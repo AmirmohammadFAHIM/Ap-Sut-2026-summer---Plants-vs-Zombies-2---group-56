@@ -1,4 +1,5 @@
 import controllers.datacontroller.Data;
+import controllers.datacontroller.MiniGameLevelManager;
 import models.App;
 import models.GameAdventure.Chapters;
 
@@ -10,6 +11,7 @@ public class Main{
         Data.setUp();
         Data.loadPlantsFromJson();
         Data.loadLevelsFromJson("levels.json");
+        MiniGameLevelManager.loadLevelsFromFile("minigames.json");
         while (App.getScreen() != null) {
             App.getScreen().input();
         }

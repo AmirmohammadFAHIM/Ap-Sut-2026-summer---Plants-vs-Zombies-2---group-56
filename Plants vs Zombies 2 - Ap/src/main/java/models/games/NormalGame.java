@@ -8,6 +8,7 @@ import models.factory.ZombieFactory;
 import models.factory.builder.PlantType;
 import models.gamePanes.Field;
 import models.gamePanes.Tile;
+import models.gamePanes.TileType;
 import models.gamePanes.Wave;
 import models.utils.Result;
 
@@ -33,15 +34,6 @@ public class NormalGame extends BaseGame{
     }
 
 
-    private void initTestWave(){
-        waves = new ArrayList<>();
-        Wave wave = new Wave(1,200,300);
-
-        for (int i = 0; i < 7; i++) {
-            wave.getZombies().add(ZombieFactory.createZombie("normal"));
-        }
-        waves.add(wave);
-    }
 
     private void initWaves(Level level){
         int wavesCount = level.getWaves();
@@ -98,7 +90,7 @@ public class NormalGame extends BaseGame{
         }
 
             Plant newPlant = plantFactory.CreatePlant(findPlant.plantType());
-        if(!isEmpty(newPlant.getTags().contains(PlantTags.WATER) ,x, y)) {
+        if(!isEmpty(newPlant ,x, y)) {
             return "The coordination is not empty or plantable.";
         }
         plants_inField.add(newPlant);
@@ -129,10 +121,25 @@ public class NormalGame extends BaseGame{
 
     }
 
-    protected boolean isEmpty(boolean waterPlant , int x , int y){
+    protected boolean isEmpty(Plant type , int x , int y){
+        boolean waterPlant = type.getTags().contains(PlantTags.WATER);
+        Tile tile = field.getTileByCoordinats(x,y);
+        Plant a = findByCoordinates(x,y);
+        if(a != null && a.getType() == PlantType.PEA_POD &&
+        type.getType() == PlantType.PEA_POD){
+            return true;
+        }
+        else if(type.getType() == PlantType.GRAVE_BUSTER){
+            return tile.getTileType() == TileType.EGYPTIAN_GRAVE ||
+                    tile.getTileType() == TileType.DARK_AGE_GRAVE;
+        }
         Tile toPlantOn = field.getTiles().get(x).get(y);
         boolean water = toPlantOn.isWater() || !waterPlant;
-        return toPlantOn.isEmpty() && toPlantOn.isPlantable() && water;
+
+
+        return toPlantOn.isEmpty() &&
+                (toPlantOn.isPlantable() || type.getArmor().isEmpty()
+                        && type.getType() == PlantType.PUMPKIN ) && water;
     }
 
 

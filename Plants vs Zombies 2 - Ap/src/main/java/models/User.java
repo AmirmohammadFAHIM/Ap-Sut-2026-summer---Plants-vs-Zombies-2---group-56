@@ -75,7 +75,9 @@ public class User implements Serializable, QuestObserver {
         this.levels = new HashMap<>();
 
         this.unlockedPlants = new ArrayList<>(Arrays.asList(PlantType.PEASHOOTER , PlantType.SNOW_PEA,
-                PlantType.REPEATER , PlantType.CHOMPER , PlantType.WALL_NUT));
+                PlantType.REPEATER , PlantType.CHOMPER , PlantType.WALL_NUT,
+                PlantType.SUNFLOWER, PlantType.TWIN_SUNFLOWER ,
+                PlantType.JALAPENO, PlantType.CACTUS));
 
         for (PlantType plant : this.unlockedPlants) {
             this.levels.put(plant, 1);

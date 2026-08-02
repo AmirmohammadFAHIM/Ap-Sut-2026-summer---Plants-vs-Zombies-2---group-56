@@ -23,6 +23,7 @@ public class SunProduce implements Skill {
 
     @Override
     public ArrayList<Zombie> random(Plant plant, BaseGame game, int numbers) {
+        System.out.println(plant.getType() + " has produced sun ..");
         return Skill.super.random(plant, game, numbers);
     }
 

@@ -11,7 +11,6 @@ public class MoveAbility implements Ability {
         PUSH_ICE,
         PUSH_BARREL,
         PULL_PLANT,
-        THROW_OCTOPUS,
         SWAP_ZOMBIE,
         PIANO
     }

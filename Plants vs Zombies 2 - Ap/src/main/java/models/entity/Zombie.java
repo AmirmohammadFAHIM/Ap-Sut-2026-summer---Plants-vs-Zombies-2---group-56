@@ -1,6 +1,7 @@
 package models.entity;
 
 import models.App;
+import models.gamePanes.Tile;
 import models.games.BaseGame;
 import models.entity.ability.Ability;
 import controllers.observer.*;
@@ -12,23 +13,19 @@ public class Zombie extends Entity{
     // ====== CORE ======
     private final String id;
     private final String type;
-    private int hp;
     private final int maxHp;
     private int damage;
     private int cost;
     private float speed;
-    private float x, y;
     private int row;
     private int tileIndex;
+    private Tile currentTile = null;
     private boolean dead;
     private boolean frozen;
     private boolean hypnotized;
+    private boolean inWater;
     private float eatCooldown;
     private float eatTimer = 0;
-
-    // ====== HITBOX ======
-    private int width;
-    private int height;
 
     // ====== ABILITIES ======
     private final List<Ability> abilities = new ArrayList<>();
@@ -114,6 +111,9 @@ public class Zombie extends Entity{
     public void update(float deltaTime, BaseGame game) {
         if (dead) return;
 
+        this.currentTile = game.getField().getTileByCoordinats(this.tileIndex , this.row);
+        this.inWater = currentTile.isWater();
+        this.velocityX = this.speed;
         updateEffects(deltaTime);
 
         if (hasEffect(EffectType.POISONED)) {
@@ -361,7 +361,12 @@ public class Zombie extends Entity{
     public int getTileIndex() { return tileIndex; }
     public void setTileIndex(int tileIndex) { this.tileIndex = tileIndex; }
     public int getCost() { return cost; }
+    //public Tile getCurrentTile() (return this.currentTile );
     public void setCost(int cost) { this.cost = cost; }
+    public boolean isInWater(){
+        return this.inWater;
+    }
+    public void setInWater(boolean inWater){ this.inWater = inWater;}
 
     public List<Effect> getEffects() {
         return Collections.unmodifiableList(effects);
@@ -370,4 +375,8 @@ public class Zombie extends Entity{
     public AllStarObserver getAllStarObserver() { return allStarObserver; }
     public NewspaperObserver getNewspaperObserver() { return newspaperObserver; }
     public PassThroughObserver getPassThroughObserver() { return passThroughObserver; }
+
+    public void setCurrentTile(Tile currentTile) {
+        this.currentTile = currentTile;
+    }
 }

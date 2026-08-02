@@ -422,7 +422,8 @@ public class BaseGame implements Game {
     public void spawn(Zombie source, String spawnType, int count) {
         if (spawnType.equals("imp")) {
             for (int i = 0; i < count; i++) {
-                Zombie imp = ZombieFactory.createZombie("imp" , source.getRow());
+                Zombie imp = ZombieFactory.createZombie("imp");
+                imp.setRow(source.getRow());
                 imp.setPosition(source.getX() + 50, source.getY());
                 zombies.add(imp);
             }

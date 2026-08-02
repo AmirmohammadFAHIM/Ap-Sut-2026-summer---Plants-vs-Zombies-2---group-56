@@ -45,7 +45,8 @@ public class SpawnAbility implements Ability {
         if (healthThreshold > 0) {
             if (triggered) return;
             if ((float) zombie.getHp() / zombie.getMaxHp() <= healthThreshold) {
-                Zombie imp = ZombieFactory.createZombie("imp" , zombie.getRow());
+                Zombie imp = ZombieFactory.createZombie("imp");
+                imp.setRow(zombie.getRow());
                 imp.setTileIndex(2);
                 imp.setX(imp.getTileIndex() * 80 + 100);
                 imp.setY(zombie.getY());
@@ -70,7 +71,8 @@ public class SpawnAbility implements Ability {
             if (triggered) return;
             ExplodeAbility explode = zombie.getAbility(ExplodeAbility.class);
             if (explode != null && explode.isTriggered()) {
-                Zombie explodedDynamite = ZombieFactory.createZombie("normal" , zombie.getRow());
+                Zombie explodedDynamite = ZombieFactory.createZombie("normal");
+                explodedDynamite.setRow(zombie.getRow());
                 explodedDynamite.setSpeed(explodedDynamite.getSpeed() * -1);
                 game.getZombies().add(explodedDynamite);
                 triggered = true;

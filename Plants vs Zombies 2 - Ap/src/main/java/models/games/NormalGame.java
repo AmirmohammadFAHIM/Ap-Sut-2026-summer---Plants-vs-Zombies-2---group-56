@@ -4,7 +4,6 @@ import controllers.datacontroller.SeedPackage;
 import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
 import models.entity.*;
-import models.factory.ZombieFactory;
 import models.factory.builder.PlantType;
 import models.gamePanes.Field;
 import models.gamePanes.Tile;
@@ -185,7 +184,7 @@ public class NormalGame extends BaseGame{
     }
 
     private void mawners(float delta){
-        for (Moaner x : this.field.getMoaners()){
+        for (Mawner x : this.field.getMoaners()){
             String a = x.run(delta , this);
             if(a != null) output.append(a);
         }

@@ -24,12 +24,15 @@ public class Constants {
     public final static float BowlingWallnutVelocity = 200f;
     public final static float MoanerSpeed = 300f;
 
-    public static boolean overlap(Entity a ,Entity b){
-        float cx  =a.getX() + a.getWidth()/2;
-        boolean x = cx > b.getX() && cx <  b.getX() + b.getWidth();
-        float cy  =a.getY() + a.getHeight()/2;
-        boolean y = cy > b.getY() && cy <  b.getY() + b.getHeight();
-        return x && y;
+    public static boolean overlap(Entity entity1, Entity entity2) {
+        if (entity1 == null || entity2 == null) {
+            return false;
+        }
+
+        return (entity1.getX() < entity2.getX() + entity2.getWidth()) &&
+                (entity1.getX() + entity1.getWidth() > entity2.getX()) &&
+                (entity1.getY() < entity2.getY() + entity2.getHeight()) &&
+                (entity1.getY() + entity1.getHeight() > entity2.getY());
     }
 
 }

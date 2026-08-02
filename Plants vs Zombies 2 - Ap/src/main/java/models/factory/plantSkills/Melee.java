@@ -31,6 +31,7 @@ public class Melee implements Skill{
     }
     @Override
     public void do_skill(Plant plant, BaseGame game) {
+        System.out.println(plant.getType() + " is fighting ...");
         switch (attackType){
             case  PUNCH -> punch(plant, game);
             case AoE -> AoE_Punch(plant , game ,edge, punch_numbers);

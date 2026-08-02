@@ -3,7 +3,7 @@ package models.entity;
 import models.Constants;
 import models.games.BaseGame;
 
-public class Moaner extends Entity {
+public class Mawner extends Entity {
 
 
     private boolean on = false;
@@ -26,7 +26,7 @@ public class Moaner extends Entity {
         }
         return null;
     }
-    public Moaner(int line){
+    public Mawner(int line){
         this.line = line;
         this.y = line * height;
     }

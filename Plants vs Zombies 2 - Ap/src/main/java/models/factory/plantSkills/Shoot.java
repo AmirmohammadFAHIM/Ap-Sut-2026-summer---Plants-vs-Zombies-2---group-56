@@ -34,6 +34,7 @@ public class Shoot implements Skill {
 
 
     public void shoot(Plant shooter , ShootingData data , BaseGame game) throws CloneNotSupportedException {
+        System.out.println("bangg bangg bangg .. " + shooter.getType()  + " is shooting ..");
         switch (data.getMood()){
             case OneLine -> OneLineShoot(shooter , data , game);
             case ThreeLine -> ThreeLineShoot(shooter , data , game);

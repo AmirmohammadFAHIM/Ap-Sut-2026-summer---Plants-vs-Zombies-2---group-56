@@ -18,6 +18,7 @@ public class Homing implements Skill{
 
     @Override
     public void do_skill(Plant plant, BaseGame game) {
+        System.out.println("3 .. 2 .. 1 ... locked in on target" );
             switch (type){
                 case RANDOM -> random(plant , game , targetCount);
                 case CLOSEST -> closestZombie(plant, game);

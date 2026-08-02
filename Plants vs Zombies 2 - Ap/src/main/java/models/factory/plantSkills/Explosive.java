@@ -17,6 +17,7 @@ public class Explosive implements Skill{
 
     @Override
     public void do_skill(Plant plant, BaseGame game) {
+        System.out.println("booooom ... " + plant.getType() + " exploded.");
         switch (data.type){
             case ALL -> all(plant, game);
             case AOE -> AoE(plant, game);

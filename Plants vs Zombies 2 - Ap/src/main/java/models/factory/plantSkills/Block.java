@@ -20,6 +20,7 @@ public class Block implements Skill{
     }
     @Override
     public void do_skill(Plant plant, BaseGame game) {
+        System.out.println(plant.getType() + " is blocking ..");
             if(all) all(plant , game);
             else if(plant.getTags().contains(PlantTags.MOVE_ZOMBIES)){
                 if(in) attract(plant, game);

@@ -12,6 +12,7 @@ public class Freeze implements Skill{
    }
     @Override
     public void do_skill(Plant plant, BaseGame game) {
+        System.out.println("phoooooohphhpp ... Freezinggg... It's " + plant.getType());
         switch (type){
             case LINE -> line(plant, game);
             case  TOUCH -> touch(plant, game);

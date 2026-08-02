@@ -24,6 +24,7 @@ public class ExtraHP implements Skill{
     }
     @Override
     public void do_skill(Plant plant, BaseGame game) {
+        System.out.println("giving hp ... ");
             switch (type){
                 case ARMOR -> armor(plant, game);
                 case CLONE -> clone(plant, game);

@@ -166,4 +166,13 @@ public class NormalGame extends BaseGame{
         }
         return "Plant added successfully";
     }
+
+
+    public String nuke(){
+        for (Zombie x : zombies){
+            x.setHp(0);
+            x.setAlive(false);
+        }
+        return "Booooom. zombies got nuked";
+    }
 }

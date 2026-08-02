@@ -145,6 +145,8 @@ public class GameView extends View {
         }
         else if(input.matches("^show\\s+suns$")){
             System.out.println(controller.showSuns());
+        }else if(input.matches("^release\\s+nuke$")){
+            System.out.println(controller.nuke());
         }else {
             System.out.println("Invalid command in Game Menu!");
         }

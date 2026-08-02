@@ -416,6 +416,9 @@ public class GameController implements Controller , Menu {
         return  sb.toString();
     }
 
+    public String nuke(){
+        return ((NormalGame) game).nuke();
+    }
     @Override
     public String ChangeMenu(String menuName) {
         return "";

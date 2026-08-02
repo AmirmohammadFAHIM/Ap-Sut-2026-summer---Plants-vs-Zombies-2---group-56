@@ -22,16 +22,7 @@ public class NightsOps extends NormalGame implements SpecialGame {
     @Override
     public boolean startGame(String plantName) {
         SeedPackage selected = selection.selectPlant(plantName);
-        if(available_plants.containsKey(selected.getPlant())) {
-            return false;
-        }
-        else{
-            if(Data.getPlants().get(selected.getPlant()).getTags().contains(PlantTags.Day)){
-                available_plants.put(selected.getPlant() , selected);
-                /// here you print a warning that this plant gonna be sleeping the whole game
-            }
-            else available_plants.put(selected.getPlant() , selected);
-        }
+
 
         return available_plants.size() == Constants.Plants_count_in_a_game;
     }

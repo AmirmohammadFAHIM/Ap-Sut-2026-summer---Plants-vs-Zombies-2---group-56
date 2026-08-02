@@ -491,5 +491,9 @@ public class BaseGame implements Game {
     public void addSun(int amount) {
         sunCount += amount;
     }
+
+    public boolean isDay() {
+        return day;
+    }
 }
 

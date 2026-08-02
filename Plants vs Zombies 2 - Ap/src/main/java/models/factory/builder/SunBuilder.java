@@ -12,6 +12,9 @@ public class SunBuilder {
     private float cooldownTillNextSun;
 
     public Result sunLight(float delta , BaseGame game) {
+        if(!game.isDay()){
+            return new Result(true , "In the Night , There's no sun" , null);
+        }
         this.timePassed += delta;
         if(cooldownTillNextSun <= 0){
             cooldownTillNextSun = Math.min(6 + 0.05f * timePassed , 12);

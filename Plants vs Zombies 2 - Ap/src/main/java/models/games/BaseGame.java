@@ -237,7 +237,7 @@ public class BaseGame implements Game {
     @Override
     public Result check_endGame() {
         for (Zombie z : zombies) {
-            if(z.getX() <= 0) return new Result(true , "Loss" , null);
+            if(z.getX() <= -50) return new Result(true , "Loss" , null);
         }
         return new  Result(false, null,null);
     }
@@ -256,12 +256,12 @@ public class BaseGame implements Game {
             currentWave = waves.get(waveID);
             zombies.addAll(currentWave.getZombies());
             waveID += 1;
-          /* event = switch (App.getCurrentuser().getChapter()){
+          event = switch (App.getCurrentuser().getChapter()){
                case AncientEgypt -> new Tornado(this);
                case FrozenCaves -> new IcyWind(this);
                case BigWaveBeach -> new Water(this);
                default -> new GraveSpawner(this);
-            };*/
+            };
            return new Result(true , setTheWaveZombies(waveID == waves.size()) , null);
         }
         return new  Result(false, null,null);

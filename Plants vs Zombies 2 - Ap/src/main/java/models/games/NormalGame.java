@@ -70,6 +70,7 @@ public class NormalGame extends BaseGame{
                 iterator.remove();
             }
         }
+        mawners(delta);
         return super.playGame(delta);
     }
 
@@ -181,5 +182,12 @@ public class NormalGame extends BaseGame{
             x.setAlive(false);
         }
         return "Booooom. zombies got nuked";
+    }
+
+    private void mawners(float delta){
+        for (Moaner x : this.field.getMoaners()){
+            String a = x.run(delta , this);
+            if(a != null) output.append(a);
+        }
     }
 }

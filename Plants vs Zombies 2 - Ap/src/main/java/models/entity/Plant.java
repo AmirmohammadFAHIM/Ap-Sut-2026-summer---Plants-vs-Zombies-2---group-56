@@ -142,7 +142,18 @@ public class Plant extends Entity {
     }
 
     public void update(float delta , BaseGame game){
-        if(freezeLevel >= 3 || cat || frozen) heat(game ,delta); ;
+        if(tags.contains(PlantTags.Day) && !game.isDay()){
+            System.out.println("This plant is for the day.");
+            return;
+        }
+        else if(tags.contains(PlantTags.Night) && game.isDay()){
+            System.out.println("This plant is for the night.");
+            return;
+        }
+        if(freezeLevel >= 3 || cat || frozen) {
+            heat(game ,delta);
+            return;
+        }
         if(t <= 0){
             t = ActionInterval;
            if(Trap(game)) {

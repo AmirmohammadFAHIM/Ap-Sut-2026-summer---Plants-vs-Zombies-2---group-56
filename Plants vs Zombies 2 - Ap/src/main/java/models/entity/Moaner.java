@@ -7,16 +7,24 @@ public class Moaner extends Entity {
 
 
     private boolean on = false;
-    public void run(float delta , BaseGame game) {
-        if(!on) return;
-        x += Constants.MoanerSpeed * delta;
+    public String run(float delta , BaseGame game) {
+
+
+      if(on){
+          x += Constants.MoanerSpeed * delta;
+      }
         for (Zombie z : game.getZombies()) {
             if(Constants.overlap(z , this)){
+                if(!on){
+                    on = true;
+                    return "Lawn Mawner turned on at line " + line;
+                }
                 z.setHurt(true);
                 z.setAlive(false);
                 z.setHp(0);
             }
         }
+        return null;
     }
     public Moaner(int line){
         this.line = line;

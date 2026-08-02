@@ -420,6 +420,18 @@ public class GameController implements Controller , Menu {
     public String nuke(){
         return ((NormalGame) game).nuke();
     }
+
+    public String showMap(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Wave id : " + game.getWaveID()).append("\n");
+        sb.append(showSunAmount()).append("\n");
+        sb.append("zombies remained on the yard : " + game.getZombies().size()).append("\n");
+        sb.append(showPlantsStatus()).append("\n");
+        sb.append(showAllZombies()).append("\n");
+        sb.append(showPlants()).append("\n");
+        sb.append(showSuns()).append("\n");
+        return sb.toString();
+    }
     @Override
     public String ChangeMenu(String menuName) {
         return "";

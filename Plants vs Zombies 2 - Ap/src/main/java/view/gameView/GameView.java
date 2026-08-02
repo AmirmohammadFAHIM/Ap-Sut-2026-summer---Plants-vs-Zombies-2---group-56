@@ -120,7 +120,7 @@ public class GameView extends View {
         } else if (input.matches("^cheat\\s+end$")){
             System.out.println(controller.cheat("end"));
         } else if (showMapMatcher.matches()) {
-            // controller.showMap();
+            controller.showMap();
             System.out.println("Displaying map...");
         } else if (showPlantsStatMatcher.matches()) {
             System.out.println(controller.showPlantsStatus());

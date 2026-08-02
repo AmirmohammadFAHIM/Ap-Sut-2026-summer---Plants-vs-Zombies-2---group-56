@@ -64,7 +64,7 @@ public class Sun extends Entity{
                     zombie.setHp(zombie.getHp() - 150);
                 }
             }
-            for (Plant x : game.getPlants_inField()) {
+            for (Plant x : game.getPlantsInField()) {
                 float pCentreX = x.getX() + x.getWidth() / 2;
                 float pCentreY = x.getY() + x.getHeight() / 2;
                 if (Math.abs(centreX - pCentreX) <= Tile.getWidth() &&

@@ -2,7 +2,6 @@ package models.factory.plantSkills;
 
 import models.entity.Plant;
 import models.entity.PlantCategory;
-import models.entity.Zombie;
 import models.games.BaseGame;
 
 public class Mint implements Skill{
@@ -14,7 +13,7 @@ public class Mint implements Skill{
 
     @Override
     public void do_skill(Plant plant, BaseGame game) {
-        for (Plant x: game.getPlants_inField()) {
+        for (Plant x: game.getPlantsInField()) {
             if(x.getCategory() == category) {
                 x.setPlantFood(true);
             }

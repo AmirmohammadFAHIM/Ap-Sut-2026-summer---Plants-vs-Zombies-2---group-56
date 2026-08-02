@@ -19,7 +19,7 @@ public class Bullet implements Cloneable {
     private float destinationX;
     private float destinationY;
     private float damage;
-    private float AoEDamage;
+    private float aoEDamage;
     private float x;
     private float y;
     private float pierce = 1;
@@ -34,7 +34,7 @@ public class Bullet implements Cloneable {
     public enum Tag{MAGICAL,ICE,FIRE,POISON,HOMING,AoE}
     ArrayList<Tag> tags = new  ArrayList<>();
     private boolean proved = false;
-    /// for homing plants_inField of course!
+    /// for homing plantsInField of course!
     private Zombie toLockIn;
     public void setTags(ArrayList<PlantTags> tags){
         if(tags.contains(PlantTags.Fire)){
@@ -87,7 +87,7 @@ public class Bullet implements Cloneable {
         }
 
         if(pierce <= 0) dispose(game);
-        updateLocation(delta);
+        updateLocation(delta , game);
         if(!tags.contains(Tag.MAGICAL) && toLockIn == null) block(game);
         if(bowling.contains(this.type)){
             bowling(game.getField());
@@ -165,7 +165,7 @@ public class Bullet implements Cloneable {
             }
         }
 
-        for (Plant p : game.getPlants_inField()){
+        for (Plant p : game.getPlantsInField()){
             if(p.isFrozen()){
                 if(this.tags.contains(Tag.FIRE)){
                     p.setFreezeHp(0);
@@ -179,7 +179,8 @@ public class Bullet implements Cloneable {
 
     }
 
-    private void updateLocation(float delta){
+    public int line;
+    private void updateLocation(float delta, BaseGame game){
         if(toLockIn != null){
             setDest();
         }
@@ -187,6 +188,12 @@ public class Bullet implements Cloneable {
         this.y += velocityY * delta;
         if(!grounded){
             this.velocityY -= Constants.gravity * delta;
+        }
+        if(this.y - line * Tile.getHeight() <= 30 && velocityY < 0){
+            grounded = true;
+            if(tags.contains(Tag.AoE)){
+                AoE(game);
+            }
         }
     }
     private void setDest(){
@@ -203,6 +210,22 @@ public class Bullet implements Cloneable {
         }
         else if(this.y <= 0){
             velocityY *= -1;
+        }
+    }
+
+    private void AoE(BaseGame game){
+        for (Zombie z : game.getZombies()) {
+            float dx = Math.abs(z.getX() - this.x);
+            float dy = Math.abs(z.getY() - this.y);
+            if(dx <= Tile.getWidth() * 1 && dy <= Tile.getHeight() * 1){
+                z.takeDamage((int) this.aoEDamage);
+                if (this.getTags().contains(Tag.ICE)) {
+                    z.addEffect(new Effect(EffectType.FROZEN, 3.0f));
+                }
+                if (this.getTags().contains(Tag.POISON)) {
+                    z.addEffect(new Effect(EffectType.POISONED, 5.0f));
+                }
+            }
         }
     }
 
@@ -303,7 +326,7 @@ public class Bullet implements Cloneable {
 
         clone.width = this.width;
         clone.height = this.height;
-        clone.AoEDamage = this.AoEDamage;
+        clone.aoEDamage = this.aoEDamage;
         clone.pierce = this.pierce;
         clone.grounded = this.grounded;
         clone.active = this.active;
@@ -321,11 +344,15 @@ public class Bullet implements Cloneable {
     }
 
     public boolean overlaps(Zombie zombie){
-        float centreX = this.x + this.width /2 ;
-        float centreY = this.y + this.height /2 ;
-        boolean x = centreX >= zombie.getX() && centreX <= zombie.getX() + zombie.getWidth();
-        boolean y = centreY >= zombie.getY() && centreY <= zombie.getY() + zombie.getHeight();
-        return x && y;
+        if (zombie == null) {
+            return false;
+        }
+
+        return (this.getX() < zombie.getX() + zombie.getWidth()) &&
+                (this.getX() + width > zombie.getX()) &&
+                (this.getY() < zombie.getY() + zombie.getHeight()) &&
+                (this.getY() + height > zombie.getY());
+
     }
 
     public void setPierce(float pierce) {

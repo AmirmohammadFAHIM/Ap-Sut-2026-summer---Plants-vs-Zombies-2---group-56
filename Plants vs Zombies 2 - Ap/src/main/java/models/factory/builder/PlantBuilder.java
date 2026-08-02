@@ -6,6 +6,7 @@ import controllers.datacontroller.Upgrade;
 import models.App;
 import models.entity.Plant;
 import models.entity.PlantTags;
+import models.entity.WrampUpPlant;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,7 +18,7 @@ public class PlantBuilder {
     private final String cooldown = "$Cooldown\\s+(?<amount>-?\\d+)^";
     private final String lifeSpan = "$Lifespan\\s+(?<>-?\\d+)\\s*s^";
     private final String Speed = "$Speed\\s+(?<amount>-?\\d+)^";
-    private final Plant plant = new Plant();
+    private  Plant plant = new Plant();
 
 
     public Plant build(PlantType plantType){
@@ -29,6 +30,13 @@ public class PlantBuilder {
         plant.setTags(Data.getPlants().get(plantType).getTags());
         explodeOnFinish();
         plantType.allocateSkill(plant);
+        if(plantType == PlantType.SEA_SHROOM ||
+        plantType == PlantType.PUFF_SHROOM){
+            plant.setLifeTime(60);
+        }
+        if(plant.getTags().contains(PlantTags.Wramp_up)){
+            plant = new WrampUpPlant(plant);
+        }
         return plant;
     }
 

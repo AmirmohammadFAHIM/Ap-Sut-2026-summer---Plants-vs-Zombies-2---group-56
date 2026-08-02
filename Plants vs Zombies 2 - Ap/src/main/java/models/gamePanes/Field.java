@@ -83,7 +83,7 @@ public class Field {
                 for (int i = 0; i < 5; i++) {
                     for (Tile tile : tiles.get(i)) {
                         if(tile.getTileType() == TileType.FROZEN){
-                            for (Plant x : game.getPlants_inField()){
+                            for (Plant x : game.getPlantsInField()){
                                 int dx = Math.abs(x.getTileIndex() - tile.getCol());
                                 int dy = Math.abs(x.getLine() - tile.getLine());
                                 if(dx <= 1 && dy <= 1 && x.getTags().contains(PlantTags.Fire)){

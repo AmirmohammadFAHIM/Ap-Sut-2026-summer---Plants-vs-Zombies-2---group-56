@@ -61,7 +61,7 @@ public class ExtraHP implements Skill{
             Plant clone = factory.CreatePlant(plant.getType());
             clone.setLine(row);
             clone.setTileIndex(col);
-            game.getPlants_inField().add(clone);
+            game.getPlantsInField().add(clone);
             tile.setEmpty(false);
             cloneNumber -= 1;
         }
@@ -76,7 +76,7 @@ public class ExtraHP implements Skill{
     private void stack(Plant plant , BaseGame game) {
         int row = plant.getLine();
         int col = plant.getTileIndex();
-        for (Plant p :  game.getPlants_inField()) {
+        for (Plant p :  game.getPlantsInField()) {
             if (p.getTileIndex() == row
                     && p.getTileIndex() == col
                     && !p.getArmor().getLast().pumpkin) {
@@ -92,7 +92,7 @@ public class ExtraHP implements Skill{
     }
 
     private void reset(Plant plant, BaseGame game) {
-            for (Plant x :  game.getPlants_inField()) {
+            for (Plant x :  game.getPlantsInField()) {
                 if(x.getType() == plant.getType()) x.setLifeTime(60);
             }
     }

@@ -67,7 +67,7 @@ public class Modify implements Skill {
 
     private void lilyPad(Plant plant, BaseGame game) {
         if(plant.getArmor() == null){
-            for (Plant x : game.getPlants_inField()){
+            for (Plant x : game.getPlantsInField()){
                 if(x.getLine() == plant.getLine() && x.getTileIndex() == plant.getTileIndex()){
                     plant.getArmor().add(new PlantArmor(x.getHp()));
                     break;
@@ -82,7 +82,7 @@ public class Modify implements Skill {
             plant.setFreezeLevel(0);
         }
         if(App.getCurrentuser().getLevels().get(heater.getType()) >= 3){
-            for (Plant p :  game.getPlants_inField()){
+            for (Plant p :  game.getPlantsInField()){
                 if(Math.abs(p.getTileIndex() - heater.getTileIndex()) <= 1
                 && Math.abs(p.getLine() - heater.getLine()) <= 1){
                     p.setFreezeLevel(0);

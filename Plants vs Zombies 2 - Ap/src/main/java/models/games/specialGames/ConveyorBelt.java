@@ -72,7 +72,7 @@ public class ConveyorBelt extends NormalGame implements SpecialGame {
                 plant.setTileIndex(x);
                 Tile tile = this.field.getTileByCoordinats(x,y);
                 tile.setEmpty(true);
-                this.plants_inField.add(plant);
+                this.plantsInField.add(plant);
             return "Planted " + type.name() + " successfully";
             }
             else return "We don't have this plant on the belt now.";

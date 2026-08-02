@@ -53,7 +53,7 @@ public class Water implements  ChapterSpecialEvent
     }
 
     private void WaterEffect(BaseGame game) {
-        for (Plant x : game.getPlants_inField()){
+        for (Plant x : game.getPlantsInField()){
             if(x.getTileIndex() >= game.getField().getWaterCurrentSurface()){
                 if(!x.onLilyPad && !x.getTags().contains(PlantTags.WATER)){
                     x.dispose(game);

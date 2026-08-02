@@ -158,7 +158,7 @@ public class GameController implements Controller , Menu {
     public String tileStatus(int x , int y){
         ArrayList<Plant> plants = new ArrayList<>();
         ArrayList<Zombie> zombies = new ArrayList<>();
-        for (Plant p : game.getPlants_inField()){
+        for (Plant p : game.getPlantsInField()){
             if(p.getLine() == y && p.getTileIndex() == x){
                 plants.add(p);
             }
@@ -386,7 +386,7 @@ public class GameController implements Controller , Menu {
 
     public String showPlants(){
         StringBuilder sb = new StringBuilder();
-        for (Plant x : game.getPlants_inField()){
+        for (Plant x : game.getPlantsInField()){
             sb.append("=====\n").append("type : " + x.getType()).append("\n")
                     .append("hp : " + x.getHp()).append("\n")
                     .append("location : x = " + x.getTileIndex() + " , y = " + x.getLine());

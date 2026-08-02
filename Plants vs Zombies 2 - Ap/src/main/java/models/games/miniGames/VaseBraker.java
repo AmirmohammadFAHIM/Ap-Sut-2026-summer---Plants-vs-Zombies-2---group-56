@@ -105,7 +105,7 @@ public class VaseBraker extends BaseGame {
             plant.setTileIndex(x);
             plant.setLine(y);
             tile.setEmpty(false);
-            plants_inField.add(plant);
+            plantsInField.add(plant);
             return "Plant" + plantName + " planted ";
 
         }catch (IllegalArgumentException e){

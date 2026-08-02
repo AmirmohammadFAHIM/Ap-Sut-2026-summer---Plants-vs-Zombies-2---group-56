@@ -108,7 +108,12 @@ public enum PlantType {
         }
     },
     PEA_POD{
-
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            ShootingData data = new ShootingData(BulletType.PEA , ShootingMood.OneLine , 1);
+            plant.getBaseSkill().add(new Shoot(data));
+            return super.allocateSkill(plant);
+        }
     },
     SPLIT_PEA{
         @Override

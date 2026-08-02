@@ -93,7 +93,7 @@ public class NormalGame extends BaseGame{
         if(!isEmpty(newPlant ,x, y)) {
             return "The coordination is not empty or plantable.";
         }
-        plants_inField.add(newPlant);
+        plantsInField.add(newPlant);
         Tile tile = field.getTiles().get(y).get(x);
         if(plantName.equals("LILY_PAD")){
             tile.setPlantable(true);
@@ -146,7 +146,7 @@ public class NormalGame extends BaseGame{
     @Override
     public String pluck(int x, int y) {
         Tile  toPluckOn = field.getTiles().get(x).get(y);
-        for (Plant p : plants_inField){
+        for (Plant p : plantsInField){
             if(p.getLine() == y && p.getTileIndex() == x){
                 if(toPluckOn.isEmpty() && toPluckOn.isPlantable()
                         && toPluckOn.isWater()) continue; // This is a lily pad!

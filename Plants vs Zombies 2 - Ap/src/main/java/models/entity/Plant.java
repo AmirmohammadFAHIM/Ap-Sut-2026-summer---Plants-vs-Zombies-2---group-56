@@ -14,22 +14,22 @@ import models.games.BaseGame;
 import java.util.ArrayList;
 
 public class Plant extends Entity {
-    private float damage;
-    private int cost;
-    private float ActionInterval;
+    protected float damage;
+    protected int cost;
+    protected float ActionInterval;
     public float t;
-    private PlantCategory category;
-    private PlantType type;
-    private ArrayList<PlantTags> tags;
-    private ArrayList<Skill> baseSkill = new ArrayList<>();
-    private ArrayList<Skill> plantfoodSkill = new ArrayList<>();
-    private boolean frozen = false;
-    private boolean cat = false;
+    protected PlantCategory category;
+    protected PlantType type;
+    protected ArrayList<PlantTags> tags;
+    protected ArrayList<Skill> baseSkill = new ArrayList<>();
+    protected ArrayList<Skill> plantfoodSkill = new ArrayList<>();
+    protected boolean frozen = false;
+    protected boolean cat = false;
     public boolean onLilyPad = false;
-    private float lifeTime = -5;
-    private int freezeLevel = 0;
-    private ArrayList<PlantArmor> armor =  new ArrayList<>();
-    private Observer skillObserver;
+    protected float lifeTime = -5;
+    protected int freezeLevel = 0;
+    protected ArrayList<PlantArmor> armor =  new ArrayList<>();
+    protected Observer skillObserver;
 
     public ArrayList<PlantArmor> getArmor() {
         return armor;
@@ -212,7 +212,7 @@ public class Plant extends Entity {
             ExplosionData data = new ExplosionData( 3 ,3);
             new Explosive(data).do_skill(this , game);
         }
-        //game.getPlants_inField().remove(this);
+        //game.getPlantsInField().remove(this);
 
     }
 
@@ -279,7 +279,7 @@ public class Plant extends Entity {
     }
 
     private void heat(BaseGame game , float delta){
-        for (Plant x : game.getPlants_inField()){
+        for (Plant x : game.getPlantsInField()){
             float dx =  Math.abs(x.getX() - this.x);
             float dy = Math.abs(x.getY() - this.y);
             if(dx <= Tile.getWidth() * 1 && dy  <= Tile.getHeight() * 1){

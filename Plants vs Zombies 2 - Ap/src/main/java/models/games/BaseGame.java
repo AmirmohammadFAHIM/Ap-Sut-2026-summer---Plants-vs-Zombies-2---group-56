@@ -40,7 +40,7 @@ public class BaseGame implements Game {
 
     protected Field field ;
     protected ArrayList<Wave> waves = new ArrayList<>();
-    protected ArrayList<Plant> plants_inField = new  ArrayList<>();
+    protected ArrayList<Plant> plantsInField = new  ArrayList<>();
     protected LinkedHashMap<PlantType , SeedPackage> available_plants = new  LinkedHashMap<>();
     protected SunBuilder sunBuilder = new  SunBuilder();
     protected Wave currentWave;
@@ -48,7 +48,7 @@ public class BaseGame implements Game {
     protected ArrayList<Zombie> zombies = new ArrayList<>(); ///combination of current wave and next wave
     protected ArrayList<Bullet>  bullets =  new ArrayList<>();
     protected ArrayList<Sun> suns =  new ArrayList<>();
-    protected GameCommands StartGameCommand;
+    protected GameCommands startGameCommand;
     protected ChapterSpecialEvent event;
     protected PlantFactory plantFactory = new PlantFactory();
 
@@ -64,7 +64,7 @@ public class BaseGame implements Game {
     public void setPlantFactory(PlantFactory plantFactory) { this.plantFactory = plantFactory; }
     public int getWaveID() { return waveID; }
     public void setWaveID(int waveID) { this.waveID = waveID; }
-    public GameCommands getStartGameCommand() { return StartGameCommand; }
+    public GameCommands getStartGameCommand() { return startGameCommand; }
     public GameState getState() { return state; }
     public void setState(GameState state) { this.state = state; }
     public int getSunCount() { return sunCount; }
@@ -76,8 +76,8 @@ public class BaseGame implements Game {
     public void setField(Field field) { this.field = field; }
     public ArrayList<Wave> getWaves() { return waves; }
     public void setWaves(ArrayList<Wave> waves) { this.waves = waves; }
-    public ArrayList<Plant> getPlants_inField() { return plants_inField; }
-    public void setPlants_inField(ArrayList<Plant> plants_inField) { this.plants_inField = plants_inField; }
+    public ArrayList<Plant> getPlantsInField() { return plantsInField; }
+    public void setPlantsInField(ArrayList<Plant> plantsInField) { this.plantsInField = plantsInField; }
     public SunBuilder getSunBuilder() { return sunBuilder; }
     public void setSunBuilder(SunBuilder sunBuilder) { this.sunBuilder = sunBuilder; }
     public void setCurrentWave(Wave currentWave) { this.currentWave = currentWave; }
@@ -91,7 +91,7 @@ public class BaseGame implements Game {
     public void setSelection(PlantSelection selection) { this.selection = selection; }
     public LinkedHashMap<PlantType, SeedPackage> getAvailable_plants() { return available_plants; }
     public void setAvailable_plants(LinkedHashMap<PlantType, SeedPackage> available_plants) { this.available_plants = available_plants; }
-    public void setStartGameCommand(GameCommands startGameCommand) { StartGameCommand = startGameCommand; }
+    public void setStartGameCommand(GameCommands startGameCommand) { this.startGameCommand = startGameCommand; }
     public ChapterSpecialEvent getEvent() { return event; }
     public void setEvent(ChapterSpecialEvent event) { this.event = event; }
 
@@ -161,7 +161,7 @@ public class BaseGame implements Game {
 
     @Override
     public void updatePlants(float delta ) {
-        Iterator<Plant> iterator = plants_inField.iterator();
+        Iterator<Plant> iterator = plantsInField.iterator();
         while (iterator.hasNext()){
             Plant p =  (Plant) iterator.next();
             p.update(delta,this);
@@ -222,7 +222,7 @@ public class BaseGame implements Game {
     @Override
     public String pluck(int x, int y) {
         Tile toPluckOn = field.getTiles().get(x).get(y);
-        for (Plant p : plants_inField) {
+        for (Plant p : plantsInField) {
             if (p.getLine() == y && p.getTileIndex() == x) {
                 if (toPluckOn.isEmpty() && toPluckOn.isPlantable() && toPluckOn.isWater()) continue;
                 p.dispose(this);
@@ -293,7 +293,7 @@ public class BaseGame implements Game {
 
     // ====== PLANT HELPERS ======
     public Plant findByCoordinates(int x, int y) {
-        for (Plant p : this.plants_inField) {
+        for (Plant p : this.plantsInField) {
             if (p.getLine() == y && p.getTileIndex() == x) {
                 return p;
             }
@@ -302,7 +302,7 @@ public class BaseGame implements Game {
     }
 
     public Plant getPlantAt(int row, int col) {
-        for (Plant p : plants_inField) {
+        for (Plant p : plantsInField) {
             if (p.getLine() == row && p.getTileIndex() == col) {
                 return p;
             }
@@ -335,7 +335,7 @@ public class BaseGame implements Game {
     public Plant findTargetPlant(Zombie zombie, float range) {
         Plant nearest = null;
         float minDist = Float.MAX_VALUE;
-        for (Plant p : plants_inField) {
+        for (Plant p : plantsInField) {
             if (p.getLine() != zombie.getRow()) continue;
             float dx = p.getX() - zombie.getX();
             if (dx > 0 && dx <= range * 80) {
@@ -349,7 +349,7 @@ public class BaseGame implements Game {
     }
 
     public void explodeArea(int row, float x, float range, int damage) {
-        for (Plant p : plants_inField) {
+        for (Plant p : plantsInField) {
             if (p.getLine() != row) continue;
             float dx = Math.abs(p.getX() - x);
             if (dx <= range * 80) {
@@ -400,7 +400,7 @@ public class BaseGame implements Game {
 
     public Plant getRandomPlantInRange(Zombie zombie, float range) {
         List<Plant> candidates = new ArrayList<>();
-        for (Plant p : plants_inField) {
+        for (Plant p : plantsInField) {
             if (p.getLine() != zombie.getRow()) continue;
             float dx = p.getX() - zombie.getX();
             if (dx > 0 && dx <= range * 80) {

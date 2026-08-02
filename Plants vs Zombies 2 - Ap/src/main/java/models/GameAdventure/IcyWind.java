@@ -13,7 +13,7 @@ public class IcyWind implements ChapterSpecialEvent{
     public void run(BaseGame game, float delta) {
         Random rand = new Random();
         int row =  rand.nextInt(5);
-        for (Plant x : game.getPlants_inField()) {
+        for (Plant x : game.getPlantsInField()) {
             if(x.getLine() == row) x.setFreezeLevel(x.getFreezeLevel() + 1);
         }
         dispose(game);

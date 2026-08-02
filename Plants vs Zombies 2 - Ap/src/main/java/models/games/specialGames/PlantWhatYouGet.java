@@ -64,7 +64,7 @@ public class PlantWhatYouGet extends NormalGame implements SpecialGame {
             Plant plant = builder.build(type);
             plant.setTileIndex(x);
             plant.setTileIndex(y);
-            plants_inField.add(plant);
+            plantsInField.add(plant);
             Tile tile = field.getTileByCoordinats(x, y);
             tile.setEmpty(true);
             return "Plant " + type +" planted at (" + x + ", " + y + ")" + "and cost you " + cost + " suns.";

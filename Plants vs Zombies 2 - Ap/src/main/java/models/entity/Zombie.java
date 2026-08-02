@@ -244,6 +244,26 @@ public class Zombie extends Entity{
 
     public void die() {
         dead = true;
+        int random = (int)(Math.random() * 100);
+        if( random <= 10){
+            int rand = random % 3;
+            if(rand == 0) {
+                App.getCurrentuser().addCoins(50);
+                System.out.println("mara koshti but this 50 coins for you , be kind");
+            }
+             else if(rand == 1) {
+                App.getCurrentuser().addDiamonds(1);
+                System.out.println("mara koshti but this diamond for you , be kind");
+            }
+             else {
+                App.getCurrentuser().addUnlockedPots(1);
+                System.out.println("mara koshti but this pot for you , nahali beneshan be yade man");
+            }
+        }
+        else if(random <=  15){
+            App.getCurrentuser().addPlantFoods(1);
+            System.out.println("mara koshti bedoon sabr, but eat this food patiently ");
+        }
         if (App.getCurrentuser() != null) {
             App.getCurrentuser().updateQuestProgress("KILL_ZOMBIE", 1);
         }

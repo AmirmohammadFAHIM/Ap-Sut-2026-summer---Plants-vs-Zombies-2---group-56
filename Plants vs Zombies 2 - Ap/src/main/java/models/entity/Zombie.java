@@ -50,10 +50,11 @@ public class Zombie extends Entity{
     private boolean isDynamiteFrozen = false;
 
     // ====== CONSTRUCTOR ======
-    public Zombie(String id, String type, int hp, int damage,  float speed, int cost, int width, int height) {
+    public Zombie(String id, String type, int row, int hp, int damage,  float speed, int cost, int width, int height) {
         this.id = id;
         this.type = type;
         this.hp = hp;
+        this.row = row;
         this.maxHp = hp;
         this.damage = damage;
         this.speed = speed;

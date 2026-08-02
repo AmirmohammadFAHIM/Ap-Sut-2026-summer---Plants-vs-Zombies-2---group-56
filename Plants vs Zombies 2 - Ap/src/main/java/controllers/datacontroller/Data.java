@@ -99,7 +99,7 @@ public class Data {
         try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("plants.json")) {
 
             if (inputStream == null) {
-                System.out.println("خطا: فایل plants.json در پوشه resources پیدا نشد!");
+                System.out.println("خطا: ایل plants.json در پوشه resources پیدا نشد!");
                 return;
             }
 

@@ -2,11 +2,9 @@ package models.games.specialGames;
 
 import models.entity.PlantCategory;
 import models.factory.builder.PlantType;
-import models.games.BaseGame;
 import models.games.NormalGame;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class LockedPlants extends NormalGame implements SpecialGame {
     public LockedPlants(LockType type) {
@@ -23,9 +21,9 @@ public class LockedPlants extends NormalGame implements SpecialGame {
     @Override
     public boolean startGame(String plantName) {
 
-        if(!available_plants.isEmpty() && lockType == LockType.ByCategory) {
+        if(!availablePlants.isEmpty() && lockType == LockType.ByCategory) {
             PlantCategory lock;
-            lock = available_plants.lastEntry().getValue().getPlant().getCategory();
+            lock = availablePlants.lastEntry().getValue().getPlant().getCategory();
 
             selection.getPlantsToChoose().removeIf(plant -> plant.getCategory().equals(lock));
         }

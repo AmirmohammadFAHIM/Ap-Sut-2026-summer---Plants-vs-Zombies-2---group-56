@@ -41,7 +41,7 @@ public class BaseGame implements Game {
     protected Field field ;
     protected ArrayList<Wave> waves = new ArrayList<>();
     protected ArrayList<Plant> plantsInField = new  ArrayList<>();
-    protected LinkedHashMap<PlantType , SeedPackage> available_plants = new  LinkedHashMap<>();
+    protected LinkedHashMap<PlantType , SeedPackage> availablePlants = new  LinkedHashMap<>();
     protected SunBuilder sunBuilder = new  SunBuilder();
     protected Wave currentWave;
     protected Wave previousWave;
@@ -60,8 +60,6 @@ public class BaseGame implements Game {
     // ====== GETTERS & SETTERS ======
     public GridController getGridController() { return gridController; }
 
-    public PlantFactory getPlantFactory() { return plantFactory; }
-    public void setPlantFactory(PlantFactory plantFactory) { this.plantFactory = plantFactory; }
     public int getWaveID() { return waveID; }
     public void setWaveID(int waveID) { this.waveID = waveID; }
     public GameCommands getStartGameCommand() { return startGameCommand; }
@@ -77,22 +75,12 @@ public class BaseGame implements Game {
     public ArrayList<Wave> getWaves() { return waves; }
     public void setWaves(ArrayList<Wave> waves) { this.waves = waves; }
     public ArrayList<Plant> getPlantsInField() { return plantsInField; }
-    public void setPlantsInField(ArrayList<Plant> plantsInField) { this.plantsInField = plantsInField; }
-    public SunBuilder getSunBuilder() { return sunBuilder; }
-    public void setSunBuilder(SunBuilder sunBuilder) { this.sunBuilder = sunBuilder; }
     public void setCurrentWave(Wave currentWave) { this.currentWave = currentWave; }
     public Wave getPreviousWave() { return previousWave; }
-    public void setPreviousWave(Wave previousWave) { this.previousWave = previousWave; }
-    public void setBullets(ArrayList<Bullet> bullets) { this.bullets = bullets; }
-    public void setSuns(ArrayList<Sun> suns) { this.suns = suns; }
     public ArrayList<Zombie> getZombies() { return zombies; }
     public void setZombies(ArrayList<Zombie> zombies) { this.zombies = zombies; }
     public PlantSelection getSelection() { return selection; }
-    public void setSelection(PlantSelection selection) { this.selection = selection; }
-    public LinkedHashMap<PlantType, SeedPackage> getAvailable_plants() { return available_plants; }
-    public void setAvailable_plants(LinkedHashMap<PlantType, SeedPackage> available_plants) { this.available_plants = available_plants; }
-    public void setStartGameCommand(GameCommands startGameCommand) { this.startGameCommand = startGameCommand; }
-    public ChapterSpecialEvent getEvent() { return event; }
+    public LinkedHashMap<PlantType, SeedPackage> getAvailable_plants() { return availablePlants; }
     public void setEvent(ChapterSpecialEvent event) { this.event = event; }
 
     @Override
@@ -102,7 +90,7 @@ public class BaseGame implements Game {
 
     @Override
     public boolean startGame(String plantName) {
-        return available_plants.size() == 5;
+        return availablePlants.size() == 5;
     }
 
     protected boolean plantSelection = false;
@@ -116,7 +104,7 @@ public class BaseGame implements Game {
         output = new StringBuilder();
 
 
-            for (SeedPackage x : available_plants.values()){
+            for (SeedPackage x : availablePlants.values()){
                 x.update(delta);
             }
 

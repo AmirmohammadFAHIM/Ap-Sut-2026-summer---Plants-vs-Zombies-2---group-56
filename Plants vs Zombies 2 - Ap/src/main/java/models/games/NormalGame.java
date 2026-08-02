@@ -81,7 +81,7 @@ public class NormalGame extends BaseGame{
             return findPlant.message();
         }
         try {
-            if(available_plants.get(findPlant.plantType()).getCost() > sunCount){
+            if(availablePlants.get(findPlant.plantType()).getCost() > sunCount){
                 return "I hoped you wanna talk about business and " +
                         "you can't even effort a fuckin plant?";
             }
@@ -102,12 +102,12 @@ public class NormalGame extends BaseGame{
         }
         newPlant.setLine(y);
         newPlant.setTileIndex(x);
-        SeedPackage seedPackage = available_plants.get(findPlant.plantType());
+        SeedPackage seedPackage = availablePlants.get(findPlant.plantType());
         if(seedPackage.getBoost()){
             newPlant.setPlantFood(true);
             seedPackage.setBoost(false);
         }
-        this.sunCount -= (int) available_plants.get(findPlant.plantType()).getCost();
+        this.sunCount -= (int) availablePlants.get(findPlant.plantType()).getCost();
         return "New plant : " + findPlant.plantType().name() + " planted successfully at coordination :" +
                 " ( " + x + "," + y + ")";
     }
@@ -115,7 +115,7 @@ public class NormalGame extends BaseGame{
     protected Result plantAvailable(String plantName) {
         try {
             PlantType type = PlantType.valueOf(plantName.toUpperCase());
-            if(!available_plants.containsKey(type)) {
+            if(!availablePlants.containsKey(type)) {
                 return new Result(false , "The plant doesn't exist on the available plants.",null);
             }
             return new Result(true, null,type);
@@ -164,16 +164,16 @@ public class NormalGame extends BaseGame{
 
     @Override
     public String add(String name) {
-        if(available_plants.size() == 8) return "Impossible. Slots are full";
-        if(name.equalsIgnoreCase("Imitater")) name = available_plants.lastEntry().getKey().name();
+        if(availablePlants.size() == 8) return "Impossible. Slots are full";
+        if(name.equalsIgnoreCase("Imitater")) name = availablePlants.lastEntry().getKey().name();
         SeedPackage seedPackage = selection.selectPlant(name);
        if(seedPackage != null){
-           available_plants.put(seedPackage.getPlant(), seedPackage);
+           availablePlants.put(seedPackage.getPlant(), seedPackage);
        }
        else {
            return "This plant is not on the list.";
        }
-        if(available_plants.size() == 8) {
+        if(availablePlants.size() == 8) {
             plantSelection = true;
         }
         return "Plant added successfully";
@@ -196,7 +196,7 @@ public class NormalGame extends BaseGame{
     }
 
     public String boost(PlantType type){
-        SeedPackage seedPackage = available_plants.get(type);
+        SeedPackage seedPackage = availablePlants.get(type);
         seedPackage.setBoost(true);
         return type + " boosetd.";
     }

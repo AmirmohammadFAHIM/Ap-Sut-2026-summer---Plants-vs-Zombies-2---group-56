@@ -1,9 +1,7 @@
 package models.games.specialGames;
 
-import controllers.datacontroller.Data;
 import controllers.datacontroller.SeedPackage;
 import models.Constants;
-import models.entity.PlantTags;
 import models.factory.builder.PlantType;
 import models.games.NormalGame;
 import models.utils.Result;
@@ -24,7 +22,7 @@ public class NightsOps extends NormalGame implements SpecialGame {
         SeedPackage selected = selection.selectPlant(plantName);
 
 
-        return available_plants.size() == Constants.Plants_count_in_a_game;
+        return availablePlants.size() == Constants.Plants_count_in_a_game;
     }
 
     @Override

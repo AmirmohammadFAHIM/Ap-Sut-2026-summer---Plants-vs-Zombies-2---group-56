@@ -222,10 +222,10 @@ public class GameController implements Controller , Menu {
                 if (App.getCurrentuser() != null) {
                     App.getCurrentuser().updateQuestProgress("COLLECT_SUN", sun.getPrice());
                 }
+                float price = sun.getPrice();
+                iterator.remove();
 
-                sun.dispose(game);
-                //iterator.remove();
-                return "Sun collected , you got " + sun.getPrice() + " suns!";
+                return "Sun collected , you got " +price + " suns!";
             }
         }
         return null;

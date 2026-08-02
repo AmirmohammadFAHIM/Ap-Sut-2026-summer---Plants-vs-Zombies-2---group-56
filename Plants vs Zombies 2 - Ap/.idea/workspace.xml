@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a75b644f-c754-43e8-9be1-9402df2c84a0" name="Changes" comment="fixed boost">
+    <list default="true" id="a75b644f-c754-43e8-9be1-9402df2c84a0" name="Changes" comment="added some initial plants to User">
       <change beforePath="$PROJECT_DIR$/.gradle/9.0.0/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0.0/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0.0/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0.0/fileHashes/fileHashes.bin" afterDir="false" />
@@ -12,18 +12,10 @@
       <change beforePath="$PROJECT_DIR$/.gradle/9.0.0/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0.0/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/controllers/datacontroller/MiniGameLevelManager$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controllers/datacontroller/MiniGameLevelManager$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controllers/menus/gameController/GameController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controllers/menus/gameController/GameController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controllers/menus/gameController/GameController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controllers/menus/gameController/GameController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/Constants.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/Constants.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/GameAdventure/IcyWind.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/GameAdventure/IcyWind.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/GameAdventure/Water.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/GameAdventure/Water.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/entity/Bullet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/entity/Bullet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/User.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/entity/Moaner.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/entity/Plant.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/entity/Plant.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/entity/Sun.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/entity/Sun.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/entity/WrampUpPlant.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/entity/WrampUpPlant.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantBuilder.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType$11.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType$11.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType$12.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType$12.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType$13.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType$13.class" afterDir="false" />
@@ -70,28 +62,22 @@
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType$54.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType$54.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType$55.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType$55.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType$56.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType$56.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/builder/PlantType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Block.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Block.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Explosive$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Explosive$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Explosive.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Explosive.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/ExtraHP.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/ExtraHP.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Freeze.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Freeze.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Homing.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Homing.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Melee.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Melee.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Mint.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Mint.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Shoot$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Shoot$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Shoot.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/Shoot.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/skillDatas/Modify$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/skillDatas/Modify$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/skillDatas/Modify.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/skillDatas/Modify.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/gamePanes/Field.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/gamePanes/Field.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/skillDatas/SunProduce.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/factory/plantSkills/skillDatas/SunProduce.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/BaseGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/games/BaseGame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/games/Game.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/NormalGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/games/NormalGame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/miniGames/VaseBraker.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/games/miniGames/VaseBraker.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/specialGames/ConveyorBelt.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/games/specialGames/ConveyorBelt.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/specialGames/LockedPlants$LockType.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/games/specialGames/LockedPlants$LockType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/specialGames/LockedPlants.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/games/specialGames/LockedPlants.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/specialGames/NightsOps.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/games/specialGames/NightsOps.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/specialGames/PlantWhatYouGet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/games/specialGames/PlantWhatYouGet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/view/gameView/GameView.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/view/gameView/GameView.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/menus/gameController/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/menus/gameController/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/games/BaseGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/games/BaseGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/games/NormalGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/games/NormalGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/games/specialGames/LockedPlants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/games/specialGames/LockedPlants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/games/specialGames/NightsOps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/games/specialGames/NightsOps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/games/specialGames/PlantWhatYouGet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/games/specialGames/PlantWhatYouGet.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,6 +191,7 @@
       <workItem from="1785659947235" duration="5033000" />
       <workItem from="1785671689259" duration="853000" />
       <workItem from="1785675922624" duration="3709000" />
+      <workItem from="1785681442114" duration="834000" />
     </task>
     <task id="LOCAL-00001" summary="fixed gradle issue">
       <option name="closed" value="true" />
@@ -358,7 +345,15 @@
       <option name="project" value="LOCAL" />
       <updated>1785679625641</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="added some initial plants to User">
+      <option name="closed" value="true" />
+      <created>1785681611625</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1785681611625</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -384,6 +379,7 @@
     <MESSAGE value="printed some logs to see plants working" />
     <MESSAGE value="fixed life time and wramp up bugs" />
     <MESSAGE value="fixed boost" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed boost" />
+    <MESSAGE value="added some initial plants to User" />
+    <option name="LAST_COMMIT_MESSAGE" value="added some initial plants to User" />
   </component>
 </project>

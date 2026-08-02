@@ -373,4 +373,8 @@ public class Bullet implements Cloneable {
     public void setGrounded(boolean grounded) {
         this.grounded = grounded;
     }
+
+    public boolean isGrounded() {
+        return grounded;
+    }
 }

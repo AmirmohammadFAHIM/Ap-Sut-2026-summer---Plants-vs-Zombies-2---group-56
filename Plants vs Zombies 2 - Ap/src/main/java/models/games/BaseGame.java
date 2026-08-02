@@ -373,6 +373,8 @@ public class BaseGame implements Game {
         if (isCellEmpty(plant.getLine(), col - 1)) {
             plant.setTileIndex(col - 1);
         }
+        if(plant.getTileIndex() == zombie.getTileIndex())
+            plant.setHP(0.0f);
     }
 
     public void pullZombie(Zombie source, Zombie target) {
@@ -417,19 +419,10 @@ public class BaseGame implements Game {
         return zombies.get(new Random().nextInt(zombies.size()));
     }
 
-    public void spawnReverseZombie(int row) {
-        Zombie z = ZombieFactory.createZombie("normal");
-        z.setRow(row);
-        z.setPosition(50, row * 100 + 50);
-        z.setHypnotized(true);
-        zombies.add(z);
-    }
-
     public void spawn(Zombie source, String spawnType, int count) {
         if (spawnType.equals("imp")) {
             for (int i = 0; i < count; i++) {
-                Zombie imp = ZombieFactory.createZombie("imp");
-                imp.setRow(source.getRow());
+                Zombie imp = ZombieFactory.createZombie("imp" , source.getRow());
                 imp.setPosition(source.getX() + 50, source.getY());
                 zombies.add(imp);
             }

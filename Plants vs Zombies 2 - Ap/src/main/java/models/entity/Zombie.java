@@ -50,10 +50,11 @@ public class Zombie extends Entity{
     private boolean isDynamiteFrozen = false;
 
     // ====== CONSTRUCTOR ======
-    public Zombie(String id, String type, int hp, int damage,  float speed, int cost, int width, int height) {
+    public Zombie(String id, String type, int row, int hp, int damage,  float speed, int cost, int width, int height) {
         this.id = id;
         this.type = type;
         this.hp = hp;
+        this.row = row;
         this.maxHp = hp;
         this.damage = damage;
         this.speed = speed;
@@ -243,6 +244,26 @@ public class Zombie extends Entity{
 
     public void die() {
         dead = true;
+        int random = (int)(Math.random() * 100);
+        if( random <= 10){
+            int rand = random % 3;
+            if(rand == 0) {
+                App.getCurrentuser().addCoins(50);
+                System.out.println("mara koshti but this 50 coins for you , be kind");
+            }
+             else if(rand == 1) {
+                App.getCurrentuser().addDiamonds(1);
+                System.out.println("mara koshti but this diamond for you , be kind");
+            }
+             else {
+                App.getCurrentuser().addUnlockedPots(1);
+                System.out.println("mara koshti but this pot for you , nahali beneshan be yade man");
+            }
+        }
+        else if(random <=  15){
+            App.getCurrentuser().addPlantFoods(1);
+            System.out.println("mara koshti bedoon sabr, but eat this food patiently ");
+        }
         if (App.getCurrentuser() != null) {
             App.getCurrentuser().updateQuestProgress("KILL_ZOMBIE", 1);
         }
@@ -280,6 +301,16 @@ public class Zombie extends Entity{
         return !armors.isEmpty();
     }
 
+    public void changeRow(){
+        int random =(int)(Math.random() * 5) ;
+        if(random == 0 )
+            this.setRow(row +1);
+        else
+            this.setRow(row -1);
+
+        return;
+    }
+
     // ====== STATE FLAGS ======
     public boolean isTorchOn() { return isTorchOn; }
     public void setTorchOn(boolean torchOn) { this.isTorchOn = torchOn; }
@@ -315,7 +346,14 @@ public class Zombie extends Entity{
     public void setHp(int hp) { this.hp = hp; }
     public void setSpeed(float speed) { this.speed = speed; }
     public void setPosition(float x, float y) { this.x = x; this.y = y; }
-    public void setRow(int row) { this.row = row; }
+    public void setRow(int row) {
+        if(row < 1)
+            row = 2;
+        else if(row > 5)
+            row = 4;
+
+        this.row = row;
+    }
     public void setFrozen(boolean frozen) { this.frozen = frozen; }
     public void setHypnotized(boolean hypnotized) { this.hypnotized = hypnotized; }
     public void setX(float x) { this.x = x;}

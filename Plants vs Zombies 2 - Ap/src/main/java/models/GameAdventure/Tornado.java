@@ -21,7 +21,7 @@ public class Tornado implements ChapterSpecialEvent{
         while (iterator.hasNext() && count > 0) {
             Zombie zombie =  iterator.next();
             zombies.add(zombie);
-            game.getCurrentWave().getZombies().remove(zombie);
+            iterator.remove();
             count -= 1;
         }
 
@@ -34,12 +34,14 @@ public class Tornado implements ChapterSpecialEvent{
     @Override
     public void run(BaseGame game  , float delta) {
         int i = 0;
-        for (Zombie zombie : zombies) {
+        Iterator iterator = game.getZombies().iterator();
+        while (iterator.hasNext()){
+            Zombie zombie = (Zombie) iterator.next();
             zombie.setX(zombie.getX() - Constants.TornadoVelocity * delta );
             /// TODO: update zombies tile index , and change this to Iterator
             if(zombie.getTileIndex() == destinations[i]) {
                 game.getCurrentWave().getZombies().add(zombie);
-                zombies.remove(zombie);
+                iterator.remove();
             }
             i++;
         }

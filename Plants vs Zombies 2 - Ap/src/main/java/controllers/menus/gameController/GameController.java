@@ -85,6 +85,7 @@ public class GameController implements Controller , Menu {
             user.setLevelsPassed(user.getLevelsPassed()+1);
             for (PlantType x : level.getUnlockingPlants()){
                 user.getUnlockedPlants().add(x);
+                user.getLevels().put(x , 1);
                 user.getUnreadNews().add("Congratulation , You've Unlocked new Plant " +
                         ", " + x.name() + " !");
             }

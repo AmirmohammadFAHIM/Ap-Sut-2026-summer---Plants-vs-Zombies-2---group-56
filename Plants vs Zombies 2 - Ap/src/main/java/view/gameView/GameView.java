@@ -3,6 +3,7 @@ package view.gameView;
 import controllers.menus.gameController.GameController;
 import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
+import models.factory.builder.PlantType;
 import models.games.BaseGame;
 import models.games.specialGames.PlantWhatYouGet;
 import models.utils.RegexHelper;
@@ -113,7 +114,14 @@ public class GameView extends View {
             int y = Integer.parseInt(feedPlantMatcher.group("y"));
             System.out.println(controller.boost(x, y));
             System.out.println("Feeding plant at (" + x + ", " + y + ")");
-        } else if (cheatRemCooldownMatcher.matches()) {
+        }else if(input.matches("boost\\s+\\w+")){
+            try {
+                PlantType type = PlantType.valueOf(input.split("\\s+")[1]);
+                System.out.println(controller.getGame().boost(type));
+            }catch (Exception e){
+                System.out.println("Invalid input according to boost type.");
+            }
+        }else if (cheatRemCooldownMatcher.matches()) {
             System.out.println(controller.cheat("remove-cooldown"));
         } else if (cheatAddFoodMatcher.matches()) {
             System.out.println(controller.cheat("add-plant-food"));

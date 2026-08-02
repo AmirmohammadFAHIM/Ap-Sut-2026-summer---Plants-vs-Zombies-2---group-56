@@ -102,6 +102,11 @@ public class NormalGame extends BaseGame{
         }
         newPlant.setLine(y);
         newPlant.setTileIndex(x);
+        SeedPackage seedPackage = available_plants.get(findPlant.plantType());
+        if(seedPackage.getBoost()){
+            newPlant.setPlantFood(true);
+            seedPackage.setBoost(false);
+        }
         this.sunCount -= (int) available_plants.get(findPlant.plantType()).getCost();
         return "New plant : " + findPlant.plantType().name() + " planted successfully at coordination :" +
                 " ( " + x + "," + y + ")";
@@ -188,5 +193,11 @@ public class NormalGame extends BaseGame{
             String a = x.run(delta , this);
             if(a != null) output.append(a);
         }
+    }
+
+    public String boost(PlantType type){
+        SeedPackage seedPackage = available_plants.get(type);
+        seedPackage.setBoost(true);
+        return type + " boosetd.";
     }
 }

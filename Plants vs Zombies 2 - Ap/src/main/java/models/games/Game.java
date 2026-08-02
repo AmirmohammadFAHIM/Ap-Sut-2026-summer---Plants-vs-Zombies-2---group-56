@@ -2,6 +2,7 @@ package models.games;
 
 import models.GameAdventure.Chapters;
 import models.GameAdventure.levels.Level;
+import models.factory.builder.PlantType;
 import models.utils.Result;
 
 public interface Game {
@@ -16,5 +17,8 @@ public interface Game {
     public String pluck(int x , int y);
     public Result check_endGame();
     public void endGame();
+    public default String boost(PlantType type) {
+        return  "boosetd";
+    }
 
 }

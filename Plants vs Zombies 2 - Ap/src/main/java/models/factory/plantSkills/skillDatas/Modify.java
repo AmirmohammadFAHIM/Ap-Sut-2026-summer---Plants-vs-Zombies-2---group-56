@@ -2,10 +2,13 @@ package models.factory.plantSkills.skillDatas;
 
 import models.App;
 import models.entity.*;
+import models.factory.builder.PlantType;
 import models.factory.plantSkills.Skill;
 import models.gamePanes.Tile;
 import models.gamePanes.TileType;
 import models.games.BaseGame;
+
+import java.util.ArrayList;
 
 public class Modify implements Skill {
     public enum Type {GRAVE_EATER}
@@ -20,6 +23,8 @@ public class Modify implements Skill {
         if(plant.getCategory() == PlantCategory.StrikeThrough) runBack(plant, game);
         else if(plant.getTags().contains(PlantTags.Fire)) fire(plant, game);
         else if(plant.getTags().contains(PlantTags.WATER)) lilyPad(plant, game);
+        else if(plant.getType() == PlantType.GRAVE_BUSTER) graveEater(plant, game);
+        else if(plant.getType() == PlantType.MAGNET_SHROOM) random(plant , game , 1);
     }
 
     @Override
@@ -89,5 +94,24 @@ public class Modify implements Skill {
         for (Zombie x :  game.getZombies()) {
             if(x.getLine() == plant.getLine()) x.setTileIndex(plant.getTileIndex() - 3);
         }
+    }
+
+    @Override
+    public ArrayList<Zombie> random(Plant plant, BaseGame game, int numbers) {
+        Zombie zombie =  Skill.super.random(plant, game, 1).getFirst();
+        Armor armor = null;
+        for (Armor x : zombie.getArmors()){
+            if(x.isMagnetic()){
+                armor = x;
+                break;
+            }
+        }
+        if(armor == null){
+            random(plant, game, 1);
+        }
+        else{
+            zombie.getArmors().remove(armor);
+        }
+        return null;
     }
 }

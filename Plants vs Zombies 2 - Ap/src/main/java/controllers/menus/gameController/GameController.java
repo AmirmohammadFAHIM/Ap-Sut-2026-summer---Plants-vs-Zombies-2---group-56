@@ -21,9 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GameController implements Controller , Menu {
-    private BaseGame game;
-    private Level level;
-    private Chapters chapter;
+    private final BaseGame game;
+    private final Level level;
+    private final Chapters chapter;
 
     public GameController(Chapters chapter , Level level){
         this.level = level;
@@ -65,7 +65,10 @@ public class GameController implements Controller , Menu {
         String log = game.playGame(delta);
         Result end = game.check_endGame();
         if(end.success()){
-            if(end.message().equals("Loss")) return "Brainzzzzzzzzzz!!!!! Deliciouzzzzzzz!!";
+            if(end.message().equals("Loss")) {
+                App.setScreen(new PlayView());
+                return "Brainzzzzzzzzzz!!!!! Deliciouzzzzzzz!!";
+            }
         }
         else if(game.isWon()){
             end();
@@ -95,6 +98,8 @@ public class GameController implements Controller , Menu {
                 default -> user.getChapter();
             };
             user.setChapter(newChapter);
+
+
         }
 
         Data.saveUser();
@@ -124,6 +129,9 @@ public class GameController implements Controller , Menu {
 
     public String showPlantsStatus(){
         StringBuilder output = new StringBuilder();
+        if(game instanceof ConveyorBelt){
+            return belt();
+        }
         try {
             for (SeedPackage x : game.getAvailable_plants().values()) {
                 output.append(x.getPlant().name()).append("\n")
@@ -133,6 +141,15 @@ public class GameController implements Controller , Menu {
             }
         }catch (RuntimeException e){
             return "Something went wrong during showing plants! try again!...";
+        }
+        return output.toString();
+    }
+
+    private String belt(){
+        ConveyorBelt  conveyorBelt = (ConveyorBelt) game;
+        StringBuilder output = new StringBuilder();
+        for (PlantType x : conveyorBelt.getBelt()){
+            output.append(x.name()).append(" is ready on the belt\n");
         }
         return output.toString();
     }

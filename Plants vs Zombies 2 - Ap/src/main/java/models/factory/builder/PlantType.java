@@ -432,7 +432,16 @@ public enum PlantType {
             return super.allocateSkill(plant);
         }
     },
-    KIWIBEAST,
+    KIWIBEAST{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            ExplosionData data = new ExplosionData(3 , 3);
+            plant.getBaseSkill().add(new Explosive(data));
+            ExplosionData data1 = new ExplosionData(9 , 9);
+            plant.getPlantfoodSkill().add(new Explosive(data1));
+            return super.allocateSkill(plant);
+        }
+    },
     /// ----------WALL_NUTS------------
     WALL_NUT{
         @Override
@@ -510,7 +519,13 @@ public enum PlantType {
             return super.allocateSkill(plant);
         }
     },
-    HYPNO_SHROOM,
+    HYPNO_SHROOM{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+
+            return super.allocateSkill(plant);
+        }
+    },
     IMITATER,
     LILY_PAD{
         @Override
@@ -550,7 +565,14 @@ public enum PlantType {
             return super.allocateSkill(plant);
         }
     },
-    MAGNET_SHROOM,
+    MAGNET_SHROOM{
+        @Override
+        public Plant allocateSkill(Plant plant) {
+            plant.getBaseSkill().add(new  Modify());
+            plant.getPlantfoodSkill().add(new Modify());
+            return super.allocateSkill(plant);
+        }
+    },
 
 
     ///MINTS

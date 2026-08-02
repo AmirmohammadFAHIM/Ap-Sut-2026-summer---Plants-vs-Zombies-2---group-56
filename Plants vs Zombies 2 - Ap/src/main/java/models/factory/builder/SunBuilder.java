@@ -14,7 +14,7 @@ public class SunBuilder {
     public Result sunLight(float delta , BaseGame game) {
         this.timePassed += delta;
         if(cooldownTillNextSun <= 0){
-            cooldownTillNextSun = Math.max(6 + 0.05f * timePassed , 12);
+            cooldownTillNextSun = Math.min(6 + 0.05f * timePassed , 12);
             Sun product = drop();
             game.getSuns().add(product);
             String type = product.getPrice() == 100 ? "Special" : product.getPrice() == 50 ?
@@ -24,7 +24,8 @@ public class SunBuilder {
         }else{
             cooldownTillNextSun -= delta;
         }
-        return null;
+        return new Result(true , "time till next sun dropping : "
+                + cooldownTillNextSun , null);
     }
 
     private Sun drop() {

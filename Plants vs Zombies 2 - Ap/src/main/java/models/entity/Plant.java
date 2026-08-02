@@ -1,6 +1,7 @@
 package models.entity;
 
 import models.App;
+import models.factory.ZombieFactory;
 import models.factory.builder.PlantType;
 import models.factory.plantSkills.Explosive;
 import models.factory.plantSkills.Skill;
@@ -241,6 +242,12 @@ public class Plant extends Entity {
     private void dispose(Zombie eater , BaseGame game){
         if(tags.contains(PlantTags.Shroom) && tags.contains(PlantTags.MAGICAL)){
            eater.setHypnotized(true);
+           if(plantFood){
+               game.getZombies().remove(eater);
+               Zombie zombie = ZombieFactory.createZombie("Gargantur");
+               zombie.setHypnotized(true);
+               game.getZombies().add(zombie);
+           }
         }
         else if(tags.contains(PlantTags.EXPLOSIVE)){
             if(App.getCurrentuser().getLevels().get(this.type) >= 3) damage += 200;

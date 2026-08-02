@@ -1,7 +1,10 @@
 package models.games.specialGames;
 
 import models.App;
+import models.entity.Plant;
+import models.factory.PlantFactory;
 import models.factory.builder.PlantType;
+import models.gamePanes.Tile;
 import models.games.NormalGame;
 
 import java.util.ArrayList;
@@ -12,8 +15,8 @@ public class ConveyorBelt extends NormalGame implements SpecialGame {
     ArrayList<PlantType> plants =  new ArrayList<>();
 
     public  ConveyorBelt() {
-        super();
-        initPlants(8);
+
+        initPlants(5);
         belt.add(plants.getFirst());
         state = GameState.PLAYING;
     }
@@ -21,7 +24,7 @@ public class ConveyorBelt extends NormalGame implements SpecialGame {
     Random random = new Random();
     private void initPlants(int i){
         if(i == 0) return;
-        int index = rand.nextInt(App.getCurrentuser().getUnlockedPlants().size());
+        int index = random.nextInt(App.getCurrentuser().getUnlockedPlants().size());
         PlantType type = App.getCurrentuser().getUnlockedPlants().get(index);
         if(plants.contains(type)){
             initPlants(i);
@@ -63,7 +66,13 @@ public class ConveyorBelt extends NormalGame implements SpecialGame {
             PlantType type = PlantType.valueOf(plantName.toUpperCase());
             if(belt.contains(type)){
                 belt.remove(type);
-                ///  TODO : do plant stuff
+                PlantFactory factory = new PlantFactory();
+                Plant plant = factory.CreatePlant(type);
+                plant.setLine(y);
+                plant.setTileIndex(x);
+                Tile tile = this.field.getTileByCoordinats(x,y);
+                tile.setEmpty(true);
+                this.plants_inField.add(plant);
             return "Planted " + type.name() + " successfully";
             }
             else return "We don't have this plant on the belt now.";
@@ -83,6 +92,7 @@ public class ConveyorBelt extends NormalGame implements SpecialGame {
     }
 
 
-
-
+    public ArrayList<PlantType> getBelt() {
+        return belt;
+    }
 }

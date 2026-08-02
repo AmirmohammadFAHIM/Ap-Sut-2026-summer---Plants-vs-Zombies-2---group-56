@@ -76,12 +76,12 @@ public class GameView extends View {
 
             return;
         }
-        else if(input.matches("$start\\s+zombie\\s+waves^")){
+        else if(input.matches("^start\\s+zombie\\s+waves$")){
             try {
                 PlantWhatYouGet plantWhatYouGet = (PlantWhatYouGet) controller.getGame();
                 plantWhatYouGet.startWaves();
             } catch (Exception e){
-                System.out.println("Bro I'm sure you trippin af , zombies are in front of you!!!");
+                System.out.println("Zombies are coming , no need to write this command!!!");
             }
         }
         else if (advanceTimeMatcher.matches()) {

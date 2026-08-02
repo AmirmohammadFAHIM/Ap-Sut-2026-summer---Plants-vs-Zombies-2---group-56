@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a75b644f-c754-43e8-9be1-9402df2c84a0" name="Changes" comment="fixed planting plant">
+    <list default="true" id="a75b644f-c754-43e8-9be1-9402df2c84a0" name="Changes" comment="fixed conveyourBelt belt bugs">
       <change beforePath="$PROJECT_DIR$/.gradle/9.0.0/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0.0/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0.0/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.0.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.0.0/fileHashes/fileHashes.bin" afterDir="false" />
@@ -13,17 +13,15 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controllers/menus/gameController/GameController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controllers/menus/gameController/GameController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controllers/menus/gameController/GameController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controllers/menus/gameController/GameController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/models/games/BaseGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/models/games/BaseGame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/view/gameView/GameView.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/view/gameView/GameView.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/resources/main/plants.json" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/plants.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controllers/datacontroller/Data$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controllers/datacontroller/Data$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/problems/problems-report.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/controllers/menus/gameController/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/menus/gameController/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/entity/Sun.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/entity/Sun.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/entity/Plant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/entity/Plant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/factory/builder/PlantType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/factory/builder/PlantType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/models/factory/builder/SunBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/factory/builder/SunBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/gamePanes/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/gamePanes/Tile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/games/BaseGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/games/BaseGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/factory/plantSkills/skillDatas/Modify.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/factory/plantSkills/skillDatas/Modify.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/games/specialGames/ConveyorBelt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/games/specialGames/ConveyorBelt.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/view/gameView/GameView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/gameView/GameView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,6 +52,11 @@
     </system>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="C:\Users\Administrator\.gradle\wrapper\dists\gradle-9.0.0-bin\d6wjpkvcgsg3oed0qlfss3wgl\gradle-9.0.0" javaHome="C:\Users\Administrator\.gradle\jdks\eclipse_adoptium-21-amd64-windows.2" gradleVersion="9.0.0" />
@@ -73,7 +76,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Fahim-Debugging-GamePlay&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Administrator/OneDrive/Desktop/Programming/Java/group-56/Plants vs Zombies 2 - Ap/src/main/resources&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -81,6 +84,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -125,7 +129,10 @@
       <workItem from="1785586990358" duration="264000" />
       <workItem from="1785591172887" duration="3646000" />
       <workItem from="1785597749583" duration="2139000" />
-      <workItem from="1785612452772" duration="4304000" />
+      <workItem from="1785612452772" duration="8684000" />
+      <workItem from="1785624116296" duration="4224000" />
+      <workItem from="1785631242273" duration="1846000" />
+      <workItem from="1785659947235" duration="5033000" />
     </task>
     <task id="LOCAL-00001" summary="fixed gradle issue">
       <option name="closed" value="true" />
@@ -175,7 +182,47 @@
       <option name="project" value="LOCAL" />
       <updated>1785599891769</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fixed sun dropping bug(width and height were not initialized)">
+      <option name="closed" value="true" />
+      <created>1785616817014</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1785616817014</updated>
+    </task>
+    <task id="LOCAL-00008" summary="fixed game play bugs">
+      <option name="closed" value="true" />
+      <created>1785620124840</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1785620124840</updated>
+    </task>
+    <task id="LOCAL-00009" summary="fixed game play bugs">
+      <option name="closed" value="true" />
+      <created>1785621437965</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1785621437965</updated>
+    </task>
+    <task id="LOCAL-00010" summary="fixed vase breaker vase break">
+      <option name="closed" value="true" />
+      <created>1785628350255</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1785628350255</updated>
+    </task>
+    <task id="LOCAL-00011" summary="fixed conveyourBelt belt bugs">
+      <option name="closed" value="true" />
+      <created>1785632546412</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1785632546413</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,6 +235,11 @@
     <MESSAGE value="fixed field init bugs" />
     <MESSAGE value="fixed starting game bug" />
     <MESSAGE value="fixed planting plant" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed planting plant" />
+    <MESSAGE value="fixed sun dropping bug(width and height were not initialized)" />
+    <MESSAGE value="fixed bullet clone bug" />
+    <MESSAGE value="fixed game play bugs" />
+    <MESSAGE value="fixed vase breaker vase break" />
+    <MESSAGE value="fixed conveyourBelt belt bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed conveyourBelt belt bugs" />
   </component>
 </project>

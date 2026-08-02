@@ -180,7 +180,7 @@ public class ZombieFactory {
 
         // ====== 25. JUGGLER ======
         if (type.equals("juggler") || type.equals("ZombieDarkJuggler")) {
-            Zombie z = new Zombie(type, type, row, 420, 100, 0.2f, 450, 32, 95);
+            Zombie z = new Zombie(type, type, row, 420, 100, 0.1f, 450, 32, 95);
             z.addBulletObserver(new JugglerObserver());
             return z;
         }

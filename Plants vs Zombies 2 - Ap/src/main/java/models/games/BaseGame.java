@@ -390,6 +390,8 @@ public class BaseGame implements Game {
         if (isCellEmpty(plant.getLine(), col - 1)) {
             plant.setTileIndex(col - 1);
         }
+        if(plant.getTileIndex() == zombie.getTileIndex())
+            plant.setHP(0.0f);
     }
 
     public void pullZombie(Zombie source, Zombie target) {

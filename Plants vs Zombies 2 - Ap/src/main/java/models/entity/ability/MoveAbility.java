@@ -12,7 +12,8 @@ public class MoveAbility implements Ability {
         PUSH_BARREL,
         PULL_PLANT,
         THROW_OCTOPUS,
-        SWAP_ZOMBIE
+        SWAP_ZOMBIE,
+        PIANO
     }
 
     private final MoveType type;
@@ -65,6 +66,12 @@ public class MoveAbility implements Ability {
         if (target != null && target != zombie) {
             game.swapZombieToRow(target, zombie.getRow());
         }
+    }
+
+    public void pianoSwap(BaseGame game){
+        Zombie target = game.getRandomZombie();
+        if(target != null)
+            target.changeRow();
     }
 
     public boolean isCarrying() { return isCarrying; }

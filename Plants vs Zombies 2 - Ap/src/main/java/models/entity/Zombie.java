@@ -301,6 +301,16 @@ public class Zombie extends Entity{
         return !armors.isEmpty();
     }
 
+    public void changeRow(){
+        int random =(int)(Math.random() * 5) ;
+        if(random == 0 )
+            this.setRow(row +1);
+        else
+            this.setRow(row -1);
+
+        return;
+    }
+
     // ====== STATE FLAGS ======
     public boolean isTorchOn() { return isTorchOn; }
     public void setTorchOn(boolean torchOn) { this.isTorchOn = torchOn; }
@@ -336,7 +346,14 @@ public class Zombie extends Entity{
     public void setHp(int hp) { this.hp = hp; }
     public void setSpeed(float speed) { this.speed = speed; }
     public void setPosition(float x, float y) { this.x = x; this.y = y; }
-    public void setRow(int row) { this.row = row; }
+    public void setRow(int row) {
+        if(row < 1)
+            row = 2;
+        else if(row > 5)
+            row = 4;
+
+        this.row = row;
+    }
     public void setFrozen(boolean frozen) { this.frozen = frozen; }
     public void setHypnotized(boolean hypnotized) { this.hypnotized = hypnotized; }
     public void setX(float x) { this.x = x;}

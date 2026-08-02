@@ -95,7 +95,8 @@ public class ZombieFactory {
         // ====== 13. PIANIST ======
         if (type.equals("piano") || type.equals("ZombiePiano")) {
             Zombie z = new Zombie(type, type, row, 840, 4000, 0.12f, 450, 75, 110);
-            z.addAbility(new ExplodeAbility(1, 2500, 1.0f));
+            z.addAbility(new ExplodeAbility(1, 2500, 5.0f));
+            z.addAbility(new MoveAbility(MoveAbility.MoveType.PIANO , 2.0f));
             return z;
         }
 

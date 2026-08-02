@@ -2,6 +2,7 @@ package models.entity.ability;
 
 import models.entity.Zombie;
 import models.games.BaseGame;
+import models.factory.*;
 
 public class SpawnAbility implements Ability {
 
@@ -44,7 +45,11 @@ public class SpawnAbility implements Ability {
         if (healthThreshold > 0) {
             if (triggered) return;
             if ((float) zombie.getHp() / zombie.getMaxHp() <= healthThreshold) {
-                game.spawn(zombie, spawnType, count);
+                Zombie imp = ZombieFactory.createZombie("imp" , zombie.getRow());
+                imp.setTileIndex(2);
+                imp.setX(imp.getTileIndex() * 80 + 100);
+                imp.setY(zombie.getY());
+                game.getZombies().add(imp);
                 triggered = true;
             }
             return;
@@ -65,7 +70,9 @@ public class SpawnAbility implements Ability {
             if (triggered) return;
             ExplodeAbility explode = zombie.getAbility(ExplodeAbility.class);
             if (explode != null && explode.isTriggered()) {
-                game.spawnReverseZombie(zombie.getRow());
+                Zombie explodedDynamite = ZombieFactory.createZombie("normal" , zombie.getRow());
+                explodedDynamite.setSpeed(explodedDynamite.getSpeed() * -1);
+                game.getZombies().add(explodedDynamite);
                 triggered = true;
             }
             return;

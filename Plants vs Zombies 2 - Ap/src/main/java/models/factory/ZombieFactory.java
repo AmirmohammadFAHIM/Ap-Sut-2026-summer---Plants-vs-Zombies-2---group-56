@@ -168,7 +168,9 @@ public class ZombieFactory {
 
         // ====== 23. SNORKEL =====
         if (type.equals("snorkel") || type.equals("ZombieBeachSnorkel")) {
-            return new Zombie(type, type, row, 350, 100, 0.185f, 200, 32, 105);
+            Zombie z = new Zombie(type, type, row, 350, 100, 0.185f, 200, 32, 105);
+            z.addBulletObserver(new SnorkelObserver());
+            return z;
         }
 
         // ====== 24. OCTOPUS ======

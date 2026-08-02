@@ -334,4 +334,8 @@ public class Bullet implements Cloneable {
     public void setActive(boolean active){
         this.active = active;
     }
+
+    public boolean isGrounded() {
+        return grounded;
+    }
 }

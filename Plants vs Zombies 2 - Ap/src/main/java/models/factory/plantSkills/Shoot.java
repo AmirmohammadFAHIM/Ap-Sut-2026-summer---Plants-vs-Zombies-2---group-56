@@ -210,6 +210,7 @@ public class Shoot implements Skill {
         float dy =  target.getY() - shooter.getY();
         float Vy = dy / t + Constants.gravity * t / 2;
         bullet.setVelocityY(Vy);
+        bullet.setGrounded(true);
         return  bullet;
     }
 

@@ -342,4 +342,8 @@ public class Bullet implements Cloneable {
     public float getPierce() {
         return pierce;
     }
+
+    public void setGrounded(boolean grounded) {
+        this.grounded = grounded;
+    }
 }

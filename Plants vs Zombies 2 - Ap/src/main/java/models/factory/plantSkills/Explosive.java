@@ -2,6 +2,7 @@ package models.factory.plantSkills;
 
 import models.entity.PlantTags;
 import models.factory.plantSkills.skillDatas.ExplosionData;
+import models.gamePanes.Tile;
 import models.games.BaseGame;
 import models.entity.Plant;
 import models.entity.Zombie;
@@ -89,7 +90,9 @@ public class Explosive implements Skill{
         int x = self.getTileIndex() - ((data.width - 1) / 2);
         int y = self.getLine() + ((data.height - 1) / 2);
         for (Zombie zombie :  game.getZombies()) {
-            if(Math.abs(x) <= data.width && Math.abs(y) <= data.height ){
+            float dx = Math.abs(zombie.getX() - self.getX());
+            float dy = Math.abs(zombie.getY() - self.getY());
+            if(dx <= x * Tile.getWidth() && dy <= y * Tile.getHeight() ){
                 zombie.setHp(zombie.getHp() - self.getDamage());
             }
         }

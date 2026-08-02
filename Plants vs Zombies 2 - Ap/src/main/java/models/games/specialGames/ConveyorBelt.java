@@ -12,10 +12,25 @@ public class ConveyorBelt extends NormalGame implements SpecialGame {
     ArrayList<PlantType> plants =  new ArrayList<>();
 
     public  ConveyorBelt() {
-
+        super();
+        initPlants(8);
+        belt.add(plants.getFirst());
         state = GameState.PLAYING;
     }
 
+    Random random = new Random();
+    private void initPlants(int i){
+        if(i == 0) return;
+        int index = rand.nextInt(App.getCurrentuser().getUnlockedPlants().size());
+        PlantType type = App.getCurrentuser().getUnlockedPlants().get(index);
+        if(plants.contains(type)){
+            initPlants(i);
+        }
+        else {
+            plants.add(type);
+            initPlants(i - 1);
+        }
+    }
     @Override
     public String playGame(float delta) {
         updateBelt(delta);
@@ -40,6 +55,21 @@ public class ConveyorBelt extends NormalGame implements SpecialGame {
     @Override
     public void attack() {
 
+    }
+
+    @Override
+    public String plant(String plantName, int x, int y) {
+        try {
+            PlantType type = PlantType.valueOf(plantName.toUpperCase());
+            if(belt.contains(type)){
+                belt.remove(type);
+                ///  TODO : do plant stuff
+            return "Planted " + type.name() + " successfully";
+            }
+            else return "We don't have this plant on the belt now.";
+        }catch (Exception e){
+            return "No plant found with name " + plantName;
+        }
     }
 
     float beltTimer = 0;

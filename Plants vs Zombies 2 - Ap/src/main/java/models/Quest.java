@@ -2,8 +2,8 @@
 package models;
 
 import controllers.datacontroller.Data;
-import controllers.menus.SecondaryMenus.News;
-import models.QuestObserver;
+import controllers.menus.secondarymenus.News;
+
 import java.io.Serializable;
 
 public class Quest implements Serializable, QuestObserver {

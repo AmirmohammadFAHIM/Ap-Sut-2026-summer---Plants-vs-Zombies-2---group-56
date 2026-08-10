@@ -29,13 +29,20 @@ public class SignUp implements Menu {
         return "--- Sign Up Menu ---";
     }
 
-    public String register(String username, String password, String passwordConfirm, String nickname, String email, String gender) {
+    public String register(String username, String password,
+                           String passwordConfirm, String nickname, String email, String gender) {
         if (!isValidUsername(username)) return "Error: username format is invalid.";
         if (Data.isUsernameExists(username)) return "Error: username is already taken.";
         if (!password.equals(passwordConfirm)) return "Error: passwords does not match.";
-        if (!isValidPassword(password)) return "Error: weak password. Must be at least 8 characters with letters, numbers, and symbols.";
-        if (!isValidNickname(nickname)) return "Error: nickname length is invalid. It must be between 3 and 30 characters.";
-        if (!isValidEmail(email)) return "Error: email format is invalid.";
+        if (!isValidPassword(password)){
+            return "Error: weak password. Must be at least 8 characters with letters, numbers, and symbols.";
+        }
+        if (!isValidNickname(nickname)) {
+            return "Error: nickname length is invalid. It must be between 3 and 30 characters.";
+        }
+        if (!isValidEmail(email)) {
+            return "Error: email format is invalid.";
+        }
 
         String hashedPassword = hashPassword(password);
         User newUser = new User(username, hashedPassword, nickname, email, gender);
@@ -57,13 +64,16 @@ public class SignUp implements Menu {
         return "Error: you must register first before picking a security question.";
     }
 
-    private boolean isValidUsername(String username) { return Pattern.matches(RegexHelper.USERNAME_PATTERN, username); }
-    private boolean isValidPassword(String password) { return Pattern.matches(RegexHelper.PASSWORD_PATTERN, password); }
+    private boolean isValidUsername(String username) {
+        return Pattern.matches(RegexHelper.USERNAME_PATTERN, username); }
+    private boolean isValidPassword(String password) {
+        return Pattern.matches(RegexHelper.PASSWORD_PATTERN, password); }
     private boolean isValidEmail(String email) {
         if (email == null || email.length() - email.replace("@", "").length() != 1) return false;
         return Pattern.matches(RegexHelper.EMAIL_PATTERN, email);
     }
-    private boolean isValidNickname(String nickname) { return nickname != null && nickname.length() >= 3 && nickname.length() <= 30; }
+    private boolean isValidNickname(String nickname) { return nickname != null
+            && nickname.length() >= 3 && nickname.length() <= 30; }
 
     private String hashPassword(String password) {
         try {

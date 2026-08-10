@@ -4,7 +4,7 @@ import models.entity.Plant;
 import models.entity.PlantTags;
 import models.factory.PlantFactory;
 import models.factory.plantSkills.skillDatas.PlantArmor;
-import models.gamePanes.Tile;
+import models.gamepanes.Tile;
 import models.games.BaseGame;
 
 import java.util.Random;
@@ -58,7 +58,7 @@ public class ExtraHP implements Skill{
         Tile tile = game.getField().getTiles().get(row).get(col);
         if(tile.isEmpty() && tile.isPlantable()){
             PlantFactory factory = new PlantFactory();
-            Plant clone = factory.CreatePlant(plant.getType());
+            Plant clone = factory.createPlant(plant.getType());
             clone.setLine(row);
             clone.setTileIndex(col);
             game.getPlantsInField().add(clone);

@@ -9,13 +9,13 @@ import models.factory.plantSkills.skillobserver.AoEObserver;
 import models.factory.plantSkills.skillobserver.ShootingObserver;
 
 public class PlantFactory {
-    private PlantBuilder plantBuilder;
-    public Plant CreatePlant(String input) {
-        return null;
+    public Plant createPlant(String input) {
+
+        return createPlant(PlantType.valueOf(input));
     }
 
     PlantBuilder builder = new PlantBuilder();
-    public  Plant CreatePlant(PlantType type) {
+    public  Plant createPlant(PlantType type) {
         Plant plant = builder.build(type);
         if(plant.getCategory() == PlantCategory.SHOOTER) plant.setSkillObserver(new ShootingObserver());
         else if(plant.getCategory() == PlantCategory.Explosive

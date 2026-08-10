@@ -1,6 +1,6 @@
 package models.entity;
 
-import models.gamePanes.Tile;
+import models.gamepanes.Tile;
 
 public class Entity {
     protected float x;

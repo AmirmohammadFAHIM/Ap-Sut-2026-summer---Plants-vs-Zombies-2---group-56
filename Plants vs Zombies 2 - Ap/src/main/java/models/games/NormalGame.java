@@ -1,14 +1,14 @@
 package models.games;
 
 import controllers.datacontroller.SeedPackage;
-import models.GameAdventure.Chapters;
-import models.GameAdventure.levels.Level;
+import models.gameadventure.Chapters;
+import models.gameadventure.levels.Level;
 import models.entity.*;
 import models.factory.builder.PlantType;
-import models.gamePanes.Field;
-import models.gamePanes.Tile;
-import models.gamePanes.TileType;
-import models.gamePanes.Wave;
+import models.gamepanes.Field;
+import models.gamepanes.Tile;
+import models.gamepanes.TileType;
+import models.gamepanes.Wave;
 import models.utils.Result;
 
 import java.util.ArrayList;
@@ -82,14 +82,13 @@ public class NormalGame extends BaseGame{
         }
         try {
             if(availablePlants.get(findPlant.plantType()).getCost() > sunCount){
-                return "I hoped you wanna talk about business and " +
-                        "you can't even effort a fuckin plant?";
+                return "Can't plant , not enough suns.";
             }
         }catch (Exception e){
             return "This plant , you haven't selected!\n - Yoda";
         }
 
-            Plant newPlant = plantFactory.CreatePlant(findPlant.plantType());
+            Plant newPlant = plantFactory.createPlant(findPlant.plantType());
         if(!isEmpty(newPlant ,x, y)) {
             return "The coordination is not empty or plantable.";
         }
@@ -126,39 +125,55 @@ public class NormalGame extends BaseGame{
 
     }
 
-    protected boolean isEmpty(Plant type , int x , int y){
+    protected boolean isEmpty(Plant type, int x, int y) {
         boolean waterPlant = type.getTags().contains(PlantTags.WATER);
-        Tile tile = field.getTileByCoordinats(x,y);
-        Plant a = findByCoordinates(x,y);
-        if(a != null && a.getType() == PlantType.PEA_POD &&
-        type.getType() == PlantType.PEA_POD){
+        Tile tile = field.getTileByCoordinats(x, y);
+        Plant existingPlant = findByCoordinates(x, y);
+
+        // Pea Pod Stacking logic
+        if (existingPlant != null && existingPlant.getType() == PlantType.PEA_POD && type.getType() == PlantType.PEA_POD) {
             return true;
         }
-        else if(type.getType() == PlantType.GRAVE_BUSTER){
-            return tile.getTileType() == TileType.EGYPTIAN_GRAVE ||
-                    tile.getTileType() == TileType.DARK_AGE_GRAVE;
+        else if (type.getType() == PlantType.GRAVE_BUSTER) {
+            return tile.getTileType() == TileType.EGYPTIAN_GRAVE || tile.getTileType() == TileType.DARK_AGE_GRAVE;
         }
-        Tile toPlantOn = field.getTiles().get(x).get(y);
+
+        // FIXED: get(y).get(x) because y = row, x = col
+        Tile toPlantOn = field.getTiles().get(y).get(x);
         boolean water = toPlantOn.isWater() || !waterPlant;
 
-
         return toPlantOn.isEmpty() &&
-                (toPlantOn.isPlantable() || type.getArmor().isEmpty()
-                        && type.getType() == PlantType.PUMPKIN ) && water;
+                (toPlantOn.isPlantable() || (type.getArmor().isEmpty() && type.getType() == PlantType.PUMPKIN)) &&
+                water;
     }
 
 
     @Override
     public String pluck(int x, int y) {
-        Tile  toPluckOn = field.getTiles().get(x).get(y);
-        for (Plant p : plantsInField){
-            if(p.getLine() == y && p.getTileIndex() == x){
-                if(toPluckOn.isEmpty() && toPluckOn.isPlantable()
-                        && toPluckOn.isWater()) continue; // This is a lily pad!
+        // FIXED: y is row (line), x is column (tileIndex)
+        Tile toPluckOn = field.getTiles().get(y).get(x);
+        Iterator<Plant> iterator = plantsInField.iterator();
+        boolean found = false;
+
+        while (iterator.hasNext()) {
+            Plant p = iterator.next();
+            if (p.getLine() == y && p.getTileIndex() == x) {
+                // Check to avoid plucking Lily Pads if they have a plant on them
+                if (toPluckOn.isEmpty() && toPluckOn.isPlantable() && toPluckOn.isWater()) {
+                    continue;
+                }
                 p.dispose(this);
+                iterator.remove(); // FIXED: Actually removes the plant from the list
+                found = true;
             }
         }
-        return "Bro don't pluck the plants ):";
+
+        if (found) {
+            toPluckOn.setEmpty(true);
+            return "Plant plucked successfully.";
+        }
+
+        return "ُThere's no plant to pluck.";
     }
 
 

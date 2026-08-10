@@ -12,26 +12,26 @@ public class ZombieFactory {
 
         // ====== 1. NORMAL ======
         if (type.equals("normal") || type.equals("ZombieDefault")) {
-            return new Zombie(type, type, row, 190, 100, -92.5f, 100, 32, 95);
+            return new Zombie(type, type, row, 190, 100, -150f, 50, 32, 95);
         }
 
         // ====== 2. CONEHEAD ======
         if (type.equals("cone") || type.equals("ZombieArmor1")) {
-            Zombie z = new Zombie(type, type, row, 190, 100, -92.5f, 200, 32, 95);
+            Zombie z = new Zombie(type, type, row, 190, 100, -150f, 50, 32, 95);
             z.addArmor(ArmorType.CONE.create());
             return z;
         }
 
         // ====== 3. BUCKETHEAD ======
         if (type.equals("bucket") || type.equals("ZombieArmor2")) {
-            Zombie z = new Zombie(type, type, row, 190, 100, -92.5f, 400, 32, 95);
+            Zombie z = new Zombie(type, type, row, 190, 100, -92.5f, 60, 32, 95);
             z.addArmor(ArmorType.BUCKET.create());
             return z;
         }
 
         // ====== 4. KNIGHT ======
         if (type.equals("knight") || type.equals("ZombieDarkArmor3")) {
-            Zombie z = new Zombie(type, type, row, 190, 100, -92.5f, 550, 32, 95);
+            Zombie z = new Zombie(type, type, row, 190, 100, -92.5f, 80, 32, 95);
             z.addArmor(ArmorType.CROWN.create());
             z.addArmor(ArmorType.SHOULDER.create());
             return z;

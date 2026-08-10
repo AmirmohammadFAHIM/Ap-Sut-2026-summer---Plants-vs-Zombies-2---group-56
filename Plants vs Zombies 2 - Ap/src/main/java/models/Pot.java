@@ -1,123 +1,84 @@
 package models;
 
-import models.utils.*;
-import models.factory.builder.*;
+import models.utils.CountDown;
+import models.factory.builder.PlantType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Pot {
-
+public class Pot implements Serializable {
     private boolean unlocked;
     private PlantType seedling;
     private int x;
     private int y;
-    private int random;
     private CountDown timer;
     private User user;
 
-    public Pot(User user , int x , int y){
+    public Pot(User user, int x, int y) {
         this.x = x;
         this.y = y;
         this.user = user;
         this.seedling = null;
-        this.random = (int)(Math.random() * 10) % 2 ;
-        if(y == 1)
-            this.unlocked = true;
-        else
-            this.unlocked = false;
+        // باز بودن گلدان‌های اولیه
+        this.unlocked = (y == 1);
     }
 
-    public void plant(){
-        if(this.unlocked == false)
-            return;
-        if(this.seedling != null){
-            // print error
-            return;
-        }
-        if (random == 0){ // marigold
-            this.seedling = PlantType.MARIGOLD; // marigold
-        }
+    public String plant() {
+        if (!this.unlocked) return "Error: This pot is locked!";
+        if (this.seedling != null) return "Error: Pot already has a plant.";
 
-        else{ // an unlocked plant , randomly
+        int random = (int)(Math.random() * 10) % 2;
+        if (random == 0) {
+            this.seedling = PlantType.MARIGOLD;
+            timer = new CountDown(2); // زمان رشد گل همیشه بهار
+        } else {
             ArrayList<String> names = user.getUnlockedPlantsNames();
-            int count = names.size();
-            int plantRand = (int)(Math.random() * 100 ) % count;
+            if(names.isEmpty()) return "Error: You have no unlocked plants to grow!";
+            int plantRand = (int)(Math.random() * names.size());
             String chosen = names.get(plantRand);
             this.seedling = PlantType.valueOf(chosen.toUpperCase());
+            timer = new CountDown(8); // زمان رشد گیاهان تصادفی
         }
-        timer = new CountDown(random * 6 + 2);
+        return "Planted " + this.seedling.name() + " at (" + x + ", " + y + ").";
     }
 
-    public void collect(){
-        if(this.unlocked == false)
-            return;
-        if(this.seedling != null){
-            System.out.println("har kasi bedrood chizi ra ke kesht!  nakeshti chizi!!!");
-            return;
-        }
-        if(this.timer.getRemainingHours() > 0){
-            System.out.println("bagheban saber bash , waghte besyary dar mazrae pishe gozar joost , nadani to magar?");
-        }
-        if (this.seedling.equals(PlantType.MARIGOLD)){
+    public String collect() {
+        if (!this.unlocked) return "Error: This pot is locked!";
+        if (this.seedling == null) return "Error: There is no plant here to collect!";
+        if (this.timer.getRemainingHours() > 0) return "Error: The plant is not fully grown yet. Remaining: " + timer.getRemainingHours() + " hours.";
+
+        String result;
+        if (this.seedling.equals(PlantType.MARIGOLD)) {
             user.addCoins(500);
-            System.out.println("500 seke moft!");
-        }
-        else{
+            result = "Collected a Marigold! Earned 500 coins.";
+        } else {
             user.addToBoostList(seedling);
-            //addToList must check if it is tekrary
+            result = "Collected " + seedling.name() + "! Boost saved.";
         }
         this.seedling = null;
-
-
+        return result;
     }
 
-    public void growNow(){
-        if(this.unlocked == false)
-            return;
-        if(this.seedling != null){
-            // print error
-            return;
-        }
+    public String growNow() {
+        if (!this.unlocked) return "Error: This pot is locked!";
+        if (this.seedling == null) return "Error: Pot is empty.";
 
         int remaining = this.timer.getRemainingHours();
-        if(remaining == 0)
-            return;
-        int newDiamond = user.getDiamonds() - remaining;
-        if(newDiamond < 0){
-            System.out.println("motasefam doost gerami , almaset kafi nabood :( ");
-            return;
+        if (remaining <= 0) return "Error: Plant is already fully grown!";
+
+        if (user.getDiamonds() < remaining) {
+            return "Error: Not enough diamonds. You need " + remaining + " diamonds.";
         }
+
         user.addDiamonds(-1 * remaining);
         timer.setCountingHours(0);
-        System.out.println("6 mahe be donya oomadi?" + remaining + "saat sabr mikardy!");
+        return "Used " + remaining + " diamonds to force grow. The plant is ready!";
     }
 
-    public void unlock(boolean isOpen){
-        this.unlocked = isOpen;
-        // will be called from shop
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public String getSeedling() {
-        if (seedling == null)
-            return null;
-        return seedling.toString();
-    }
-
-    public int getRemainingHours() {
-        if (timer == null) return 0;
-
-        return timer.getRemainingHours();
-    }
-
-    public boolean isUnlocked(){
-        return unlocked;
-    }
+    public void unlock(boolean isOpen) { this.unlocked = isOpen; }
+    public int getX() { return x; }
+    public int getY() { return y; }
+    public String getSeedling() { return seedling == null ? null : seedling.toString(); }
+    public int getRemainingHours() { return timer == null ? 0 : timer.getRemainingHours(); }
+    public boolean isUnlocked() { return unlocked; }
 }

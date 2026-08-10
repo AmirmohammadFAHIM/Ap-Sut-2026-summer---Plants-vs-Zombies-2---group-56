@@ -1,7 +1,7 @@
 package models.entity;
 
 import models.App;
-import models.gamePanes.Tile;
+import models.gamepanes.Tile;
 import models.games.BaseGame;
 import models.entity.ability.Ability;
 import controllers.observer.*;
@@ -109,7 +109,9 @@ public class Zombie extends Entity{
 
     // ====== UPDATE ======
     public void update(float deltaTime, BaseGame game) {
-        if (dead) return;
+        if (dead){
+            return;
+        }
 
         this.currentTile = game.getField().getTileByCoordinats(this.tileIndex , this.row);
         this.inWater = currentTile.isWater();
@@ -126,15 +128,15 @@ public class Zombie extends Entity{
 
         move();
 
-        if (reachedPlant()) {
+
             eatTimer += deltaTime;
             if (eatTimer >= eatCooldown) {
                 eatTimer = 0;
-                Plant plant = findNextPlant();
+                Plant plant = game.findTargetPlant(this , 70);
                 if (plant != null) {
                     attack(plant , game);
                 }
-            }
+
         }
 
         for (Ability ability : abilities) {

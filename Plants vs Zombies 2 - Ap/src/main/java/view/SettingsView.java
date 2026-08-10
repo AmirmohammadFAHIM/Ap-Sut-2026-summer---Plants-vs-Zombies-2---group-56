@@ -1,6 +1,6 @@
 package view;
 
-import controllers.menus.SecondaryMenus.Settings;
+import controllers.menus.secondarymenus.Settings;
 import models.utils.RegexHelper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

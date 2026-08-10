@@ -1,6 +1,6 @@
 package view;
 
-import controllers.menus.SecondaryMenus.Wallet;
+import controllers.menus.secondarymenus.Wallet;
 import models.utils.RegexHelper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

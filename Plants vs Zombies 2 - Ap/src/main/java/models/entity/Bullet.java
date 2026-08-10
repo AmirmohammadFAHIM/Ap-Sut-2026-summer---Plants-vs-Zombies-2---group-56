@@ -1,9 +1,9 @@
 package models.entity;
 
 import models.Constants;
-import models.gamePanes.Field;
-import models.gamePanes.Tile;
-import models.gamePanes.TileType;
+import models.gamepanes.Field;
+import models.gamepanes.Tile;
+import models.gamepanes.TileType;
 import models.games.BaseGame;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class Bullet implements Cloneable {
     private float pierce = 1;
     private boolean grounded = true;
     private boolean active;
-    private float poisonDamage = Constants.poisonBaseDamage;
+    private float poisonDamage = Constants.POISON_BASE_DAMAGE;
     private final ArrayList<BulletType> bowling = new ArrayList<>(Arrays.asList(BulletType.ONION_1,
             BulletType.ONION_2 , BulletType.ONION_3 , BulletType.Explosive_Onion));
 
@@ -48,27 +48,31 @@ public class Bullet implements Cloneable {
         if(tags.contains(PlantTags.AoE)) this.tags.add(Tag.AoE);
     }
 
-    public Bullet(float x, float y , float velocityX ,  float velocityY) {
+    public Bullet(float x, float y , float velocityX ,  float velocityY,int line) {
         this.x = x;
         this.y = y;
         this.velocityX = velocityX;
         this.velocityY = velocityY;
+        this.line = line;
     }
 
-    public Bullet(float x, float y , float velocityX , BulletType type ,  float damage) {
+    public Bullet(float x, float y , float velocityX , BulletType type ,  float damage
+    , int line) {
         this.x = x;
         this.y = y;
         this.velocityX = velocityX;
         this.type = type;
         this.damage = damage;
+        this.line = line;
     }
 
-    public Bullet(float x, float y , BulletType bulletType) {
+    public Bullet(float x, float y , BulletType bulletType, int line) {
         this.x = x;
         this.y = y;
         this.type = bulletType;
-        this.velocityX = Constants.BulletVelocityX;
+        this.velocityX = Constants.BULLET_VELOCITY_X;
         damage = 20;
+        this.line = line;
     }
 
     public void setPosition(float x, float y) {
@@ -83,7 +87,7 @@ public class Bullet implements Cloneable {
     public void run(float delta , BaseGame game){
 
         if(!grounded){
-            velocityY -= Constants.gravity * delta;
+            velocityY -= Constants.GRAVITY * delta;
         }
 
         if(pierce <= 0) dispose(game);
@@ -105,21 +109,35 @@ public class Bullet implements Cloneable {
             return;
         }
 
+        Zombie target = null;
         for (Zombie z : game.getZombies()) {
-            if (overlaps(z)) {
-                hitZombie(z);
-                if(tags.contains(Tag.AoE)){
-                    damageOnArea(1 , game);
-                }
-                break;
+            if(z.line != this.line){
+                continue;
+            }
+            float dx = Math.abs(x - z.getX());
+            float d = 0;
+            if(target != null){
+              d = Math.abs(x - target.x);
+           }
+            if (target == null ||
+           dx < d ) {
+                target = z;
             }
         }
+       if(target != null &&
+       overlaps(target)){
+           hitZombie(target);
+           if(tags.contains(Tag.AoE)){
+               damageOnArea(1 , game);
+           }
+       }
+
     }
 
     private void hitZombie(Zombie z){
         this.pierce -= 1;
         z.notifyBulletObservers(this);
-        if (this.isActive()) {
+
             z.takeDamage((int) this.damage);
             if (this.getTags().contains(Tag.ICE)) {
                 z.addEffect(new Effect(EffectType.FROZEN, 3.0f));
@@ -131,7 +149,7 @@ public class Bullet implements Cloneable {
                 z.setFrozen(false);
                 z.setDynamiteFrozen(false);
             }
-        }
+
     }
 
 
@@ -187,7 +205,7 @@ public class Bullet implements Cloneable {
         this.x += velocityX * delta;
         this.y += velocityY * delta;
         if(!grounded){
-            this.velocityY -= Constants.gravity * delta;
+            this.velocityY -= Constants.GRAVITY * delta;
         }
         if(this.y - line * Tile.getHeight() <= 30 && velocityY < 0){
             grounded = true;
@@ -200,8 +218,8 @@ public class Bullet implements Cloneable {
         float dy = toLockIn.getY() - y;
         float dx = toLockIn.getX() - x;
         float d = (float) Math.sqrt(dx * dx + dy * dy);
-        velocityX = Constants.HomingVelocity * (dx / d);
-        velocityY = Constants.HomingVelocity * (dy / d);
+        velocityX = Constants.HOMING_VELOCITY * (dx / d);
+        velocityY = Constants.HOMING_VELOCITY * (dy / d);
     }
 
     private void bowling(Field field){
@@ -335,12 +353,15 @@ public class Bullet implements Cloneable {
 
         return clone;
     }
-    public boolean overlaps(Tile tile){
-        float centreX = this.x + this.width /2 ;
-        float centreY = this.y + this.height /2 ;
-        boolean x = centreX >= tile.getX() && centreX <= tile.getX() + Tile.getWidth();
-        boolean y = centreY >= tile.getY() && centreY <= tile.getY() + Tile.getHeight();
-        return x && y;
+    public boolean overlaps(Tile tile) {
+        if (tile == null) {
+            return false;
+        }
+
+        return (this.x < tile.getX() + Tile.getWidth()) &&
+                (this.x + this.width > tile.getX()) &&
+                (this.y < tile.getY() + Tile.getHeight()) &&
+                (this.y + this.height > tile.getY());
     }
 
     public boolean overlaps(Zombie zombie){

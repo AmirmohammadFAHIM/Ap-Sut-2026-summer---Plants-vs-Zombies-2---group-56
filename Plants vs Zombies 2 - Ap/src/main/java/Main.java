@@ -1,7 +1,6 @@
-import controllers.datacontroller.Data;
-import controllers.datacontroller.MiniGameLevelManager;
-import models.App;
-import models.GameAdventure.Chapters;
+import controllers.datacontroller.*;
+
+import models.*;
 
 
 public class Main{

@@ -1,7 +1,7 @@
 package models.entity;
 
 import models.Constants;
-import models.gamePanes.Tile;
+import models.gamepanes.Tile;
 import models.games.BaseGame;
 
 public class Sun extends Entity{
@@ -32,7 +32,7 @@ public class Sun extends Entity{
         }
         if(!ground)
         {
-            this.y -= delta * Constants.SunDroppingVelocity;
+            this.y -= delta * Constants.SUN_DROPPING_VELOCITY;
         if(this.y + Sun.height / 2 <= this.line * Tile.getHeight()
                 + Tile.getHeight() / 2 ){
             ground = true;
@@ -74,7 +74,7 @@ public class Sun extends Entity{
             }
         }
 
-            game.getSuns().remove(this);
+
 
     }
 

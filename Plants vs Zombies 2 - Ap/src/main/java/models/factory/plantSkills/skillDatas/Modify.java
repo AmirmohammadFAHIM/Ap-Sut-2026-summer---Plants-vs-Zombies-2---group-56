@@ -4,8 +4,8 @@ import models.App;
 import models.entity.*;
 import models.factory.builder.PlantType;
 import models.factory.plantSkills.Skill;
-import models.gamePanes.Tile;
-import models.gamePanes.TileType;
+import models.gamepanes.Tile;
+import models.gamepanes.TileType;
 import models.games.BaseGame;
 
 import java.util.ArrayList;

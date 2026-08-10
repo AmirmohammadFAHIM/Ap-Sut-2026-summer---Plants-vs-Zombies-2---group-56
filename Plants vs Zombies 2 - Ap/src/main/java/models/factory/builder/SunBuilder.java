@@ -1,7 +1,7 @@
 package models.factory.builder;
 
 import models.entity.Sun;
-import models.gamePanes.Tile;
+import models.gamepanes.Tile;
 import models.games.BaseGame;
 import models.utils.Result;
 

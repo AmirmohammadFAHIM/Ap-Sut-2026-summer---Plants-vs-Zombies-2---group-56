@@ -4,7 +4,7 @@
     "chapters": "AncientEgypt",
     "levelType": "normal",
     "waves": 3,
-    "baseHardness": 1.0,
+    "baseHardness": 300,
     "allowedZombies": ["normal", "cone"],
     "unlockingPlants": ["CABBAGE_PULT", "CHERRY_BOMB"]
   },
@@ -13,7 +13,7 @@
     "chapters": "AncientEgypt",
     "levelType": "conveyor belt",
     "waves": 2,
-    "baseHardness": 1.2,
+    "baseHardness": 600,
     "allowedZombies": ["normal", "cone", "bucket"],
     "unlockingPlants": ["POTATO_MINE"]
   },
@@ -22,7 +22,7 @@
     "chapters": "AncientEgypt",
     "levelType": "save our seeds",
     "waves": 3,
-    "baseHardness": 1.5,
+    "baseHardness": 800,
     "allowedZombies": ["normal", "cone", "ra"],
     "unlockingPlants": ["GRAVE_BUSTER"]
   },

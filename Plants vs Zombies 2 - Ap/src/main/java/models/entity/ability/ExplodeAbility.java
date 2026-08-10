@@ -45,9 +45,9 @@ public class ExplodeAbility implements Ability {
             triggered = true;
 
             if (zombie.hasEffect(EffectType.HYPNOTIZED)) {
-                game.explodeAreaOnZombies(zombie.getRow(), zombie.getX(), range, damage);
+                game.explodeAreaOnZombies(zombie.getLine(), zombie.getX(), range, damage);
             } else {
-                game.explodeArea(zombie.getRow(), zombie.getX(), range, damage);
+                game.explodeArea(zombie.getLine(), zombie.getX(), range, damage);
             }
         }
     }

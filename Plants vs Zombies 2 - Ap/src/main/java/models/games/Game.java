@@ -1,7 +1,7 @@
 package models.games;
 
-import models.GameAdventure.Chapters;
-import models.GameAdventure.levels.Level;
+import models.gameadventure.Chapters;
+import models.gameadventure.levels.Level;
 import models.factory.builder.PlantType;
 import models.utils.Result;
 

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Melee implements Skill{
     public enum MeleeAttack{PUNCH , AoE,}
     MeleeAttack attackType;
-    public int punch_numbers;
+    public int punchNumbers;
     public int edge;
     public int range = 1;
     public Skill setRange(int range) {
@@ -18,23 +18,23 @@ public class Melee implements Skill{
     }
     public Melee(MeleeAttack attackType){
         this.attackType = attackType;
-        punch_numbers = 1;
+        punchNumbers = 1;
     }
-    public Melee(MeleeAttack attackType , int punch_numbers ,  int edge){
+    public Melee(MeleeAttack attackType , int punchNumbers, int edge){
         this.attackType = attackType;
-        this.punch_numbers = punch_numbers;
+        this.punchNumbers = punchNumbers;
         this.edge = edge;
     }
-    public Melee(MeleeAttack attackType , int punch_numbers){
+    public Melee(MeleeAttack attackType , int punchNumbers){
         this.attackType = attackType;
-        this.punch_numbers = punch_numbers;
+        this.punchNumbers = punchNumbers;
     }
     @Override
     public void do_skill(Plant plant, BaseGame game) {
         System.out.println(plant.getType() + " is fighting ...");
         switch (attackType){
             case  PUNCH -> punch(plant, game);
-            case AoE -> AoE_Punch(plant , game ,edge, punch_numbers);
+            case AoE -> aoEPunch(plant , game ,edge, punchNumbers);
         }
     }
 
@@ -67,10 +67,11 @@ public class Melee implements Skill{
     }
 
 
-    private void AoE_Punch(Plant plant, BaseGame game , int edge , int punch_numbers /*for multi punches(plant food)*/) {
+    private void aoEPunch(Plant plant, BaseGame game , int edge , int punch_numbers) {
         ArrayList<Zombie> zombies;
         for (Zombie x : game.getZombies()) {
-            if(Math.abs(x.getLine() - plant.getLine()) <= edge && Math.abs(x.getTileIndex() - plant.getTileIndex()) <= edge) {
+            if(Math.abs(x.getLine() - plant.getLine()) <= edge
+                    && Math.abs(x.getTileIndex() - plant.getTileIndex()) <= edge) {
                 x.setHp(x.getHp() - plant.getDamage() * punch_numbers);
             }
         }

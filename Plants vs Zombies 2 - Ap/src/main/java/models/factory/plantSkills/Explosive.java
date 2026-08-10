@@ -1,8 +1,7 @@
 package models.factory.plantSkills;
 
-import models.entity.PlantTags;
 import models.factory.plantSkills.skillDatas.ExplosionData;
-import models.gamePanes.Tile;
+import models.gamepanes.Tile;
 import models.games.BaseGame;
 import models.entity.Plant;
 import models.entity.Zombie;
@@ -31,7 +30,9 @@ public class Explosive implements Skill{
 
     private void oneLine(Plant self, BaseGame game) {
         for (Zombie z : game.getZombies()){
-            z.setHp(z.getHp() - self.getDamage());
+           if(z.getLine() == self.getLine()){
+               z.setHp(z.getHp() - self.getDamage());
+           }
         }
     }
 
@@ -67,21 +68,13 @@ public class Explosive implements Skill{
     }
 
     private void nextTo(Plant self, BaseGame game) {
-        for (Zombie z : game.getCurrentWave().getZombies()) {
-            if (z.getX() - self.getX() + self.getWidth() < 20) {
+        for (Zombie z : game.getZombies()){
+            if(z.getX() <= self.getX() + self.getWidth()){
                 z.setHp(0);
-                self.setHp(0);
-                return;
+                z.setAlive(false);
             }
         }
 
-
-        for (Zombie z : game.getPreviousWave().getZombies()) {
-            if (z.getX() - self.getX() + self.getWidth() < 20) {
-                z.setHp(0);
-                self.setHp(0);
-            }
-        }
     }
 
 

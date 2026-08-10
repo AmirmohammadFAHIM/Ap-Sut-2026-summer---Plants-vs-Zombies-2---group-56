@@ -1,6 +1,6 @@
 package view;
 
-import controllers.menus.SecondaryMenus.TravelLog;
+import controllers.menus.secondarymenus.TravelLog;
 import models.utils.RegexHelper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

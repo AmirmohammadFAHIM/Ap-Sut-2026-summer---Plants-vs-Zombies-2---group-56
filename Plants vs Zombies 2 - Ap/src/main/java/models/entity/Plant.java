@@ -8,7 +8,7 @@ import models.factory.plantSkills.Skill;
 import models.factory.plantSkills.skillDatas.ExplosionData;
 import models.factory.plantSkills.skillDatas.PlantArmor;
 import models.factory.plantSkills.skillobserver.Observer;
-import models.gamePanes.Tile;
+import models.gamepanes.Tile;
 import models.games.BaseGame;
 
 import java.util.ArrayList;

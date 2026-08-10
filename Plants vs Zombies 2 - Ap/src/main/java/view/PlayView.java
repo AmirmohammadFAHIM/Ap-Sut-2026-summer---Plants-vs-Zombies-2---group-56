@@ -1,8 +1,8 @@
 package view;
 
 import controllers.datacontroller.Data;
-import controllers.menus.gameController.PlayMenu;
-import models.GameAdventure.Chapters;
+import controllers.menus.gamecontroller.PlayMenu;
+import models.gameadventure.Chapters;
 import models.User;
 import models.utils.RegexHelper;
 import java.util.regex.Matcher;

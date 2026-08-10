@@ -1,7 +1,7 @@
 // file: Plants vs Zombies 2 - Ap/src/view/ShopView.java
 package view;
 
-import controllers.menus.SecondaryMenus.Shop;
+import controllers.menus.secondarymenus.Shop;
 import models.utils.RegexHelper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

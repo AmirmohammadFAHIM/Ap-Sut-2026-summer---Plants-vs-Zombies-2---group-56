@@ -3,26 +3,26 @@ package models;
 import models.entity.Entity;
 
 public class Constants {
-    public final static float gravity = 300;
-    public final static float LobberBulletVelocityX = 100;
-    public final static float BulletVelocityX = 120;
-    public final static float MagicalBulletVelocity = 120;
-    public final static float Tall_WallNut_Height = 250;
-    public final static int DeadLine_TileIndex = 3;
-    public final static int LYP_Count = 5;
-    public final static int Plants_count_in_a_game = 8;
-    public final static int PlantWhatYouGet_StartingSunCount = 800;
-    public final static int DisasterZombiesBaseCount = 3;
-    public final static float TornadoVelocity = 200f;
-    public final static float EndurianArmorDamage = 80f;
-    public final static float WaterSurfaceChangeTime = 30f;
-    public final static float SunDroppingVelocity = 70f;
-    public final static float ChillTime = 5f;
-    public final static float poisonBaseDamage = 10f;
-    public final static float HomingVelocity = 250f;
-    public final static int WallnutLimitLine = 3;
-    public final static float BowlingWallnutVelocity = 200f;
-    public final static float MoanerSpeed = 300f;
+        public final static float GRAVITY = 300;
+    public final static float LOBBER_BULLET_VELOCITY_X = 100;
+    public final static float BULLET_VELOCITY_X = 120;
+    public final static float MAGICAL_BULLET_VELOCITY = 120;
+    public final static float TALL_WALL_NUT_HEIGHT = 250;
+    public final static int DEAD_LINE_TILE_INDEX = 3;
+    public final static int LAP_Count = 5;
+    public final static int PLANTS_COUNT_IN_A_GAME = 8;
+    public final static int PLANT_WHAT_YOU_GET_STARTING_SUN_COUNT = 800;
+    public final static int DISASTER_ZOMBIES_BASE_COUNT = 3;
+    public final static float TORNADO_VELOCITY = 200f;
+    public final static float ENDURIAN_ARMOR_DAMAGE = 80f;
+    public final static float WATER_SURFACE_CHANGE_TIME = 30f;
+    public final static float SUN_DROPPING_VELOCITY = 70f;
+    public final static float CHILL_TIME = 5f;
+    public final static float POISON_BASE_DAMAGE = 10f;
+    public final static float HOMING_VELOCITY = 250f;
+    public final static int WALLNUT_LIMIT_LINE = 3;
+    public final static float BOWLING_WALLNUT_VELOCITY = 200f;
+    public final static float MOANER_SPEED = 300f;
 
     public static boolean overlap(Entity entity1, Entity entity2) {
         if (entity1 == null || entity2 == null) {

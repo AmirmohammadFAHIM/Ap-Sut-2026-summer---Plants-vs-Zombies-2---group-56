@@ -1,6 +1,6 @@
 package view;
 
-import controllers.menus.SecondaryMenus.News;
+import controllers.menus.secondarymenus.News;
 import models.utils.RegexHelper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

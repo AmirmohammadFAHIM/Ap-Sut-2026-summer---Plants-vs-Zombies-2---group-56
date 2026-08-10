@@ -1,8 +1,9 @@
 package models.utils;
 
+import java.io.Serializable;
 import java.time.*;
 
-public class CountDown {
+public class CountDown implements Serializable {
     private LocalDateTime targetTime;
     private int countingHours;
 

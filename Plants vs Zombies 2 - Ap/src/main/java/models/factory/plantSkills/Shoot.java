@@ -5,7 +5,7 @@ import models.Constants;
 import models.entity.*;
 import models.factory.plantSkills.skillDatas.ShootingData;
 import models.factory.plantSkills.skillDatas.ShootingMood;
-import models.gamePanes.Tile;
+import models.gamepanes.Tile;
 import models.games.BaseGame;
 
 import java.util.ArrayList;
@@ -36,10 +36,10 @@ public class Shoot implements Skill {
     public void shoot(Plant shooter , ShootingData data , BaseGame game) throws CloneNotSupportedException {
         System.out.println("bangg bangg bangg .. " + shooter.getType()  + " is shooting ..");
         switch (data.getMood()){
-            case OneLine -> OneLineShoot(shooter , data , game);
-            case ThreeLine -> ThreeLineShoot(shooter , data , game);
-            case Front_Back -> front_back_shoot(shooter , data , game);
-            case Star -> star_shoot( shooter , data , game);
+            case OneLine -> oneLineShoot(shooter , data , game);
+            case ThreeLine -> threeLineShoot(shooter , data , game);
+            case Front_Back -> frontBackShoot(shooter , data , game);
+            case Star -> starShoot( shooter , data , game);
             case Diagonal -> diagonal(shooter , data , game);
             case LOBBER -> lobber(shooter , game);
             case Random -> random(shooter , game , data.getRandomCount());
@@ -50,7 +50,7 @@ public class Shoot implements Skill {
     }
 
     float onionChange;
-    public void OneLineShoot(Plant shooter, ShootingData data , BaseGame game) throws CloneNotSupportedException {
+    public void oneLineShoot(Plant shooter, ShootingData data , BaseGame game) throws CloneNotSupportedException {
         onionChange += 2;
         int level = App.getCurrentuser().getLevels().get(shooter.getType());
         if(data.getBullet() == BulletType.ONION_1 || data.getBullet() == BulletType.ONION_3){
@@ -74,8 +74,8 @@ public class Shoot implements Skill {
         }
         float x = shooter.getX() + shooter.getWidth();
         float y =  (shooter.getY() + shooter.getHeight() * 0.8f);
-        Bullet bullet = new Bullet(x , y , data.getBullet());
-        bullet.setVelocityX(Constants.BulletVelocityX);
+        Bullet bullet = new Bullet(x , y , data.getBullet(),shooter.getLine());
+        bullet.setVelocityX(Constants.BULLET_VELOCITY_X);
         for (int i = 0; i < data.getBulletNumber(); i++) {
             Bullet bullet1 = (Bullet) bullet.clone();
             bullet1.setX(bullet1.getX() + i * 10);
@@ -84,15 +84,17 @@ public class Shoot implements Skill {
 
 
         if(data.getBulletNumber() >= 50){
-            Bullet bullet1 = new Bullet(x , y , Constants.BulletVelocityX , BulletType.GIANT_PEA
-                    , shooter.getDamage());
+            Bullet bullet1 = new Bullet(x , y , Constants.BULLET_VELOCITY_X, BulletType.GIANT_PEA
+                    , shooter.getDamage(),shooter.getLine());
             game.getBullets().add(bullet1);
         }
     }
 
-    public void ThreeLineShoot(Plant shooter, ShootingData data , BaseGame game) throws CloneNotSupportedException {
+    public void threeLineShoot(Plant shooter, ShootingData data , BaseGame game) throws CloneNotSupportedException {
         Bullet bullet = new Bullet(shooter.getX() + shooter.getWidth(),
-                shooter.getY() + shooter.getHeight() * 0.8f ,Constants.BulletVelocityX, data.getBullet() , shooter.getDamage());
+                shooter.getY() + shooter.getHeight() * 0.8f
+                ,Constants.BULLET_VELOCITY_X, data.getBullet() , shooter.getDamage()
+        , shooter.getLine());
         Bullet bulletup = (Bullet) bullet.clone();
         Bullet bulletdown = (Bullet) bulletup.clone();
         bulletup.setY(bulletup.getY() + Tile.getHeight());
@@ -101,12 +103,13 @@ public class Shoot implements Skill {
        if(shooter.getLine() != 5) game.getBullets().add(bulletdown);
     }
 
-    private void front_back_shoot(Plant shooter , ShootingData data , BaseGame game) throws CloneNotSupportedException {
+    private void frontBackShoot(Plant shooter , ShootingData data , BaseGame game) throws CloneNotSupportedException {
         ShootingData front = new ShootingData(data.getBullet() , data.getMood() ,
                 data.getBulletNumber() / 2);
-        OneLineShoot(shooter , front , game);
-        Bullet bulletBack = new Bullet(shooter.getX() , shooter.getY() + shooter.getHeight() * 0.8f,Constants.BulletVelocityX * -1
-                , data.getBullet(), shooter.getDamage());
+        oneLineShoot(shooter , front , game);
+        Bullet bulletBack = new Bullet(shooter.getX() , shooter.getY() + shooter.getHeight() * 0.8f
+                ,Constants.BULLET_VELOCITY_X * -1
+                , data.getBullet(), shooter.getDamage() ,  shooter.getLine());
         for (int i = 0; i < data.getBulletNumber() / 2; i++) {
             Bullet b = (Bullet) bulletBack.clone();
             b.setX(b.getX() - i * 4);
@@ -114,11 +117,12 @@ public class Shoot implements Skill {
         }
     }
 
-    private void star_shoot(Plant shooter , ShootingData data ,  BaseGame game) throws CloneNotSupportedException {
-        OneLineShoot(shooter, new ShootingData(data.getBullet() , data.getMood()
+    private void starShoot(Plant shooter , ShootingData data , BaseGame game) throws CloneNotSupportedException {
+        oneLineShoot(shooter, new ShootingData(data.getBullet() , data.getMood()
                 , data.getBulletNumber() / 5), game);///right
         Bullet bulletStar2 = new Bullet(shooter.getX() , shooter.getY() + shooter.getHeight() * 0.8f ,
-               Constants.BulletVelocityX * -1 , data.getBullet() , shooter.getDamage() );
+               Constants.BULLET_VELOCITY_X * -1 , data.getBullet() , shooter.getDamage()
+        ,  shooter.getLine());
         Bullet bulletStar3 = (Bullet) bulletStar2.clone();
         bulletStar3.setVelocityY(bulletStar3.getVelocityX());
         bulletStar3.setY(shooter.getY());
@@ -141,7 +145,8 @@ public class Shoot implements Skill {
 
     private void diagonal(Plant shooter , ShootingData  data , BaseGame game) throws CloneNotSupportedException {
         Bullet bullet1 = new Bullet(shooter.getX() + shooter.getWidth() , shooter.getY() + shooter.getHeight() * 0.9f ,
-                Constants.BulletVelocityX, data.getBullet() , shooter.getDamage());
+                Constants.BULLET_VELOCITY_X, data.getBullet() , shooter.getDamage()
+        ,   shooter.getLine());
         bullet1.setVelocityY(bullet1.getVelocityX());
         Bullet bullet2 = (Bullet) bullet1.clone();
         bullet2.setVelocityX(bullet2.getVelocityX() * -1);
@@ -151,7 +156,7 @@ public class Shoot implements Skill {
         bullet3.setY(shooter.getY());
         Bullet bullet4 = (Bullet) bullet3.clone();
         bullet4.setX(shooter.getX() + shooter.getWidth());
-        bullet4.setVelocityX(Constants.BulletVelocityX);
+        bullet4.setVelocityX(Constants.BULLET_VELOCITY_X);
         for (int i = 0; i < data.getBulletNumber() / 4; i++) {
             game.getBullets().add((Bullet) bullet4.clone());
             game.getBullets().add((Bullet) bullet3.clone());
@@ -176,7 +181,8 @@ public class Shoot implements Skill {
                                 zombie.getTileIndex() - shooter.getTileIndex() <= data.range) {
                             Bullet bullet = new Bullet(shooter.getX() +  shooter.getWidth() ,
                                     shooter.getY() + shooter.getHeight() * 0.8f
-                                    , Constants.BulletVelocityX , 0);
+                                    , Constants.BULLET_VELOCITY_X, 0,
+                                    shooter.getLine());
                             bullet.setType(data.getBullet());
                         }
                     }
@@ -196,21 +202,22 @@ public class Shoot implements Skill {
             }
         }
 
-       if(target != null) game.getBullets().add(lobber_shoot(shooter , target));
+       if(target != null) game.getBullets().add(lobberShoot(shooter , target));
     }
-    private Bullet lobber_shoot(Plant shooter , Zombie target){
-        Bullet bullet = new Bullet(shooter.getX() - 30, shooter.getY() + shooter.getHeight() / 2 , data.getBullet());
+    private Bullet lobberShoot(Plant shooter , Zombie target){
+        Bullet bullet = new Bullet(shooter.getX() - 30, shooter.getY() + shooter.getHeight() / 2
+                , data.getBullet(),shooter.getLine());
         if(data.getBullet() == BulletType.CORN){
             Random rand = new Random();
             boolean changeIncrease = App.getCurrentuser().getLevels().get(shooter.getType()) >= 2;
             int a = rand.nextInt(100); // probability = 20%
             if((a >= 1 && a <= 40) || (changeIncrease && a >= 41 && a <= 45)) bullet.setType(BulletType.BUTTER);
         }
-        bullet.setVelocityX(Constants.LobberBulletVelocityX);
+        bullet.setVelocityX(Constants.LOBBER_BULLET_VELOCITY_X);
         float t = (target.getX() - shooter.getX()) / (bullet.getVelocityX() + target.getVelocityX());
         float dy =  target.getY() - shooter.getY();
-        float Vy = dy / t + Constants.gravity * t / 2;
-        bullet.setVelocityY(Vy);
+        float vy = dy / t + Constants.GRAVITY * t / 2;
+        bullet.setVelocityY(vy);
         bullet.setGrounded(true);
         return  bullet;
     }
@@ -222,7 +229,7 @@ public class Shoot implements Skill {
         ArrayList<Zombie> targets = Skill.super.random(plant, game, data.getRandomCount());
         if(data.getMood() == ShootingMood.LOBBER){
             for (Zombie z : targets) {
-                game.getBullets().add(lobber_shoot(plant, z));
+                game.getBullets().add(lobberShoot(plant, z));
             }
         }
         return targets;
@@ -232,7 +239,7 @@ public class Shoot implements Skill {
     public void all(Plant plant, BaseGame game) {
         if(data.getMood() == ShootingMood.LOBBER){
             for (Zombie z : game.getZombies()) {
-                game.getBullets().add(lobber_shoot(plant, z));
+                game.getBullets().add(lobberShoot(plant, z));
             }
 
         }
@@ -240,7 +247,8 @@ public class Shoot implements Skill {
             for (int i = 0; i < data.getBulletNumber() / 5; i++) {
                 for (int j = 1; j <= 5; j++) {
                     Bullet bullet = new Bullet(plant.getX() ,
-                            plant.getY() + i * Tile.getHeight() - Tile.getHeight() / 2, data.getBullet());
+                            plant.getY() + i * Tile.getHeight() - Tile.getHeight() / 2
+                            , data.getBullet(),plant.getLine());
                     game.getBullets().add(bullet);
                 }
             }

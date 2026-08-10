@@ -1,7 +1,6 @@
 package models.entity.ability;
 
 import models.entity.*;
-import models.gamePanes.GridItem;
 import models.games.BaseGame;
 
 public class MoveAbility implements Ability {
@@ -63,7 +62,7 @@ public class MoveAbility implements Ability {
     private void handleSwap(Zombie zombie, BaseGame game) {
         Zombie target = game.getRandomZombie();
         if (target != null && target != zombie) {
-            game.swapZombieToRow(target, zombie.getRow());
+            game.swapZombieToRow(target, zombie.getLine());
         }
     }
 

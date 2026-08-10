@@ -5,7 +5,7 @@ import models.Constants;
 import models.entity.PlantTags;
 import models.entity.Sun;
 import models.entity.Zombie;
-import models.gamePanes.Tile;
+import models.gamepanes.Tile;
 import models.games.BaseGame;
 import models.entity.Plant;
 
@@ -25,7 +25,7 @@ public class Block implements Skill{
             else if(plant.getTags().contains(PlantTags.MOVE_ZOMBIES)){
                 if(in) attract(plant, game);
             }
-            else if(plant.getHeight() >= Constants.Tall_WallNut_Height){
+            else if(plant.getHeight() >= Constants.TALL_WALL_NUT_HEIGHT){
                 tall(plant, game);
             }
             damaged_action(plant, game);
@@ -66,7 +66,7 @@ public class Block implements Skill{
         for (Zombie zombie: game.getZombies()) {
             if(zombie.getX() - self.getX() < 10 && self.isHurt()) {
                if(damage) {
-                   float extraDamage = self.getArmor() != null ? Constants.EndurianArmorDamage : 0;
+                   float extraDamage = self.getArmor() != null ? Constants.ENDURIAN_ARMOR_DAMAGE : 0;
                    if(App.getCurrentuser().getLevels().get(self.getType()) >= 2) extraDamage += 5;
                    zombie.setHp(zombie.getHp() - self.getDamage() - extraDamage);
                }

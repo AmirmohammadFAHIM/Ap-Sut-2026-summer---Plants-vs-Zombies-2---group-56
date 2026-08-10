@@ -2,27 +2,23 @@ package controllers.datacontroller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sun.tools.javac.Main;
-import models.App;
-import models.GameAdventure.Chapters;
-import models.GameAdventure.levels.Level;
-import models.User;
-import models.factory.builder.PlantType;
-import view.HomeView;
-import view.SignUpView;
-import com.google.gson.Gson;
+import models.*;
+import models.gameadventure.*;
+import models.gameadventure.levels.*;
+import models.*;
+import models.factory.builder.*;
+import view.*;
+import view.*;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Map;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Data {
     private static final String USERS_FILE = "users_data.dat";

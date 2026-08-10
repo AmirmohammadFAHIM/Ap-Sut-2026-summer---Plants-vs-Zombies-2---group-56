@@ -28,13 +28,14 @@ public class BulletAbility implements Ability {
         if (isHypnotized) {
             Zombie target = game.findNearestZombie(zombie, range);
             if (target == null) return;
-            Bullet bullet = new Bullet(zombie.getX(), zombie.getY(), bulletType);
+            Bullet bullet = new Bullet(zombie.getX(), zombie.getY(), bulletType,zombie.getLine());
             bullet.setToLockIn(target);
             game.getBullets().add(bullet);
         } else {
             Plant target = game.findTargetPlant(zombie, range);
             if (target == null) return;
-            Bullet bullet = new Bullet(zombie.getX(), zombie.getY(), bulletType);
+            Bullet bullet = new Bullet(zombie.getX(), zombie.getY(), bulletType
+            , zombie.getLine());
             bullet.setToLockIn(null);
             game.getBullets().add(bullet);
         }

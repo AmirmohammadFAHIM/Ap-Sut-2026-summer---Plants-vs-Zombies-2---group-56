@@ -2,7 +2,7 @@ package controllers.observer;
 
 import models.entity.Bullet;
 import models.entity.Zombie;
-import models.gamePanes.*;
+import models.gamepanes.*;
 
 public class PassThroughObserver implements BulletObserver{
 

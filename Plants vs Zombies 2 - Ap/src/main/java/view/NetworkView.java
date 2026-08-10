@@ -1,6 +1,6 @@
 package view;
 
-import controllers.menus.SecondaryMenus.Network;
+import controllers.menus.secondarymenus.Network;
 import models.utils.RegexHelper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

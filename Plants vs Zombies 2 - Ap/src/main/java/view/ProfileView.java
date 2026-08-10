@@ -1,6 +1,6 @@
 package view;
 
-import controllers.menus.SecondaryMenus.Profile;
+import controllers.menus.secondarymenus.Profile;
 import models.utils.RegexHelper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,13 +23,13 @@ public class ProfileView extends View {
         if (infoMatcher.matches()) {
             System.out.println(((Profile) menu).showProfile());
         } else if (usernameMatcher.matches()) {
-            System.out.println(((Profile) menu).ChangeUserName(usernameMatcher.group("username")));
+            System.out.println(((Profile) menu).changeUserName(usernameMatcher.group("username")));
         } else if (nicknameMatcher.matches()) {
-            System.out.println(((Profile) menu).ChangeNickName(nicknameMatcher.group("nickname")));
+            System.out.println(((Profile) menu).changeNickName(nicknameMatcher.group("nickname")));
         } else if (emailMatcher.matches()) {
-            System.out.println(((Profile) menu).ChangeEmail(emailMatcher.group("email")));
+            System.out.println(((Profile) menu).changeEmail(emailMatcher.group("email")));
         } else if (passwordMatcher.matches()) {
-            System.out.println(((Profile) menu).ChangePassword(passwordMatcher.group("oldPassword"), passwordMatcher.group("newPassword")));
+            System.out.println(((Profile) menu).changePassword(passwordMatcher.group("oldPassword"), passwordMatcher.group("newPassword")));
         } else {
             System.out.println("Invalid command!");
         }

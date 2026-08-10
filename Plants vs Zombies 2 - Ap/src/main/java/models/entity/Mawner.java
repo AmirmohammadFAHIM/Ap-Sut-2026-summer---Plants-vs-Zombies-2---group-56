@@ -11,7 +11,7 @@ public class Mawner extends Entity {
 
 
       if(on){
-          x += Constants.MoanerSpeed * delta;
+          x += Constants.MOANER_SPEED * delta;
       }
         for (Zombie z : game.getZombies()) {
             if(Constants.overlap(z , this)){

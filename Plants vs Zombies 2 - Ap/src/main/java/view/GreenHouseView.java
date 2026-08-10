@@ -1,6 +1,6 @@
 package view;
 
-import controllers.menus.SecondaryMenus.GreenHouseController;
+import controllers.menus.secondarymenus.GreenHouseController;
 import models.App;
 import models.utils.RegexHelper;
 import java.util.regex.Matcher;

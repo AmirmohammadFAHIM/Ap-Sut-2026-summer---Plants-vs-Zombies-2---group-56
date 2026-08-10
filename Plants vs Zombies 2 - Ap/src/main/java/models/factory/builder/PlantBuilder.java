@@ -22,6 +22,7 @@ public class PlantBuilder {
 
 
     public Plant build(PlantType plantType){
+        plant = new Plant();
         plant.setType(plantType);
         int level = App.getCurrentuser().getLevels().get(plantType);
         plant.setHp(upgradedHP(plantType , level));

@@ -4,15 +4,14 @@ import commands.GameCommands;
 import controllers.Start.PlantSelection;
 import controllers.datacontroller.SeedPackage;
 import controllers.observer.WizardObserver;
-import models.App;
-import models.GameAdventure.*;
+import models.gameadventure.*;
 //import models.collection.ZombieRegistry;
-import models.GameAdventure.levels.Level;
+import models.gameadventure.levels.Level;
 import models.entity.*;
 import models.factory.*;
 import models.factory.builder.PlantType;
 import models.factory.builder.SunBuilder;
-import models.gamePanes.*;
+import models.gamepanes.*;
 import models.utils.Result;
 import models.entity.ability.*;
 
@@ -148,23 +147,28 @@ public class BaseGame implements Game {
 
 
     @Override
-    public void updatePlants(float delta ) {
+    public void updatePlants(float delta) {
         Iterator<Plant> iterator = plantsInField.iterator();
-        while (iterator.hasNext()){
-            Plant p =  (Plant) iterator.next();
-            p.update(delta,this);
-            if(p.getHp() <= 0){
+        while (iterator.hasNext()) {
+            Plant p = iterator.next();
+            p.update(delta, this);
+            if (p.getHp() <= 0) {
                 p.dispose(this);
                 iterator.remove();
+
                 output.append("\n").append("Plant ")
                         .append(p.getType()).append(" died at (")
                         .append(p.getTileIndex()).append(" , ")
                         .append(p.getLine()).append(")");
 
                 Tile tile = field.getTileByCoordinats(p.getTileIndex(), p.getLine());
-                tile.setEmpty(true);
-            }
 
+                // QUICK FIX: Don't set empty to true if it's a water tile (implying a Lily Pad is still there)
+                // You may need to expand this logic based on how you implemented Lily Pads
+                if (!tile.isWater()) {
+                    tile.setEmpty(true);
+                }
+            }
         }
     }
 
@@ -209,14 +213,7 @@ public class BaseGame implements Game {
 
     @Override
     public String pluck(int x, int y) {
-        Tile toPluckOn = field.getTiles().get(x).get(y);
-        for (Plant p : plantsInField) {
-            if (p.getLine() == y && p.getTileIndex() == x) {
-                if (toPluckOn.isEmpty() && toPluckOn.isPlantable() && toPluckOn.isWater()) continue;
-                p.dispose(this);
-            }
-        }
-        return "Bro don't pluck the plants ):";
+       return null;
     }
 
     protected boolean won = false;
@@ -244,12 +241,12 @@ public class BaseGame implements Game {
             currentWave = waves.get(waveID);
             zombies.addAll(currentWave.getZombies());
             waveID += 1;
-          event = switch (App.getCurrentuser().getChapter()){
+         /* event = switch (App.getCurrentuser().getChapter()){
                case AncientEgypt -> new Tornado(this);
                case FrozenCaves -> new IcyWind(this);
                case BigWaveBeach -> new Water(this);
                default -> new GraveSpawner(this);
-            };
+            };*/
            return new Result(true , setTheWaveZombies(waveID == waves.size()) , null);
         }
         return new  Result(false, null,null);
@@ -259,12 +256,12 @@ public class BaseGame implements Game {
         StringBuilder output = new StringBuilder();
         int line = 0;
         for (Zombie z : zombies) {
-            z.setRow(line % 5);
+            z.setLine(line % 5);
             z.setTileIndex(8);
             z.setX((int)(9 * Tile.getWidth() + 200));
             z.setY((int)(line * Tile.getHeight()));
+            output.append("Zombie spawned at line " + line % 5 + " , watch out human!\n");
             line++;
-            output.append("Zombie spawned at line " + line + " , watch out human!\n");
         }
         String waveFlag = "wave " + waveID + " is approaching ... ";
         String lastWave = "final Wave is coming , be ready to be eaten!!! ar ara rararararara";
@@ -324,9 +321,9 @@ public class BaseGame implements Game {
         Plant nearest = null;
         float minDist = Float.MAX_VALUE;
         for (Plant p : plantsInField) {
-            if (p.getLine() != zombie.getRow()) continue;
-            float dx = p.getX() - zombie.getX();
-            if (dx > 0 && dx <= range * 80) {
+            if (p.getLine() != zombie.getLine()) continue;
+            float dx = Math.abs(p.getX() - zombie.getX());
+            if (dx <= range) {
                 if (dx < minDist) {
                     minDist = dx;
                     nearest = p;

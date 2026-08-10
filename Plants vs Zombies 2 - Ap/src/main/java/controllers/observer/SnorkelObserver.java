@@ -1,8 +1,6 @@
 package controllers.observer;
 import models.entity.Zombie;
 import models.entity.Bullet;
-import models.gamePanes.Tile;
-import models.games.BaseGame;
 
 public class SnorkelObserver implements BulletObserver {
 

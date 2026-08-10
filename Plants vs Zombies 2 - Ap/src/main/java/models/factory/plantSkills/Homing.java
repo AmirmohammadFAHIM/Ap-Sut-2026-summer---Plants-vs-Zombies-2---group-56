@@ -48,12 +48,12 @@ public class Homing implements Skill{
         java.util.ArrayList<Zombie> targets =  Skill.super.random(plant, game, targetCount);
         for (Zombie x : targets){
             Bullet bullet = new Bullet(plant.getX() + plant.getWidth() ,
-                plant.getY() + plant.getHeight() * 0.8f , this.bullet);
+                plant.getY() + plant.getHeight() * 0.8f , this.bullet,plant.getLine());
         bullet.setToLockIn(x);
         float dx = x.getX() - plant.getX();
         float dy = x.getY() - plant.getY();
-        bullet.setVelocityX(Constants.MagicalBulletVelocity);
-        bullet.setVelocityY(Constants.MagicalBulletVelocity * dy / dx);
+        bullet.setVelocityX(Constants.MAGICAL_BULLET_VELOCITY);
+        bullet.setVelocityY(Constants.MAGICAL_BULLET_VELOCITY * dy / dx);
         bullet.getTags().add(Bullet.Tag.HOMING);
         bullet.getTags().add(Bullet.Tag.MAGICAL);
         game.getBullets().add(bullet);
@@ -74,12 +74,12 @@ public class Homing implements Skill{
         }
 
         Bullet bullet = new Bullet(plant.getX() + plant.getWidth() ,
-                plant.getY() + plant.getHeight() * 0.8f , this.bullet);
+                plant.getY() + plant.getHeight() * 0.8f , this.bullet,plant.getLine());
         bullet.setToLockIn(curr);
         float dx = curr.getX() - plant.getX();
         float dy = curr.getY() - plant.getY();
-        bullet.setVelocityX(Constants.MagicalBulletVelocity);
-        bullet.setVelocityY(Constants.MagicalBulletVelocity * dy / dx);
+        bullet.setVelocityX(Constants.MAGICAL_BULLET_VELOCITY);
+        bullet.setVelocityY(Constants.MAGICAL_BULLET_VELOCITY * dy / dx);
         bullet.getTags().add(Bullet.Tag.HOMING);
         bullet.getTags().add(Bullet.Tag.MAGICAL);
         game.getBullets().add(bullet);

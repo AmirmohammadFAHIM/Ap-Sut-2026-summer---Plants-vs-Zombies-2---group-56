@@ -1,11 +1,9 @@
 package models;
 
-import com.fasterxml.jackson.databind.deser.std.ArrayBlockingQueueDeserializer;
-import models.GameAdventure.Chapters;
-import models.GameAdventure.levels.Level;
-import models.factory.builder.PlantType;
-import models.entity.ZombieRegistry;
-import models.QuestObserver;
+import models.gameadventure.*;
+import models.gameadventure.levels.*;
+import models.factory.builder.*;
+import models.entity.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -56,6 +54,8 @@ public class User implements Serializable, QuestObserver {
 
     private ZombieRegistry zombieRegistry;
 
+    private GreenHouse greenHouse;
+
     public User(String name, String passwordHash, String nickname, String email, String gender) {
         this.name = name;
         this.passwordHash = passwordHash;
@@ -75,13 +75,13 @@ public class User implements Serializable, QuestObserver {
         this.levels = new HashMap<>();
 
         this.unlockedPlants = new ArrayList<>(Arrays.asList(PlantType.PEASHOOTER , PlantType.SNOW_PEA,
-                PlantType.REPEATER , PlantType.CHOMPER , PlantType.WALL_NUT,
-                PlantType.SUNFLOWER, PlantType.TWIN_SUNFLOWER ,
-                PlantType.JALAPENO, PlantType.CACTUS));
+                PlantType.REPEATER , PlantType.CHOMPER , PlantType.WALL_NUT));
 
         for (PlantType plant : this.unlockedPlants) {
             this.levels.put(plant, 1);
             this.unlockedPlantsNames.add(plant.name());
+
+            this.greenHouse = new GreenHouse(this);
         }
 
         this.activeQuests = new ArrayList<>();
@@ -184,6 +184,12 @@ public class User implements Serializable, QuestObserver {
     public void setLevelsPassed(int levelsPassed) {
         if(levelsPassed >= 16) levelsPassed = 16;
         this.levelsPassed = levelsPassed;
+    }
+    public GreenHouse getGreenHouse() {
+        if (this.greenHouse == null) {
+            this.greenHouse = new GreenHouse(this);
+        }
+        return greenHouse;
     }
     public void updateProgress() { }
 }

@@ -1,6 +1,8 @@
 import controllers.datacontroller.*;
 
 import models.*;
+import pvz.libpvz.pam.PamPlayer;
+import pvz.skin.PvzSkin;
 
 
 public class Main{

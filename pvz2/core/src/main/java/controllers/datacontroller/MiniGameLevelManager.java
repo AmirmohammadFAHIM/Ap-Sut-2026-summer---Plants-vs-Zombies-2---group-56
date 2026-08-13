@@ -1,48 +1,49 @@
 package controllers.datacontroller;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Json;
 import models.games.minigames.MinigameLevel;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MiniGameLevelManager {
 
     private static List<MinigameLevel> allLevels;
 
+    @SuppressWarnings("unchecked")
     public static void loadLevelsFromFile(String fileName) {
-        try (InputStream inputStream = MiniGameLevelManager.class
-                .getClassLoader().getResourceAsStream(fileName)) {
+        // ۱. پیدا کردن فایل از پوشه assets (مثلاً "minigames.json")
+        FileHandle file = Gdx.files.internal(fileName);
 
-            if (inputStream == null) {
-                System.out.println("❌ File not found in resources: " + fileName);
-                return;
-            }
+        if (!file.exists()) {
+            // تو LibGDX به جای System.out از Gdx.app.error و log استفاده می‌کنیم
+            Gdx.app.error("MiniGameLevelManager", "❌ File not found in assets: " + fileName);
+            return;
+        }
 
-            try (Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
-                Gson gson = new Gson();
-                Type listType = new TypeToken<List<MinigameLevel>>(){}.getType();
-                allLevels = gson.fromJson(reader, listType);
-            }
+        try {
+            // ۲. ساخت شیء Json (مال خود LibGDX)
+            Json json = new Json();
+
+            // ۳. این خط باعث میشه اگه تو فایل جیسون فیلد اضافه‌ای بود که تو کلاس جاوات نبود، کرش نکنه
+            json.setIgnoreUnknownFields(true);
+
+            // ۴. خواندن مستقیم لیست از فایل جیسون! (خیلی تمیزتر از Gson)
+            allLevels = json.fromJson(ArrayList.class, MinigameLevel.class, file);
+
+            Gdx.app.log("MiniGameLevelManager", "✅ Minigame Levels loaded successfully!");
 
         } catch (Exception e) {
-            System.out.println("❌ exception in reading files " + e.getMessage());
+            Gdx.app.error("MiniGameLevelManager", "❌ Exception in reading files: " + e.getMessage());
         }
     }
 
     public static MinigameLevel getLevelById(int id) {
-        if (allLevels == null) {
-            throw new IllegalStateException("levels not loaded");
-        }
-
+        if (allLevels == null) throw new IllegalStateException("levels not loaded");
         for (MinigameLevel level : allLevels) {
-            if (level.getId() == id) {
-                return level;
-            }
+            if (level.getId() == id) return level;
         }
         return null;
     }

@@ -17,6 +17,8 @@ public class Level implements Serializable {
 
     public Level(){}
 
+
+
     public Level(int id, Chapters chapters, String levelType, int waves, float baseHardness) {
         this.id = id;
         this.chapters = chapters;

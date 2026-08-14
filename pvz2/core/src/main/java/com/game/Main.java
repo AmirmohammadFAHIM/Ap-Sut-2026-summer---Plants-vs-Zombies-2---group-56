@@ -5,6 +5,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import controllers.datacontroller.Data;
+import models.App;
+import view.PlayView;
+import view.gameview.GameView;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
@@ -15,6 +19,10 @@ public class Main extends Game {
     public void create() {
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
+        new App(this);
+        Data.deserializeUser();
+        Data.setUp();
+
     }
 
     @Override
@@ -23,6 +31,7 @@ public class Main extends Game {
         batch.begin();
         batch.draw(image, 140, 210);
         batch.end();
+        super.render();
     }
 
     @Override

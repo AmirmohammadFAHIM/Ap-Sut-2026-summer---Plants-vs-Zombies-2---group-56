@@ -56,6 +56,7 @@ public class Data {
     }
 
     public static void setUp(){
+
         if(allUsers.isEmpty()) App.setScreen(new SignUpView());
         else{
             for (User user : allUsers) {
@@ -146,7 +147,7 @@ public class Data {
 
             for (Level level : levelsList) {
                 // فرض بر این است که متدی برای گرفتن چپتر این مرحله داری
-                Chapters chapter = level.getChapter();
+                Chapters chapter = level.getChapters();
 
                 // اگر این چپتر هنوز توی مپ ساخته نشده، یه لیست خالی براش می‌سازیم
                 allLevels.putIfAbsent(chapter, new ArrayList<Level>());

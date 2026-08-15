@@ -12,7 +12,7 @@ public class View implements Screen {
     public static Scanner scanner = App.getInput();
     protected String input;
 
-
+public void input(){}
 
     protected boolean handleGlobalCommands(String command) {
         Matcher enterMatcher = Pattern.compile("(?i)^menu\\s+enter\\s+(?<menuName>.+)$").matcher(command);

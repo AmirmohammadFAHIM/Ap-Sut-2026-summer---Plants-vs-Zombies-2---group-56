@@ -67,6 +67,7 @@ public class Data {
                 }
             }
         }
+        //currentUser = allUsers.getFirst();
         App.setScreen(new SignUpView());
     }
 

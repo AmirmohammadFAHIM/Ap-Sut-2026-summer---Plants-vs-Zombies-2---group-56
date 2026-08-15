@@ -1,20 +1,18 @@
 package view;
 
+import com.badlogic.gdx.Screen;
 import controllers.menus.Menu;
 import models.App;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class View implements MenuView {
+public class View implements Screen {
     protected Menu menu;
     public static Scanner scanner = App.getInput();
     protected String input;
 
-    @Override
-    public void input() {
-        input = scanner.nextLine().trim();
-    }
+public void input(){}
 
     protected boolean handleGlobalCommands(String command) {
         Matcher enterMatcher = Pattern.compile("(?i)^menu\\s+enter\\s+(?<menuName>.+)$").matcher(command);
@@ -35,5 +33,40 @@ public class View implements MenuView {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float delta) {
+
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

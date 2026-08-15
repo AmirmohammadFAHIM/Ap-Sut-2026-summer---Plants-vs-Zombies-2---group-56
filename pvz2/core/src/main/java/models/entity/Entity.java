@@ -3,6 +3,7 @@ package models.entity;
 import models.gamepanes.Tile;
 
 public class Entity {
+    protected float stateTime = 0;
     protected float x;
     protected float y;
     protected float width;
@@ -20,6 +21,10 @@ public class Entity {
     }
     public Entity(){
 
+    }
+
+    public float getStateTime() {
+        return stateTime;
     }
 
     public float getX() {

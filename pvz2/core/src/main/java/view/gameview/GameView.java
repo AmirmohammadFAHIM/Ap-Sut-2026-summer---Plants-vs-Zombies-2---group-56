@@ -1,5 +1,9 @@
 package view.gameview;
 
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import controllers.menus.gamecontroller.GameController;
 import models.gameadventure.Chapters;
 import models.gameadventure.levels.Level;
@@ -14,149 +18,57 @@ import java.util.regex.Pattern;
 
 public class GameView extends View {
     private final GameController controller;
+    private Stage stage;
+    private Image background;
+    private FitViewport  viewport;
 
     public GameView(Chapters chapter , Level level) {
         this.controller = new GameController( chapter, level);
         this.menu =  this.controller;
+
+
+    }
+
+
+
+
+    @Override
+    public void show() {
+        stage = new Stage();
+        ToolsStack toolsStack = new ToolsStack(controller);
+        toolsStack.setFillParent(true);
+        stage.addActor(toolsStack);
+        viewport = new FitViewport(1028,960);
     }
 
     @Override
-    public void input() {
-        System.out.println("=== Plant vs Zombies: Game Interface ===");
-        super.input();
+    public void render(float delta) {
+        controller.playGame(delta);
 
-        if (handleGlobalCommands(input)) {
-            return;
-        }
-        Matcher showAllPlantsMatcher = Pattern.compile(RegexHelper.GAME_SHOW_ALL_PLANTS).matcher(input);
-        Matcher showAvailPlantsMatcher = Pattern.compile(RegexHelper.GAME_SHOW_AVAILABLE_PLANTS).matcher(input);
-        Matcher addPlantMatcher = Pattern.compile(RegexHelper.GAME_ADD_PLANT).matcher(input);
-        Matcher removePlantMatcher = Pattern.compile(RegexHelper.GAME_REMOVE_PLANT).matcher(input);
-        Matcher boostPlantMatcher = Pattern.compile(RegexHelper.GAME_BOOST_PLANT).matcher(input);
-        Matcher startGameMatcher = Pattern.compile(RegexHelper.GAME_START_GAME).matcher(input);
+    }
 
-        Matcher advanceTimeMatcher = Pattern.compile(RegexHelper.GAME_ADVANCE_TIME).matcher(input);
-        Matcher collectSunMatcher = Pattern.compile(RegexHelper.GAME_COLLECT_SUN).matcher(input);
-        Matcher showSunAmountMatcher = Pattern.compile(RegexHelper.GAME_SHOW_SUN_AMOUNT).matcher(input);
-        Matcher cheatAddSunMatcher = Pattern.compile(RegexHelper.GAME_CHEAT_ADD_SUN).matcher(input);
-        Matcher releaseNukeMatcher = Pattern.compile(RegexHelper.GAME_RELEASE_NUKE).matcher(input);
-        Matcher plantPlantMatcher = Pattern.compile(RegexHelper.GAME_PLANT_PLANT).matcher(input);
-        Matcher pluckPlantMatcher = Pattern.compile(RegexHelper.GAME_PLUCK_PLANT).matcher(input);
-        Matcher feedPlantMatcher = Pattern.compile(RegexHelper.GAME_FEED_PLANT).matcher(input);
-        Matcher cheatRemCooldownMatcher = Pattern.compile(RegexHelper.GAME_CHEAT_REMOVE_COOLDOWN).matcher(input);
-        Matcher cheatAddFoodMatcher = Pattern.compile(RegexHelper.GAME_CHEAT_ADD_PLANT_FOOD).matcher(input);
-        Matcher showMapMatcher = Pattern.compile(RegexHelper.GAME_SHOW_MAP).matcher(input);
-        Matcher showPlantsStatMatcher = Pattern.compile(RegexHelper.GAME_SHOW_PLANTS_STATUS).matcher(input);
-        Matcher showTileStatMatcher = Pattern.compile(RegexHelper.GAME_SHOW_TILE_STATUS).matcher(input);
-        Matcher zombiesInfoMatcher = Pattern.compile(RegexHelper.GAME_ZOMBIES_INFO).matcher(input);
-        Matcher cheatSpawnZombieMatcher = Pattern.compile(RegexHelper.GAME_CHEAT_SPAWN_ZOMBIE).matcher(input);
-        Matcher startWavesMatcher = Pattern.compile(RegexHelper.GAME_START_ZOMBIE_WAVES).matcher(input);
+    @Override
+    public void resize(int width, int height) {
 
+    }
 
+    @Override
+    public void pause() {
+        super.pause();
+    }
 
+    @Override
+    public void resume() {
 
-        if(controller.getGame().getState() == BaseGame.GameState.STARTING){
-            if (showAllPlantsMatcher.matches()) {
-                System.out.println(controller.allPlants());
-            } else if (showAvailPlantsMatcher.matches()) {
-                System.out.println(controller.availablePlants());
-            } else if (addPlantMatcher.matches()) {
-                String type = addPlantMatcher.group("type");
-                System.out.println(controller.addPlant(type));
-            } else if (removePlantMatcher.matches()) {
-                String type = removePlantMatcher.group("type");
-                System.out.println(controller.removePlant(type));
-            } else if (boostPlantMatcher.matches()) {
-                String type = boostPlantMatcher.group("type");
-                //controller.boostPlant(type);
-                System.out.println("Boosting plant: " + type);
-            } else if (startGameMatcher.matches()) {
-                System.out.println(controller.GameStart(input));
-            }
-            else System.out.println("Invalid input according to starting state of the game.");
+    }
 
-            return;
-        }
-        else if(input.matches("^start\\s+zombie\\s+waves$")){
-            try {
-                PlantWhatYouGet plantWhatYouGet = (PlantWhatYouGet) controller.getGame();
-                plantWhatYouGet.startWaves();
-            } catch (Exception e){
-                System.out.println("Zombies are coming , no need to write this command!!!");
-            }
-        }
-        else if (advanceTimeMatcher.matches()) {
-            int ticks = Integer.parseInt(advanceTimeMatcher.group("count"));
-            System.out.println(controller.playGame(ticks * 0.1f));
-        } else if (collectSunMatcher.matches()) {
-            int x = Integer.parseInt(collectSunMatcher.group("x"));
-            int y = Integer.parseInt(collectSunMatcher.group("y"));
-            System.out.println(controller.collectSun(x,y));
-        } else if (showSunAmountMatcher.matches()) {
-            System.out.println(controller.showSunAmount());
-        } else if (cheatAddSunMatcher.matches()) {
-            int count = Integer.parseInt(cheatAddSunMatcher.group("count"));
-            System.out.println(controller.cheatSunAmount(count));
-        } else if (releaseNukeMatcher.matches()) {
-            System.out.println(controller.cheatZombieKiller());
-        } else if (plantPlantMatcher.matches()) {
-            String type = plantPlantMatcher.group("type");
-            int x = Integer.parseInt(plantPlantMatcher.group("x"));
-            int y = Integer.parseInt(plantPlantMatcher.group("y"));
-            System.out.println(controller.plant(type,x,y));
+    @Override
+    public void hide() {
 
-        } else if (pluckPlantMatcher.matches()) {
-            int x = Integer.parseInt(pluckPlantMatcher.group("x"));
-            int y = Integer.parseInt(pluckPlantMatcher.group("y"));
-            System.out.println(controller.pluck(x , y));
-        } else if (feedPlantMatcher.matches()) {
-            int x = Integer.parseInt(feedPlantMatcher.group("x"));
-            int y = Integer.parseInt(feedPlantMatcher.group("y"));
-            System.out.println(controller.boost(x, y));
-            System.out.println("Feeding plant at (" + x + ", " + y + ")");
-        }else if(input.matches("boost\\s+\\w+")){
-            try {
-                PlantType type = PlantType.valueOf(input.split("\\s+")[1]);
-                System.out.println(controller.getGame().boost(type));
-            }catch (Exception e){
-                System.out.println("Invalid input according to boost type.");
-            }
-        }else if (cheatRemCooldownMatcher.matches()) {
-            System.out.println(controller.cheat("remove-cooldown"));
-        } else if (cheatAddFoodMatcher.matches()) {
-            System.out.println(controller.cheat("add-plant-food"));
-        } else if (input.matches("^cheat\\s+end$")){
-            System.out.println(controller.cheat("end"));
-        } else if (showMapMatcher.matches()) {
-            System.out.println(controller.showMap());
-            System.out.println("Displaying map...");
-        } else if (showPlantsStatMatcher.matches()) {
-            System.out.println(controller.showPlantsStatus());
-        } else if (showTileStatMatcher.matches()) {
-            int x = Integer.parseInt(showTileStatMatcher.group("x"));
-            int y = Integer.parseInt(showTileStatMatcher.group("y"));
-            System.out.println(controller.tileStatus(x, y));
-        } else if (zombiesInfoMatcher.matches()) {
-            System.out.println(controller.showAllZombies());
-        } else if (cheatSpawnZombieMatcher.matches()) {
-            String type = cheatSpawnZombieMatcher.group("type");
-            int x = Integer.parseInt(cheatSpawnZombieMatcher.group("x"));
-            int y = Integer.parseInt(cheatSpawnZombieMatcher.group("y"));
-            // controller.spawnZombie(type, x, y);
-            System.out.println("Spawning " + type + " at (" + x + ", " + y + ")");
-        }
-        else if(input.matches("^show\\s+plants\\s+in\\s+field$")){
-            System.out.println(controller.showPlants());
-        }
-        else if(input.matches("^show\\s+bullets$")){
-            System.out.println(controller.showBullets());
-        }
-        else if(input.matches("^show\\s+suns$")){
-            System.out.println(controller.showSuns());
-        }else if(input.matches("^release\\s+nuke$")){
-            System.out.println(controller.nuke());
-        }else {
-            System.out.println("Invalid command in Game Menu!");
-        }
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

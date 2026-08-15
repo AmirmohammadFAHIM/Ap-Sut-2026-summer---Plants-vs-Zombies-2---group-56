@@ -15,6 +15,10 @@ public class Level implements Serializable {
     private ArrayList<String> allowedZombies;
     private ArrayList<PlantType> unlockingPlants;
 
+    public Level(){}
+
+
+
     public Level(int id, Chapters chapters, String levelType, int waves, float baseHardness) {
         this.id = id;
         this.chapters = chapters;

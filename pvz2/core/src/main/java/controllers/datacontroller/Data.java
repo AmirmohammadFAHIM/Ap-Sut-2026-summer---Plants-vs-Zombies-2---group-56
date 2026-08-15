@@ -1,7 +1,9 @@
 package controllers.datacontroller;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Json;
+
 import models.*;
 import models.gameadventure.*;
 import models.gameadventure.levels.*;
@@ -54,6 +56,7 @@ public class Data {
     }
 
     public static void setUp(){
+
         if(allUsers.isEmpty()) App.setScreen(new SignUpView());
         else{
             for (User user : allUsers) {
@@ -91,70 +94,71 @@ public class Data {
     }
 
 
+
+
+// ... بقیه کدهای کلاس Data ...
+
     public static void loadPlantsFromJson() {
-        try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("plants.json")) {
+        FileHandle file = Gdx.files.internal("plants.json"); // فایل حتماً تو پوشه assets باشه
 
-            if (inputStream == null) {
-                System.out.println("خطا: ایل plants.json در پوشه resources پیدا نشد!");
-                return;
+        if (!file.exists()) {
+            Gdx.app.error("Data", "❌ plants.json not found in assets folder!");
+            return;
+        }
+
+        try {
+            Json json = new Json();
+            json.setIgnoreUnknownFields(true);
+
+            // اول جیسون رو به عنوان یه آرایه (لیست) می‌خونیم
+            ArrayList<PlantData> plantsList = json.fromJson(ArrayList.class, PlantData.class, file);
+
+            // حالا تبدیلش می‌کنیم به HashMap که خودت تعریف کرده بودی
+            plants = new HashMap<>();
+            for (PlantData plant : plantsList) {
+                // فرض کردم متدی مثل getType() برای گرفتن نوع گیاه (Enum) توی PlantData داری
+                plants.put(PlantType.valueOf(plant.getName()), plant);
             }
 
-            try (Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
-
-                Gson gson = new Gson();
-
-                PlantData[] plants = gson.fromJson(reader, PlantData[].class);
-
-                if (plants != null) {
-                    for (PlantData plant : plants) {
-                        PlantType type = PlantType.valueOf(plant.getName().toUpperCase());
-                        Data.getPlants().put(type, plant);
-                    }
-                } else {
-                    System.out.println("فایل plants.json خالی است یا درست خوانده نشد.");
-                    System.out.println(plants.length);
-                }
-
-            }
+            Gdx.app.log("Data", "✅ Plants loaded successfully!");
         } catch (Exception e) {
-            System.err.println("یک مشکل غیرمنتظره در زمان خواندن فایل گیاهان رخ داد:");
-            e.printStackTrace();
+            Gdx.app.error("Data", "❌ Error reading plants: " + e.getMessage());
         }
     }
 
-    public static void loadLevelsFromJson(String fileName) {
-        Gson gson = new Gson();
 
-        // استفاده از ClassLoader برای خواندن امن فایل از پوشه resources
-        try (InputStream inputStream = Data.class.getClassLoader().getResourceAsStream(fileName)) {
+    public static void loadLevelsFromJson() {
+        FileHandle file = Gdx.files.internal("levels.json"); // فایل حتماً تو پوشه assets باشه
 
-            if (inputStream == null) {
-                System.err.println("File not found in resources: " + fileName);
-                return;
+        if (!file.exists()) {
+            Gdx.app.error("Data", "❌ levels.json not found in assets folder!");
+            return;
+        }
+
+        try {
+            Json json = new Json();
+            json.setIgnoreUnknownFields(true);
+
+            // اول جیسون رو به عنوان یه آرایه (لیست) از Level ها می‌خونیم
+            ArrayList<Level> levelsList = json.fromJson(ArrayList.class, Level.class, file);
+
+            // هش‌مپ allLevels رو ریست می‌کنیم تا دیتای تکراری اضافه نشه
+            allLevels = new HashMap<>();
+
+            for (Level level : levelsList) {
+                // فرض بر این است که متدی برای گرفتن چپتر این مرحله داری
+                Chapters chapter = level.getChapters();
+
+                // اگر این چپتر هنوز توی مپ ساخته نشده، یه لیست خالی براش می‌سازیم
+                allLevels.putIfAbsent(chapter, new ArrayList<Level>());
+
+                // مرحله رو به لیستِ همون چپتر اضافه می‌کنیم
+                allLevels.get(chapter).add(level);
             }
 
-            try (Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
-                Type levelListType = new TypeToken<List<Level>>() {}.getType();
-                List<Level> levelsList = gson.fromJson(reader, levelListType);
-
-                if (levelsList != null) {
-                    for (Chapters chapter : Chapters.values()) {
-                        allLevels.put(chapter, new ArrayList<>());
-                    }
-
-                    for (Level level : levelsList) {
-                        if (level.getUnlockingPlants() == null) level.setUnlockingPlants(new ArrayList<>());
-                        if (level.getAllowedZombies() == null) level.setAllowedZombies(new ArrayList<>());
-
-                        if (level.getChapters() != null) {
-                            allLevels.get(level.getChapters()).add(level);
-                        }
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Something went wrong while reading " + fileName + "\n " + e.getMessage());
+            Gdx.app.log("Data", "✅ Levels loaded successfully! Total chapters: " + allLevels.size());
+        } catch (Exception e) {
+            Gdx.app.error("Data", "❌ Error reading levels: " + e.getMessage());
         }
     }
     public static HashMap<Chapters, ArrayList<Level>> getAllLevels() {

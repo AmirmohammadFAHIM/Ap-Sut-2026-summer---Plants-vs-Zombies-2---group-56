@@ -4,15 +4,27 @@ import controllers.datacontroller.Data;
 import controllers.datacontroller.SeedPackage;
 import controllers.menus.Menu;
 import models.App;
+import models.User;
+import models.entity.Armor;
+import models.entity.Bullet;
+import models.entity.Effect;
+import models.entity.Plant;
+import models.entity.Sun;
+import models.entity.Zombie;
+import models.factory.builder.PlantType;
 import models.gameadventure.Chapters;
 import models.gameadventure.levels.Level;
-import models.User;
-import models.entity.*;
-import models.factory.builder.PlantType;
 import models.gamepanes.Tile;
 import models.games.BaseGame;
 import models.games.NormalGame;
-import models.games.specialgames.*;
+import models.games.specialgames.ConveyorBelt;
+import models.games.specialgames.Deadline;
+import models.games.specialgames.LockedPlants;
+import models.games.specialgames.LoveYourPlants;
+import models.games.specialgames.NightsOps;
+import models.games.specialgames.PlantWhatYouGet;
+import models.games.specialgames.SaveOurSeeds;
+import models.games.specialgames.TimedWar;
 import models.utils.Result;
 import view.PlayView;
 
@@ -20,270 +32,509 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class GameController implements Controller , Menu {
+/**
+ * Single controller gateway used by GameView.
+ *
+ * <p>GameView may read state through {@link #getGame()}, but every state-changing
+ * action is routed through this controller.</p>
+ */
+public class GameController implements Controller, Menu {
+
+    private static final int REQUIRED_STARTING_PLANTS = 5;
+
     private final BaseGame game;
     private final Level level;
     private final Chapters chapter;
 
-    public GameController(Chapters chapter , Level level){
+    public GameController(Chapters chapter, Level level) {
+        if (chapter == null) {
+            throw new IllegalArgumentException("chapter cannot be null");
+        }
+        if (level == null || level.getLevelType() == null) {
+            throw new IllegalArgumentException("level and level type cannot be null");
+        }
+
         this.level = level;
         this.chapter = chapter;
-        game = switch (level.getLevelType().toLowerCase()){
+
+        game = switch (level.getLevelType().toLowerCase()) {
             case "night ops" -> new NightsOps();
             case "plant what you get" -> new PlantWhatYouGet();
             case "locked plants by category" -> new LockedPlants(LockedPlants.LockType.ByCategory);
             case "conveyor belt" -> new ConveyorBelt();
             case "deadline" -> new Deadline();
             case "save our seeds" -> new SaveOurSeeds();
-            case "timed war"  -> new TimedWar();
+            case "timed war" -> new TimedWar();
             case "love your plants" -> new LoveYourPlants();
             default -> new NormalGame();
         };
-        game.initGame(chapter , level);
+
+        game.initGame(chapter, level);
     }
 
-    public String plant(String name , int x , int y){
-        return game.plant(name,x,y);
+    // -------------------------------------------------------------------------
+    // GUI-facing gameplay API
+    // -------------------------------------------------------------------------
+
+    public String plant(PlantType type, int x, int y) {
+        if (type == null) {
+            return "Plant not found.";
+        }
+        return plant(type.name(), x, y);
     }
-    public String pluck( int x , int y){
-        return game.pluck(x,y);
+
+    public String plant(String name, int x, int y) {
+        if (game.getState() != BaseGame.GameState.PLAYING) {
+            return "The game is not running.";
+        }
+
+        PlantType type = parsePlantType(name);
+        if (type == null) {
+            return "Plant not found.";
+        }
+
+        // ConveyorBelt owns availability itself; it does not use SeedPackage cooldowns.
+        if (game instanceof ConveyorBelt) {
+            return game.plant(type.name(), x, y);
+        }
+
+        SeedPackage packet = game.getAvailable_plants().get(type);
+        if (packet == null) {
+            return "This plant is not selected.";
+        }
+
+        if (!packet.isAvailable()) {
+            return type.name() + " is still recharging.";
+        }
+
+        int before = game.getPlantsInField().size();
+        String result = game.plant(type.name(), x, y);
+        int after = game.getPlantsInField().size();
+
+        /*
+         * SeedPackage stores the remaining cooldown rather than its original maximum.
+         * The model currently does not reset it after a successful planting, therefore
+         * recreating the selected package is the safest controller-level reset without
+         * changing model classes.
+         */
+        if (after > before) {
+            SeedPackage recharged = game.getSelection().selectPlant(type.name());
+            if (recharged != null) {
+                game.getAvailable_plants().put(type, recharged);
+            }
+        }
+
+        return result;
+    }
+
+    public String pluck(int x, int y) {
+        if (game.getState() != BaseGame.GameState.PLAYING) {
+            return "The game is not running.";
+        }
+        return game.pluck(x, y);
+    }
+
+    public String collectSun(int x, int y) {
+        if (game.getState() != BaseGame.GameState.PLAYING) {
+            return null;
+        }
+
+        Iterator<Sun> iterator = game.getSuns().iterator();
+        while (iterator.hasNext()) {
+            Sun sun = iterator.next();
+            if (sun.getTileIndex() == x && sun.getLine() == y) {
+                if (sun.isRadioActive()) {
+                    sun.dispose(game);
+                    iterator.remove();
+                    return "Radioactive sun exploded.";
+                }
+
+                game.setSunCount(game.getSunCount() + sun.getPrice());
+
+                if (App.getCurrentuser() != null) {
+                    App.getCurrentuser().updateQuestProgress("COLLECT_SUN", sun.getPrice());
+                }
+
+                float price = sun.getPrice();
+                iterator.remove();
+                return "Sun collected: +" + price;
+            }
+        }
+        return null;
+    }
+
+    public String boost(int x, int y) {
+        if (game.getState() != BaseGame.GameState.PLAYING) {
+            return "The game is not running.";
+        }
+
+        if (game.getPlantFoodsCount() <= 0) {
+            return "No Plant Food available.";
+        }
+
+        Plant plant = game.findByCoordinates(x, y);
+        if (plant == null) {
+            return "There is no plant on this tile.";
+        }
+
+        plant.setPlantFood(true);
+        game.setPlantFoodsCount(game.getPlantFoodsCount() - 1);
+        return "Plant Food applied to " + plant.getType() + ".";
+    }
+
+    public void pauseGame() {
+        if (game.getState() == BaseGame.GameState.PLAYING) {
+            game.setState(BaseGame.GameState.PAUSE);
+        }
+    }
+
+    public void resumeGame() {
+        if (game.getState() == BaseGame.GameState.PAUSE) {
+            game.setState(BaseGame.GameState.PLAYING);
+        }
+    }
+
+    public void togglePause() {
+        if (game.getState() == BaseGame.GameState.PLAYING) {
+            pauseGame();
+        } else if (game.getState() == BaseGame.GameState.PAUSE) {
+            resumeGame();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // STARTING / plant selection
+    // -------------------------------------------------------------------------
+
+    public List<PlantType> getSelectablePlants() {
+        return List.copyOf(game.getSelection().getPlantsToChoose());
+    }
+
+    public List<PlantType> getSelectedPlants() {
+        return List.copyOf(game.getAvailable_plants().keySet());
+    }
+
+    public boolean isPlantSelected(PlantType type) {
+        return type != null && game.getAvailable_plants().containsKey(type);
+    }
+
+    public boolean canSelectAnotherPlant() {
+        return game.getState() == BaseGame.GameState.STARTING
+            && game.getAvailable_plants().size() < REQUIRED_STARTING_PLANTS;
+    }
+
+    public SeedPackage getPlantPreview(PlantType type) {
+        if (type == null || !game.getSelection().getPlantsToChoose().contains(type)) {
+            return null;
+        }
+        return game.getSelection().selectPlant(type.name());
+    }
+
+    public String addPlant(PlantType type) {
+        if (type == null) {
+            return "Plant not found.";
+        }
+        return addPlant(type.name());
+    }
+
+    public String addPlant(String name) {
+        if (game.getState() != BaseGame.GameState.STARTING) {
+            return "Plant selection is already finished.";
+        }
+
+        PlantType type = parsePlantType(name);
+        if (type == null) {
+            return "Plant not found.";
+        }
+
+        if (!game.getSelection().getPlantsToChoose().contains(type)) {
+            return "This plant is not available for this level.";
+        }
+
+        if (game.getAvailable_plants().containsKey(type)) {
+            return "The plant is already selected.";
+        }
+
+        if (game.getAvailable_plants().size() >= REQUIRED_STARTING_PLANTS) {
+            return "All plant slots are full.";
+        }
+
+        SeedPackage seedPackage = game.getSelection().selectPlant(type.name());
+        if (seedPackage == null) {
+            return "Plant not found.";
+        }
+
+        game.getAvailable_plants().put(type, seedPackage);
+        return type.name() + " selected.";
+    }
+
+    public String removePlant(PlantType type) {
+        if (type == null) {
+            return "Plant not found.";
+        }
+        return removePlant(type.name());
+    }
+
+    public String removePlant(String name) {
+        if (game.getState() != BaseGame.GameState.STARTING) {
+            return "You cannot change plant selection after the game starts.";
+        }
+
+        PlantType type = parsePlantType(name);
+        if (type == null) {
+            return "Plant not found.";
+        }
+
+        if (!game.getAvailable_plants().containsKey(type)) {
+            return "This plant is not selected.";
+        }
+
+        return game.getSelection().removePlant(game.getAvailable_plants(), type);
+    }
+
+    public boolean canStartGame() {
+        return game.getState() == BaseGame.GameState.STARTING
+            && game.getAvailable_plants().size() == REQUIRED_STARTING_PLANTS;
+    }
+
+    public String startGame() {
+        if (!canStartGame()) {
+            return "Select exactly " + REQUIRED_STARTING_PLANTS + " plants first.";
+        }
+        return GameStart("");
     }
 
     @Override
     public String GameStart(String input) {
-        boolean start = game.startGame(input);
-        if(start){
-            game.setState(BaseGame.GameState.PLAYING);
-            return "Ay Yoooooo ma homie , Game on baby!!!! Vamooosss!";
+        if (game.getState() != BaseGame.GameState.STARTING) {
+            return "Game has already started.";
         }
-        return "Cannot Start Game ... You ain't ready mate.";
+
+        boolean start = game.startGame(input == null ? "" : input);
+        if (!start) {
+            return "Cannot start game.";
+        }
+
+        game.setState(BaseGame.GameState.PLAYING);
+        return "Game started.";
     }
 
+    // -------------------------------------------------------------------------
+    // Main simulation
+    // -------------------------------------------------------------------------
 
     @Override
     public String playGame(float delta) {
+        if (game.getState() != BaseGame.GameState.PLAYING) {
+            return "";
+        }
+
         String log = game.playGame(delta);
-        Result end = game.check_endGame();
-        if(end.success()){
-            if(end.message().equals("Loss")) {
-                App.setScreen(new PlayView());
-                return "Brainzzzzzzzzzz!!!!! Deliciouzzzzzzz!!";
-            }
-        }
-        else if(game.isWon()){
-            end();
+        Result endResult = game.check_endGame();
+
+        if (endResult.success() && "Loss".equals(endResult.message())) {
             App.setScreen(new PlayView());
-            return "Sometimes in the life , I'm too competitive , It's good to be competitive.";
+            return "You lost the level.";
         }
+
+        if (game.isWon()) {
+            end();
+            return "Level completed.";
+        }
+
         return log;
     }
 
-    private void end(){
+    private void end() {
         User user = Data.getCurrentUser();
-        if(chapter == user.getChapter() && level.getId() == user.getLevelId()){
-            user.setLevelId(user.getLevelId()+1);
-            user.setLevelsPassed(user.getLevelsPassed()+1);
-            for (PlantType x : level.getUnlockingPlants()){
-                user.getUnlockedPlants().add(x);
-                user.getLevels().put(x , 1);
-                user.getUnreadNews().add("Congratulation , You've Unlocked new Plant " +
-                        ", " + x.name() + " !");
+        if (user == null) {
+            App.setScreen(new PlayView());
+            return;
+        }
+
+        if (chapter == user.getChapter() && level.getId() == user.getLevelId()) {
+            user.setLevelId(user.getLevelId() + 1);
+            user.setLevelsPassed(user.getLevelsPassed() + 1);
+
+            for (PlantType type : level.getUnlockingPlants()) {
+                user.getUnlockedPlants().add(type);
+                user.getLevels().put(type, 1);
+                user.getUnreadNews().add(
+                    "Congratulations, you've unlocked a new plant: " + type.name()
+                );
             }
         }
-        if(user.getLevelId() == 5){
+
+        if (user.getLevelId() == 5) {
             user.setLevelId(1);
-            Chapters newChapter = switch (user.getChapter()){
+            Chapters newChapter = switch (user.getChapter()) {
                 case AncientEgypt -> Chapters.FrozenCaves;
                 case FrozenCaves -> Chapters.BigWaveBeach;
                 case BigWaveBeach -> Chapters.DarkAge;
                 default -> user.getChapter();
             };
             user.setChapter(newChapter);
-
-
         }
 
         Data.saveUser();
         App.setScreen(new PlayView());
     }
 
-    public String gameEndCheat(){
+    private PlantType parsePlantType(String name) {
+        if (name == null || name.isBlank()) {
+            return null;
+        }
+
+        try {
+            return PlantType.valueOf(
+                name.trim()
+                    .replace(' ', '_')
+                    .toUpperCase()
+            );
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Existing CLI/debug API kept compatible with the project
+    // -------------------------------------------------------------------------
+
+    public String gameEndCheat() {
         end();
         return "game ended. you won!";
     }
 
-    public String showSunAmount(){
+    public String showSunAmount() {
         return "-->> Suns : " + game.getSunCount();
     }
 
-    public String cheatSunAmount(int amount){
-        game.setSunCount(game.getSunCount()+amount);
-        return "==== >> Suns added by Cheat code : "  + amount + "\n now " + showSunAmount();
+    public String cheatSunAmount(int amount) {
+        game.setSunCount(game.getSunCount() + amount);
+        return "==== >> Suns added by Cheat code : " + amount + "\n now " + showSunAmount();
     }
 
-    public String cheatZombieKiller(){
-        for (Zombie z : game.getZombies()) {
-            z.setHp(0);
+    public String cheatZombieKiller() {
+        for (Zombie zombie : game.getZombies()) {
+            zombie.setHp(0);
         }
-        return "What You Said goddamn niggaZombie???";
+        return "All active zombies were defeated.";
     }
 
-    public String showPlantsStatus(){
+    public String showPlantsStatus() {
         StringBuilder output = new StringBuilder();
-        if(game instanceof ConveyorBelt){
+
+        if (game instanceof ConveyorBelt) {
             return belt();
         }
+
         try {
-            for (SeedPackage x : game.getAvailable_plants().values()) {
-                output.append(x.getPlant().name()).append("\n")
-                        .append("recharge remaining time = ").
-                        append(x.getRecharge()).append("\n").
-                        append("cost = ").append(x.getCost()).append("\n");
+            for (SeedPackage packet : game.getAvailable_plants().values()) {
+                output.append(packet.getPlant().name()).append("\n")
+                    .append("recharge remaining time = ").append(packet.getRecharge()).append("\n")
+                    .append("cost = ").append(packet.getCost()).append("\n");
             }
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return "Something went wrong during showing plants! try again!...";
         }
+
         return output.toString();
     }
 
-    private String belt(){
-        ConveyorBelt  conveyorBelt = (ConveyorBelt) game;
+    private String belt() {
+        ConveyorBelt conveyorBelt = (ConveyorBelt) game;
         StringBuilder output = new StringBuilder();
-        for (PlantType x : conveyorBelt.getBelt()){
-            output.append(x.name()).append(" is ready on the belt\n");
+        for (PlantType type : conveyorBelt.getBelt()) {
+            output.append(type.name()).append(" is ready on the belt\n");
         }
         return output.toString();
     }
 
-    public String tileStatus(int x , int y){
+    public String tileStatus(int x, int y) {
         ArrayList<Plant> plants = new ArrayList<>();
         ArrayList<Zombie> zombies = new ArrayList<>();
-        for (Plant p : game.getPlantsInField()){
-            if(p.getLine() == y && p.getTileIndex() == x){
-                plants.add(p);
+
+        for (Plant plant : game.getPlantsInField()) {
+            if (plant.getLine() == y && plant.getTileIndex() == x) {
+                plants.add(plant);
             }
         }
-        for (Zombie z : game.getZombies()){
-            if(z.getLine() == y && z.getTileIndex() == x){
-                zombies.add(z);
+
+        for (Zombie zombie : game.getZombies()) {
+            if (zombie.getLine() == y && zombie.getTileIndex() == x) {
+                zombies.add(zombie);
             }
         }
+
         Tile tile = game.getField().getTiles().get(y).get(x);
-        StringBuilder output = new StringBuilder("═════════════════TILE STATUS════════════════════");
+        StringBuilder output = new StringBuilder("═════════════════TILE STATUS════════════════════\n");
         output.append("Tile Type : ").append(tile.getTileType().name()).append("\n");
         output.append("hp : ").append(tile.getHp()).append("\n");
-        output.append("Is this tile empty ? ").append(tile.isEmpty()).append("\n").append("Is it underwater ? ")
-                .append(tile.isWater()).append("\n")
-                .append("Is it plantable ? " + tile.isPlantable()).append("\n");
+        output.append("Is this tile empty ? ").append(tile.isEmpty()).append("\n")
+            .append("Is it underwater ? ").append(tile.isWater()).append("\n")
+            .append("Is it plantable ? ").append(tile.isPlantable()).append("\n");
+
         boolean lilyPad = tile.isWater() && tile.isPlantable();
         output.append("══════\nIs there a lily pad here? ").append(lilyPad).append("\n");
-        return  output.toString();
-
+        output.append("Plants on tile: ").append(plants.size()).append("\n");
+        output.append("Zombies on tile: ").append(zombies.size()).append("\n");
+        return output.toString();
     }
 
-    public String cheat(String content){
+    public String cheat(String content) {
         String output = null;
-        switch (content){
-            case "remove-cooldown":
-                removeCooldown();
-                break;
-            case "add-plant-food":
-                addPlantFood();
-                break;
-            case  "add-plant":
-                break;
-            case "add-sun":
-                break;
-            case "end":
-                output = gameEndCheat();
-                break;
-        }
-        return "Oh ma man , cheatttt , for real you nigga??? so bad , so bad , ain't tough ):\n" + output;
-    }
 
-    private void removeCooldown(){
-        for (SeedPackage x : game.getAvailable_plants().values()){
-            x.setRecharge(0);
-            x.setAvailable(true);
-        }
-    }
-
-    public String collectSun(int x , int y){
-        Iterator<Sun> iterator = game.getSuns().iterator();
-        while(iterator.hasNext()){
-            Sun sun = iterator.next();
-            if(sun.getTileIndex() == x && sun.getLine() == y){
-                if(sun.isRadioActive()){
-                    sun.dispose(game);
-                    return "Boooooommmmmmmm !!!!! RadioActive Sun explode!";
-                }
-                game.setSunCount(game.getSunCount() + sun.getPrice());
-
-                if (App.getCurrentuser() != null) {
-                    App.getCurrentuser().updateQuestProgress("COLLECT_SUN", sun.getPrice());
-                }
-                float price = sun.getPrice();
-                iterator.remove();
-
-                return "Sun collected , you got " +price + " suns!";
+        switch (content) {
+            case "remove-cooldown" -> removeCooldown();
+            case "add-plant-food" -> addPlantFood();
+            case "end" -> output = gameEndCheat();
+            case "add-plant", "add-sun" -> {
+                // Existing command placeholders intentionally kept.
+            }
+            default -> {
             }
         }
-        return null;
+
+        return "Cheat executed.\n" + output;
     }
 
-    public String availablePlants(){
+    private void removeCooldown() {
+        for (SeedPackage packet : game.getAvailable_plants().values()) {
+            packet.setRecharge(0);
+            packet.setAvailable(true);
+        }
+    }
+
+    public String availablePlants() {
         StringBuilder output = new StringBuilder();
-        for (PlantType x : game.getSelection().getPlantsToChoose()){
-            output.append(x.name()).append("\n");
+        for (PlantType type : game.getSelection().getPlantsToChoose()) {
+            output.append(type.name()).append("\n");
         }
         return output.toString();
     }
 
-    public String allPlants(){
+    public String allPlants() {
         StringBuilder output = new StringBuilder();
-        for (PlantType x : App.getCurrentuser().getUnlockedPlants()){
-            output.append(x.name()).append("\n");
+        for (PlantType type : App.getCurrentuser().getUnlockedPlants()) {
+            output.append(type.name()).append("\n");
         }
         return output.toString();
     }
 
-    private void addPlantFood(){
-        game.setPlantFoodsCount(game.getPlantFoodsCount()+1);
-    }
-
-    public String removePlant(String name){
-        try {
-            PlantType t = PlantType.valueOf(name);
-            if(game.getState() != BaseGame.GameState.STARTING){
-                return game.getSelection().removePlant(game.getAvailable_plants() , t);
-            }
-            return "Invalid command now.";
-        } catch (RuntimeException e) {
-            return "Plant not found.";
-        }
-    }
-
-    public String addPlant(String name){
-        try {
-            SeedPackage seedPackage = game.getSelection().selectPlant(name);
-            if(game.getAvailable_plants().containsKey(seedPackage.getPlant())){
-                return "The plant is already selected , can't select twice.";
-            }
-            game.getAvailable_plants().put(seedPackage.getPlant(), seedPackage);
-            return "added plant " + seedPackage.getPlant();
-        } catch (RuntimeException e) {
-            return "Plant not found.";
-        }
-    }
-
-    public String boost(int x , int y){
-        Plant p = game.findByCoordinates(x, y);
-        p.setPlantFood(true);
-        return "Suiiiiiiiiiiiiiiiiii , we waz kangz at Africaaaaa";
+    private void addPlantFood() {
+        game.setPlantFoodsCount(game.getPlantFoodsCount() + 1);
     }
 
     public BaseGame getGame() {
         return game;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public Chapters getChapter() {
+        return chapter;
     }
 
     public String showAllZombies() {
@@ -296,9 +547,7 @@ public class GameController implements Controller , Menu {
         sb.append("--- Active Zombies (").append(zombies.size()).append(") ---\n");
 
         for (int i = 0; i < zombies.size(); i++) {
-            Zombie z = zombies.get(i);
-            sb.append(i + 1).append(". ");
-            sb.append(formatZombieInfo(z));
+            sb.append(i + 1).append(". ").append(formatZombieInfo(zombies.get(i)));
             if (i < zombies.size() - 1) {
                 sb.append("\n");
             }
@@ -309,10 +558,11 @@ public class GameController implements Controller , Menu {
 
     public String showZombie(String zombieName) {
         Zombie target = null;
-        for (Zombie z : game.getZombies()) {
-            if (z.getId().equalsIgnoreCase(zombieName) ||
-                    z.getType().equalsIgnoreCase(zombieName)) {
-                target = z;
+
+        for (Zombie zombie : game.getZombies()) {
+            if (zombie.getId().equalsIgnoreCase(zombieName)
+                || zombie.getType().equalsIgnoreCase(zombieName)) {
+                target = zombie;
                 break;
             }
         }
@@ -327,19 +577,13 @@ public class GameController implements Controller , Menu {
     private String formatZombieInfo(Zombie zombie) {
         StringBuilder sb = new StringBuilder();
 
-        // 1. Name
         sb.append(zombie.getType());
-
-        // 2. Position (tile position)
         int col = zombie.getTileIndex();
         int row = zombie.getLine();
         sb.append("  position: (").append(row).append(", ").append(col).append(")\n");
         sb.append("x : ").append(zombie.getX()).append(" , y : ").append(zombie.getY()).append("\n");
-
-        // 3. Health
         sb.append("  health: ").append(zombie.getHp()).append("/").append(zombie.getMaxHp());
 
-        // 4. Armors
         List<Armor> armors = zombie.getArmors();
         if (!armors.isEmpty()) {
             sb.append("  armors: ");
@@ -355,7 +599,6 @@ public class GameController implements Controller , Menu {
             }
         }
 
-        // 5. Effects
         List<Effect> effects = zombie.getEffects();
         if (!effects.isEmpty()) {
             sb.append("  effects: ");
@@ -372,7 +615,6 @@ public class GameController implements Controller , Menu {
             }
         }
 
-        // 6. State flags
         if (zombie.isHypnotized()) {
             sb.append("  hypnotized: YES");
         }
@@ -383,70 +625,69 @@ public class GameController implements Controller , Menu {
         return sb.toString();
     }
 
-
     public String showPlants() {
-        // 1. Check if the list is empty right away
         if (game.getPlantsInField() == null || game.getPlantsInField().isEmpty()) {
             return "No plants currently on the field.\n";
         }
 
         StringBuilder sb = new StringBuilder();
-
-        for (Plant p : game.getPlantsInField()) {
-            // 2. Safeguard against null objects or lingering dead "ghost" plants
-            if (p == null || p.getHp() <= 0) {
+        for (Plant plant : game.getPlantsInField()) {
+            if (plant == null || plant.getHp() <= 0) {
                 continue;
             }
 
-            // 3. Chain appends properly instead of using '+'
             sb.append("=====\n")
-                    .append("type : ").append(p.getType()).append("\n")
-                    .append("hp : ").append(p.getHp()).append("\n")
-                    // x = tileIndex (column), y = line (row)
-                    .append("location : x = ").append(p.getTileIndex())
-                    .append(" , y = ").append(p.getLine()).append("\n");
+                .append("type : ").append(plant.getType()).append("\n")
+                .append("hp : ").append(plant.getHp()).append("\n")
+                .append("location : x = ").append(plant.getTileIndex())
+                .append(" , y = ").append(plant.getLine()).append("\n");
         }
-
         return sb.toString();
     }
 
-    public String showBullets(){
+    public String showBullets() {
         StringBuilder sb = new StringBuilder();
-        for (Bullet bullet : game.getBullets()){
-            sb.append("=====\n").append("type : " + bullet.getType()).append("\n")
-                    .append("location " + "(" + bullet.getX() + "," + bullet.getY() + ")" + "\n");
+        for (Bullet bullet : game.getBullets()) {
+            sb.append("=====\n")
+                .append("type : ").append(bullet.getType()).append("\n")
+                .append("location (").append(bullet.getX()).append(",").append(bullet.getY()).append(")\n");
         }
-        return  sb.toString();
+        return sb.toString();
     }
 
-    public String showSuns(){
-        if(game.getSuns().isEmpty()){
+    public String showSuns() {
+        if (game.getSuns().isEmpty()) {
             return "No suns in the game.";
         }
+
         StringBuilder sb = new StringBuilder();
-        for (Sun sun : game.getSuns()){
-            sb.append(" price : " + sun.getPrice()).append("\n")
-                    .append("remainingTime : " + sun.getRemainingTime()).append("\n")
-                    .append(" is radio active ? " + sun.isRadioActive() ).append("\n");
+        for (Sun sun : game.getSuns()) {
+            sb.append(" price : ").append(sun.getPrice()).append("\n")
+                .append("remainingTime : ").append(sun.getRemainingTime()).append("\n")
+                .append(" is radio active ? ").append(sun.isRadioActive()).append("\n");
         }
-        return  sb.toString();
+        return sb.toString();
     }
 
-    public String nuke(){
-        return ((NormalGame) game).nuke();
+    public String nuke() {
+        if (game instanceof NormalGame normalGame) {
+            return normalGame.nuke();
+        }
+        return "Nuke is unavailable in this game mode.";
     }
 
-    public String showMap(){
+    public String showMap() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Wave id : " + game.getWaveID()).append("\n");
+        sb.append("Wave id : ").append(game.getWaveID()).append("\n");
         sb.append(showSunAmount()).append("\n");
-        sb.append("zombies remained on the yard : " + game.getZombies().size()).append("\n");
+        sb.append("zombies remained on the yard : ").append(game.getZombies().size()).append("\n");
         sb.append(showPlantsStatus()).append("\n");
         sb.append(showAllZombies()).append("\n");
         sb.append(showPlants()).append("\n");
         sb.append(showSuns()).append("\n");
         return sb.toString();
     }
+
     @Override
     public String ChangeMenu(String menuName) {
         return "";

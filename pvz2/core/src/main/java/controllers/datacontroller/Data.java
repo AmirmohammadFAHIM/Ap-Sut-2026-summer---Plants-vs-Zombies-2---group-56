@@ -56,9 +56,12 @@ public class Data {
     }
 
     public static void setUp(){
-
-        if(allUsers.isEmpty()) App.setScreen(new SignUpView());
+        User testUser = new User("LeBron" ,"passhash","LeBron","LeBron","LeBron");
+        currentUser = testUser;
+        App.setScreen(new PlayView());
+       /* if(allUsers.isEmpty()) App.setScreen(new SignUpView());
         else{
+
             for (User user : allUsers) {
                 if(user.isStayLoggedIn()){
                     currentUser = user;
@@ -68,7 +71,7 @@ public class Data {
             }
         }
         //currentUser = allUsers.getFirst();
-        App.setScreen(new SignUpView());
+        App.setScreen(new SignUpView());*/
     }
 
     public static void addUser(User user) {

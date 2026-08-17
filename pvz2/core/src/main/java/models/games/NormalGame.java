@@ -56,6 +56,7 @@ public class NormalGame extends BaseGame{
         finalWave.setId(wavesCount);
         finalWave.setCost(waves.getLast().getCost() * 2);
         finalWave.initWave(zombies);
+        waves.add(finalWave);
     }
 
 

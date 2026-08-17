@@ -20,7 +20,6 @@ public class Main extends Game {
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
         new App(this);
-        Data.deserializeUser();
         Data.setUp();
 
     }

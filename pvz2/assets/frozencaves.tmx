@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="245" height="96" tilewidth="8" tileheight="8" infinite="0" nextlayerid="2" nextobjectid="1">
  <tileset firstgid="1" name="texture" tilewidth="8" tileheight="8" tilecount="12446" columns="127">
-  <image source="../../../group-56/Assets/Exports/texture.png" width="1022" height="785"/>
+  <image source="map textures/texture.png" width="1022" height="785"/>
  </tileset>
  <tileset firstgid="12447" name="texture_left" tilewidth="8" tileheight="8" tilecount="3360" columns="35">
-  <image source="../../../group-56/Assets/Exports/texture_left.png" width="281" height="768"/>
+  <image source="map textures/texture_left.png" width="281" height="768"/>
  </tileset>
  <tileset firstgid="15807" name="texture_right" tilewidth="8" tileheight="8" tilecount="8064" columns="84">
-  <image source="../../../group-56/Assets/Exports/texture_right.png" width="673" height="768"/>
+  <image source="map textures/texture_right.png" width="673" height="768"/>
  </tileset>
  <layer id="1" name="Tile Layer 1" width="245" height="96">
   <data encoding="csv">

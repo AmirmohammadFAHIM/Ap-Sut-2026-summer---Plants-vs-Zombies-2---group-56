@@ -163,6 +163,13 @@ public class Data {
             Gdx.app.log("Data", "✅ Levels loaded successfully! Total chapters: " + allLevels.size());
         } catch (Exception e) {
             Gdx.app.error("Data", "❌ Error reading levels: " + e.getMessage());
+
+
+                if (e.getCause() != null) {
+                    Gdx.app.error("Data", "🔍 Root cause: " + e.getCause().getMessage());
+                }
+                e.printStackTrace();
+
         }
     }
     public static HashMap<Chapters, ArrayList<Level>> getAllLevels() {

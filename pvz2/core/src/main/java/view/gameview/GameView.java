@@ -524,25 +524,7 @@ public final class GameView extends View {
     }
 
     private String resolveMapPath() {
-        String slug = chapterSlug(chapter);
-        int id = level.getId();
-
-        String[] candidates = {
-            "maps/" + slug + "/level-" + id + ".tmx",
-            "maps/" + slug + "/level" + id + ".tmx",
-            "maps/" + slug + "/" + id + ".tmx",
-            "maps/" + slug + "/map.tmx",
-            "maps/" + chapter.name() + "/level-" + id + ".tmx",
-            "maps/game.tmx"
-        };
-
-        for (String candidate : candidates) {
-            if (Gdx.files.internal(candidate).exists()) {
-                return candidate;
-            }
-        }
-
-        return null;
+        return chapter.name().toLowerCase() + ".tmx";
     }
 
     private void configureMapGeometry() {

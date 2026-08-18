@@ -59,17 +59,31 @@ public class NormalGame extends BaseGame{
         waves.add(finalWave);
     }
 
+    protected void updateProjectiles(float delta) {
+        ArrayList<Projectile> snapshot = new ArrayList<>(projectiles);
+
+        for (Projectile projectile : snapshot) {
+            if (projectile != null && projectiles.contains(projectile)) {
+                projectile.run(delta, this);
+            }
+        }
+
+        float margin = 300f;
+        float maxX = 9f * Tile.getWidth() + margin;
+        float maxY = 5f * Tile.getHeight() + margin;
+
+        projectiles.removeIf(projectile ->
+            projectile == null
+                || projectile.getX() < -margin
+                || projectile.getX() > maxX
+                || projectile.getY() < -margin
+                || projectile.getY() > maxY
+        );
+    }
 
     @Override
     public String playGame(float delta) {
-        Iterator<Projectile> iterator = projectiles.iterator();
-        while (iterator.hasNext()){
-            Projectile projectile = iterator.next();
-            projectile.run(delta , this);
-            if(projectile.getPierce() <= 0){
-                iterator.remove();
-            }
-        }
+        updateProjectiles(delta);
         mawners(delta);
         return super.playGame(delta);
     }

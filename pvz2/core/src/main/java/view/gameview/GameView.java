@@ -1,5 +1,6 @@
 package view.gameview;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import models.entity.Sun;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -110,6 +111,8 @@ public final class GameView extends View {
 
     private FileHandle pvzAssetsRoot;
     private TextureBank textureBank;
+    private SpriteBatch entityBatch;
+    private ProjectileRenderer projectileRenderer;
     private WorldEntityRenderer worldEntities;
 
     private boolean appPausedGame;
@@ -144,6 +147,10 @@ public final class GameView extends View {
         loadTiledMap();
         configureMapGeometry();
         initialisePvzAssets();
+        entityBatch = new SpriteBatch();
+        if (pvzAssetsRoot != null && textureBank != null) {
+            projectileRenderer = new ProjectileRenderer(pvzAssetsRoot, textureBank);
+        }
         initialiseWorldEntities();
 
         toolsStack = new ToolsStack(controller);
@@ -221,13 +228,38 @@ public final class GameView extends View {
      * Plant/Sun details live outside GameView.
      */
     private void renderGameEntities(float delta) {
-        if (worldEntities == null) {
+        worldViewport.apply();
+        worldCamera.update();
+
+        // Plants, suns and the rest of the normal world entities.
+        if (worldEntities != null) {
+            worldEntities.render(delta);
+        }
+
+        // Projectiles use their own batch because WorldEntityRenderer
+        // manages its own rendering pipeline.
+        if (projectileRenderer == null || entityBatch == null) {
             return;
         }
 
-        worldViewport.apply();
-        worldCamera.update();
-        worldEntities.render(delta);
+        entityBatch.setProjectionMatrix(worldCamera.combined);
+
+        float animationDelta =
+            controller.getGame().getState() == BaseGame.GameState.PLAYING
+                ? delta * (toolsStack == null ? 1f : toolsStack.getTimeScale())
+                : 0f;
+
+        entityBatch.begin();
+        try {
+            projectileRenderer.render(
+                entityBatch,
+                controller.getGame().getBullets(),
+                lawnBounds,
+                animationDelta
+            );
+        } finally {
+            entityBatch.end();
+        }
     }
 
 
@@ -897,6 +929,15 @@ public final class GameView extends View {
             worldEntities = null;
         }
 
+        if (projectileRenderer != null) {
+            projectileRenderer.dispose();
+            projectileRenderer = null;
+        }
+
+        if (entityBatch != null) {
+            entityBatch.dispose();
+            entityBatch = null;
+        }
         if (textureBank != null) {
             textureBank.dispose();
             textureBank = null;

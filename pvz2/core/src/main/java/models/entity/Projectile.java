@@ -1,4 +1,5 @@
 package models.entity;
+import models.factory.builder.PlantType;
 
 import models.Constants;
 import models.gamepanes.Field;
@@ -12,6 +13,7 @@ import java.util.Arrays;
 
 public class Projectile implements Cloneable {
     private ProjectileType type;
+    private PlantType sourcePlantType;
     private float velocityX;
     private float velocityY;
     private float width = 50;
@@ -36,17 +38,29 @@ public class Projectile implements Cloneable {
     private boolean proved = false;
     /// for homing plantsInField of course!
     private Zombie toLockIn;
-    public void setTags(ArrayList<PlantTags> tags){
-        if(tags.contains(PlantTags.Fire)){
+    public void setTags(ArrayList<PlantTags> tags) {
+        this.tags.clear();
+        if (tags == null) {
+            return;
+        }
+
+        if (tags.contains(PlantTags.Fire)) {
             this.tags.add(Tag.FIRE);
         }
-        if(tags.contains(PlantTags.POISON)){
+        if (tags.contains(PlantTags.POISON)) {
             this.tags.add(Tag.POISON);
         }
-        if(tags.contains(PlantTags.Ice)) this.tags.add(Tag.ICE);
-        if(tags.contains(PlantTags.MAGICAL)) this.tags.add(Tag.MAGICAL);
-        if(tags.contains(PlantTags.AoE)) this.tags.add(Tag.AoE);
+        if (tags.contains(PlantTags.Ice)) {
+            this.tags.add(Tag.ICE);
+        }
+        if (tags.contains(PlantTags.MAGICAL)) {
+            this.tags.add(Tag.MAGICAL);
+        }
+        if (tags.contains(PlantTags.AoE)) {
+            this.tags.add(Tag.AoE);
+        }
     }
+
 
     public Projectile(float x, float y , float velocityX , float velocityY, int line) {
         this.x = x;
@@ -84,20 +98,23 @@ public class Projectile implements Cloneable {
 
     }
 
-    public void run(float delta , BaseGame game){
-
-        if(!grounded){
-            velocityY -= Constants.GRAVITY * delta;
+    public void run(float delta, BaseGame game) {
+        if (pierce <= 0) {
+            dispose(game);
+            return;
         }
 
-        if(pierce <= 0) dispose(game);
-        updateLocation(delta , game);
-        if(!tags.contains(Tag.MAGICAL) && toLockIn == null) block(game);
-        if(bowling.contains(this.type)){
+        updateLocation(delta, game);
+
+        if (!tags.contains(Tag.MAGICAL) && toLockIn == null) {
+            block(game);
+        }
+
+        if (bowling.contains(this.type)) {
             bowling(game.getField());
         }
-        checkHit(game);
 
+        checkHit(game);
     }
 
     private void checkHit(BaseGame game){
@@ -204,15 +221,21 @@ public class Projectile implements Cloneable {
         }
         this.x += velocityX * delta;
         this.y += velocityY * delta;
-        if(!grounded){
+        if (!grounded) {
             this.velocityY -= Constants.GRAVITY * delta;
         }
-        if(this.y - line * Tile.getHeight() <= 30 && velocityY < 0){
+
+        float groundY = line * Tile.getHeight() + 30f;
+        if (!grounded && this.y <= groundY && velocityY < 0f) {
+            this.y = groundY;
+            this.velocityY = 0f;
             grounded = true;
-            if(tags.contains(Tag.AoE)){
+
+            if (tags.contains(Tag.AoE)) {
                 AoE(game);
             }
         }
+
     }
     private void setDest(){
         float dy = toLockIn.getY() - y;
@@ -330,6 +353,21 @@ public class Projectile implements Cloneable {
 
     public ArrayList<Tag> getTags() {
         return tags;
+    }
+    public PlantType getSourcePlantType() {
+        return sourcePlantType;
+    }
+
+    public void setSourcePlantType(PlantType sourcePlantType) {
+        this.sourcePlantType = sourcePlantType;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
     }
 
     @Override

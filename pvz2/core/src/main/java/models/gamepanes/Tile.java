@@ -1,8 +1,8 @@
 package models.gamepanes;
 
 public class Tile {
-    private static float width = 100;
-    private static float height = 100;
+    private static float width = 82;
+    private static float height = 97;
     float x , y;
     private TileType tileType;
     private boolean plantable = true;

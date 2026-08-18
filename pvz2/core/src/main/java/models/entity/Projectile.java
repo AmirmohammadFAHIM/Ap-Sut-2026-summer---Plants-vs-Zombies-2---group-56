@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class Bullet implements Cloneable {
-    private BulletType type;
+public class Projectile implements Cloneable {
+    private ProjectileType type;
     private float velocityX;
     private float velocityY;
     private float width = 50;
@@ -26,8 +26,8 @@ public class Bullet implements Cloneable {
     private boolean grounded = true;
     private boolean active;
     private float poisonDamage = Constants.POISON_BASE_DAMAGE;
-    private final ArrayList<BulletType> bowling = new ArrayList<>(Arrays.asList(BulletType.ONION_1,
-            BulletType.ONION_2 , BulletType.ONION_3 , BulletType.Explosive_Onion));
+    private final ArrayList<ProjectileType> bowling = new ArrayList<>(Arrays.asList(ProjectileType.ONION_1,
+            ProjectileType.ONION_2 , ProjectileType.ONION_3 , ProjectileType.Explosive_Onion));
 
 
     /// ------------BOOLEANS------------
@@ -48,7 +48,7 @@ public class Bullet implements Cloneable {
         if(tags.contains(PlantTags.AoE)) this.tags.add(Tag.AoE);
     }
 
-    public Bullet(float x, float y , float velocityX ,  float velocityY,int line) {
+    public Projectile(float x, float y , float velocityX , float velocityY, int line) {
         this.x = x;
         this.y = y;
         this.velocityX = velocityX;
@@ -56,7 +56,7 @@ public class Bullet implements Cloneable {
         this.line = line;
     }
 
-    public Bullet(float x, float y , float velocityX , BulletType type ,  float damage
+    public Projectile(float x, float y , float velocityX , ProjectileType type , float damage
     , int line) {
         this.x = x;
         this.y = y;
@@ -66,10 +66,10 @@ public class Bullet implements Cloneable {
         this.line = line;
     }
 
-    public Bullet(float x, float y , BulletType bulletType, int line) {
+    public Projectile(float x, float y , ProjectileType projectileType, int line) {
         this.x = x;
         this.y = y;
-        this.type = bulletType;
+        this.type = projectileType;
         this.velocityX = Constants.BULLET_VELOCITY_X;
         damage = 20;
         this.line = line;
@@ -80,7 +80,7 @@ public class Bullet implements Cloneable {
         this.y = y;
     }
 
-    public Bullet(){
+    public Projectile(){
 
     }
 
@@ -320,11 +320,11 @@ public class Bullet implements Cloneable {
         this.toLockIn = toLockIn;
     }
 
-    public BulletType getType() {
+    public ProjectileType getType() {
         return type;
     }
 
-    public void setType(BulletType type) {
+    public void setType(ProjectileType type) {
         this.type = type;
     }
 
@@ -334,7 +334,7 @@ public class Bullet implements Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Bullet clone = (Bullet) super.clone();
+        Projectile clone = (Projectile) super.clone();
 
         if (this.tags != null) {
             clone.tags = new ArrayList<>(this.tags);

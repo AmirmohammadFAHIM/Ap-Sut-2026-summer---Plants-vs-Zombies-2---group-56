@@ -62,11 +62,11 @@ public class NormalGame extends BaseGame{
 
     @Override
     public String playGame(float delta) {
-        Iterator<Bullet> iterator = bullets.iterator();
+        Iterator<Projectile> iterator = projectiles.iterator();
         while (iterator.hasNext()){
-            Bullet bullet = iterator.next();
-            bullet.run(delta , this);
-            if(bullet.getPierce() <= 0){
+            Projectile projectile = iterator.next();
+            projectile.run(delta , this);
+            if(projectile.getPierce() <= 0){
                 iterator.remove();
             }
         }

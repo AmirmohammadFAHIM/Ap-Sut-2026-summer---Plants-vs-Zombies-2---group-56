@@ -45,7 +45,7 @@ public class BaseGame implements Game {
     protected Wave currentWave;
     protected Wave previousWave;
     protected ArrayList<Zombie> zombies = new ArrayList<>(); ///combination of current wave and next wave
-    protected ArrayList<Bullet>  bullets =  new ArrayList<>();
+    protected ArrayList<Projectile> projectiles =  new ArrayList<>();
     protected ArrayList<Sun> suns =  new ArrayList<>();
     protected GameCommands startGameCommand;
     protected ChapterSpecialEvent event;
@@ -66,7 +66,7 @@ public class BaseGame implements Game {
     public void setState(GameState state) { this.state = state; }
     public int getSunCount() { return sunCount; }
     public void setSunCount(int sunCount) { this.sunCount = sunCount; }
-    public ArrayList<Bullet> getBullets() { return bullets; }
+    public ArrayList<Projectile> getBullets() { return projectiles; }
     public ArrayList<Sun> getSuns() { return suns; }
     public Wave getCurrentWave() { return currentWave; }
     public Field getField() { return field; }

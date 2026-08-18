@@ -5,12 +5,8 @@ import controllers.datacontroller.SeedPackage;
 import controllers.menus.Menu;
 import models.App;
 import models.User;
-import models.entity.Armor;
-import models.entity.Bullet;
-import models.entity.Effect;
-import models.entity.Plant;
-import models.entity.Sun;
-import models.entity.Zombie;
+import models.entity.*;
+import models.entity.Projectile;
 import models.factory.builder.PlantType;
 import models.gameadventure.Chapters;
 import models.gameadventure.levels.Level;
@@ -667,10 +663,10 @@ public class GameController implements Controller, Menu {
 
     public String showBullets() {
         StringBuilder sb = new StringBuilder();
-        for (Bullet bullet : game.getBullets()) {
+        for (Projectile projectile : game.getBullets()) {
             sb.append("=====\n")
-                .append("type : ").append(bullet.getType()).append("\n")
-                .append("location (").append(bullet.getX()).append(",").append(bullet.getY()).append(")\n");
+                .append("type : ").append(projectile.getType()).append("\n")
+                .append("location (").append(projectile.getX()).append(",").append(projectile.getY()).append(")\n");
         }
         return sb.toString();
     }

@@ -98,10 +98,10 @@ public class Zombie extends Entity{
         return Collections.unmodifiableList(bulletObservers);
     }
 
-    public void notifyBulletObservers(Bullet bullet) {
+    public void notifyBulletObservers(Projectile projectile) {
         for (BulletObserver observer : bulletObservers) {
-            observer.onBulletHit(this, bullet);
-            if (!bullet.isActive()) {
+            observer.onBulletHit(this, projectile);
+            if (!projectile.isActive()) {
                 break;
             }
         }

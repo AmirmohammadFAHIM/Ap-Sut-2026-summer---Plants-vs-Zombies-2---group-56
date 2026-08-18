@@ -143,25 +143,45 @@ public class GameController implements Controller, Menu {
         while (iterator.hasNext()) {
             Sun sun = iterator.next();
             if (sun.getTileIndex() == x && sun.getLine() == y) {
-                if (sun.isRadioActive()) {
-                    sun.dispose(game);
-                    iterator.remove();
-                    return "Radioactive sun exploded.";
-                }
-
-                game.setSunCount(game.getSunCount() + sun.getPrice());
-
-                if (App.getCurrentuser() != null) {
-                    App.getCurrentuser().updateQuestProgress("COLLECT_SUN", sun.getPrice());
-                }
-
-                float price = sun.getPrice();
-                iterator.remove();
-                return "Sun collected: +" + price;
+                return collectMatchedSun(iterator, sun);
             }
         }
         return null;
     }
+
+    public String collectSun(Sun target) {
+        if (game.getState() != BaseGame.GameState.PLAYING || target == null) {
+            return null;
+        }
+
+        Iterator<Sun> iterator = game.getSuns().iterator();
+        while (iterator.hasNext()) {
+            Sun sun = iterator.next();
+            if (sun == target) {
+                return collectMatchedSun(iterator, sun);
+            }
+        }
+        return null;
+    }
+
+    private String collectMatchedSun(Iterator<Sun> iterator, Sun sun) {
+        if (sun.isRadioActive()) {
+            sun.dispose(game);
+            iterator.remove();
+            return "Radioactive sun exploded.";
+        }
+
+        game.setSunCount(game.getSunCount() + sun.getPrice());
+
+        if (App.getCurrentuser() != null) {
+            App.getCurrentuser().updateQuestProgress("COLLECT_SUN", sun.getPrice());
+        }
+
+        int price = sun.getPrice();
+        iterator.remove();
+        return "Sun collected: +" + price;
+    }
+
 
     public String boost(int x, int y) {
         if (game.getState() != BaseGame.GameState.PLAYING) {

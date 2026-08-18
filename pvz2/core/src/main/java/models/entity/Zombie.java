@@ -190,10 +190,10 @@ public class Zombie extends Entity{
     public void move(float delta) {
         if (dead) return;
         if (passThroughObserver != null && passThroughObserver.canPassThrough(this, null)) {
-            x += getActualSpeed() * movingDirection() * delta;
+            x += getActualSpeed() * movingDirection() * delta / 100;
             return;
         }
-        x += getActualSpeed() * movingDirection() * delta;
+        x += getActualSpeed() * movingDirection() * delta / 100;
         int newTile = (int) ((x - 100) / 50);
         if (newTile < 0) newTile = 0;
         if (newTile > 8) newTile = 8;

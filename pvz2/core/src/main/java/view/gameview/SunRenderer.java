@@ -1,5 +1,5 @@
 package view.gameview;
-
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -51,7 +51,7 @@ public final class SunRenderer {
     }
 
     /** SpriteBatch must already be between begin()/end(). */
-    public void render(Sun sun, SpriteBatch batch, Rectangle lawnBounds) {
+    public void render(Sun sun, Batch batch, Rectangle lawnBounds) {
         if (sun == null || batch == null || lawnBounds == null) {
             return;
         }

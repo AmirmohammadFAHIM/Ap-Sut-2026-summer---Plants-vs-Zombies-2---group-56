@@ -1,5 +1,6 @@
 package view.gameview;
 
+import models.entity.Sun;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -109,6 +110,7 @@ public final class GameView extends View {
 
     private FileHandle pvzAssetsRoot;
     private TextureBank textureBank;
+    private WorldEntityRenderer worldEntities;
 
     private boolean appPausedGame;
     private boolean disposed;
@@ -142,6 +144,7 @@ public final class GameView extends View {
         loadTiledMap();
         configureMapGeometry();
         initialisePvzAssets();
+        initialiseWorldEntities();
 
         toolsStack = new ToolsStack(controller);
         toolsStack.setVisible(false);
@@ -154,6 +157,10 @@ public final class GameView extends View {
             // Special modes such as ConveyorBelt may already start in PLAYING.
             setWorldCamera(battleCameraX, battleCameraY);
             toolsStack.setVisible(true);
+
+            if (worldEntities != null) {
+                worldEntities.preloadPlants(controller.getSelectedPlants());
+            }
         }
 
         worldInput = createWorldInput();
@@ -210,14 +217,19 @@ public final class GameView extends View {
     }
 
     /**
-     * Entity rendering intentionally stops here for now.
-     * PlantRenderer/ZombieRenderer will be connected in the next step.
+     * Renders world entities using the same viewport/camera as the TMX map.
+     * Plant/Sun details live outside GameView.
      */
     private void renderGameEntities(float delta) {
-        // TODO: render plants with PlantRenderer.
-        // TODO: render zombies with ZombieRenderer.
-        // TODO: render projectiles and suns when their renderers/assets are finalized.
+        if (worldEntities == null) {
+            return;
+        }
+
+        worldViewport.apply();
+        worldCamera.update();
+        worldEntities.render(delta);
     }
+
 
     private void renderMap() {
         if (mapRenderer == null) {
@@ -312,6 +324,10 @@ public final class GameView extends View {
                 setPreparationStatus(result);
 
                 if (controller.getGame().getState() == BaseGame.GameState.PLAYING) {
+                    if (worldEntities != null) {
+                        worldEntities.preloadPlants(controller.getSelectedPlants());
+                    }
+
                     beginBattleCameraSlide();
                 }
             }
@@ -433,6 +449,24 @@ public final class GameView extends View {
                 pointerWorld.set(screenX, screenY);
                 worldViewport.unproject(pointerWorld);
 
+                if (toolsStack.getInteractionMode() == ToolsStack.InteractionMode.NORMAL
+                    && worldEntities != null) {
+                    Sun clickedSun = worldEntities.hitTestSun(
+                        pointerWorld.x,
+                        pointerWorld.y
+                    );
+
+                    if (clickedSun != null) {
+                        String result = controller.collectSun(clickedSun);
+                        if (result != null && !result.isBlank()) {
+                            toolsStack.setStatus(result);
+                        }
+                        toolsStack.refresh();
+                        return true;
+                    }
+                }
+
+
                 if (!lawnBounds.contains(pointerWorld)) {
                     return false;
                 }
@@ -492,10 +526,7 @@ public final class GameView extends View {
             }
 
             case NORMAL -> {
-                String result = controller.collectSun(column, row);
-                if (result != null && !result.isBlank()) {
-                    toolsStack.setStatus(result);
-                }
+                // Sun collection is handled by world-coordinate hit testing in touchDown().
             }
         }
 
@@ -539,14 +570,20 @@ public final class GameView extends View {
             mapPixelWidth = Math.max(VIRTUAL_WIDTH, mapWidthTiles * tileWidth);
             mapPixelHeight = Math.max(VIRTUAL_HEIGHT, mapHeightTiles * tileHeight);
 
-            float lawnX = numberProperty(properties, "lawnX", 90f);
-            float lawnY = numberProperty(properties, "lawnY", 58f);
-            float lawnWidth = numberProperty(properties, "lawnWidth", 900f);
-            float lawnHeight = numberProperty(properties, "lawnHeight", 500f);
-            lawnBounds.set(lawnX, lawnY, lawnWidth, lawnHeight);
+            // Exact playable 9x5 rectangle from TMX:
+            // object layer "map", rectangle object "pitch".
+            lawnBounds.set(PitchBoundsReader.read(tiledMap));
 
-            battleCameraX = numberProperty(properties, "battleCameraX", lawnX + lawnWidth / 2f);
-            battleCameraY = numberProperty(properties, "battleCameraY", lawnY + lawnHeight / 2f);
+            battleCameraX = numberProperty(
+                properties,
+                "battleCameraX",
+                lawnBounds.x + lawnBounds.width / 2f
+            );
+            battleCameraY = numberProperty(
+                properties,
+                "battleCameraY",
+                lawnBounds.y + lawnBounds.height / 2f
+            );
 
             startCameraX = numberProperty(
                 properties,
@@ -555,10 +592,11 @@ public final class GameView extends View {
             );
             startCameraY = numberProperty(properties, "startCameraY", mapPixelHeight / 2f);
         } else {
-            // Asset-safe fallback. The UI remains usable even if the TMX file is missing.
-            lawnBounds.set(90f, 58f, 900f, 500f);
-            battleCameraX = lawnBounds.x + lawnBounds.width / 2f;
-            battleCameraY = lawnBounds.y + lawnBounds.height / 2f;
+            // Keep the screen usable if the TMX itself could not be loaded,
+            // but do not invent gameplay geometry.
+            lawnBounds.set(0f, 0f, 0f, 0f);
+            battleCameraX = VIRTUAL_WIDTH / 2f;
+            battleCameraY = VIRTUAL_HEIGHT / 2f;
             startCameraX = mapPixelWidth - VIRTUAL_WIDTH / 2f;
             startCameraY = mapPixelHeight / 2f;
         }
@@ -627,6 +665,26 @@ public final class GameView extends View {
             Gdx.app.error("GameView", "Failed to initialise libPVZ TextureBank", e);
         }
     }
+
+    private void initialiseWorldEntities() {
+        if (lawnBounds.width <= 0f || lawnBounds.height <= 0f) {
+            Gdx.app.error(
+                "GameView",
+                "World entity rendering disabled: TMX pitch bounds are invalid."
+            );
+            return;
+        }
+
+        worldEntities = new WorldEntityRenderer(
+            worldViewport,
+            controller,
+            lawnBounds,
+            pvzAssetsRoot,
+            textureBank,
+            safeDrawable("image_ui_hud_ingame_sun")
+        );
+    }
+
 
     private FileHandle findPvzAssetsRoot() {
         List<FileHandle> roots = new ArrayList<>();
@@ -831,6 +889,12 @@ public final class GameView extends View {
         if (tiledMap != null) {
             tiledMap.dispose();
             tiledMap = null;
+        }
+
+
+        if (worldEntities != null) {
+            worldEntities.dispose();
+            worldEntities = null;
         }
 
         if (textureBank != null) {

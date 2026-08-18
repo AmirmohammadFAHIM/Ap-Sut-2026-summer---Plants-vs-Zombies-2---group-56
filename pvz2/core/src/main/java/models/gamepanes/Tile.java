@@ -14,7 +14,7 @@ public class Tile {
     private int line;
     private int col;
     public Tile(TileType tileType , int line , int col) {
-        this.tileType = tileType;
+        setTileType(tileType);
         this.plantable = tileType.isPlantable();
         this.zombieSpawner = tileType.isZombieSpawner();
         this.block = tileType.block;
@@ -45,7 +45,15 @@ public class Tile {
     }
 
     public void setTileType(TileType tileType) {
+        if (tileType == null) {
+            return;
+        }
+
         this.tileType = tileType;
+        this.plantable = tileType.isPlantable();
+        this.zombieSpawner = tileType.isZombieSpawner();
+        this.block = tileType.block;
+        this.hp = tileType.getHp();
     }
 
     public boolean isPlantable() {

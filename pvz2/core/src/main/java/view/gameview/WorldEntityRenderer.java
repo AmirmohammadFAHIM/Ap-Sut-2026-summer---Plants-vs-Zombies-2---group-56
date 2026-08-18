@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import controllers.menus.gamecontroller.GameController;
 import models.entity.Sun;
 import models.factory.builder.PlantType;
+import models.games.BaseGame;
 import pvz.libpvz.textures.TextureBank;
 
 /**
@@ -29,6 +30,7 @@ public final class WorldEntityRenderer implements Disposable {
 
     private PlantRenderer plantRenderer;
     private SunRenderer sunRenderer;
+    private ChapterElementRenderer chapterElementRenderer;
 
     public WorldEntityRenderer(
         Viewport worldViewport,
@@ -59,8 +61,49 @@ public final class WorldEntityRenderer implements Disposable {
         this.pitchBounds = new Rectangle(pitchBounds);
         this.stage = new Stage(worldViewport);
 
+        // Layer order is intentional:
+        // map -> chapter ground/water -> plants -> chapter foreground -> suns.
+        initialiseChapterBackground(pvzAssetsRoot, sharedTextureBank);
         initialisePlants(pvzAssetsRoot);
+        initialiseChapterForeground();
         initialiseSuns(sharedTextureBank, sunFallback);
+    }
+
+    private void initialiseChapterBackground(
+        FileHandle pvzAssetsRoot,
+        TextureBank sharedTextureBank
+    ) {
+        if (pvzAssetsRoot == null || sharedTextureBank == null) {
+            Gdx.app.log(
+                TAG,
+                "Chapter visuals disabled because extracted PVZ assets are unavailable."
+            );
+            return;
+        }
+
+        try {
+            chapterElementRenderer = new ChapterElementRenderer(
+                pvzAssetsRoot,
+                sharedTextureBank
+            );
+            chapterElementRenderer.preload(controller.getChapter());
+
+            ChapterElementLayer background = new ChapterElementLayer(
+                controller,
+                chapterElementRenderer,
+                ChapterElementRenderer.Pass.BACKGROUND
+            );
+            background.setBounds(
+                pitchBounds.x,
+                pitchBounds.y,
+                pitchBounds.width,
+                pitchBounds.height
+            );
+            stage.addActor(background);
+        } catch (RuntimeException e) {
+            chapterElementRenderer = null;
+            Gdx.app.error(TAG, "Failed to initialise chapter visuals.", e);
+        }
     }
 
     private void initialisePlants(FileHandle pvzAssetsRoot) {
@@ -88,7 +131,6 @@ public final class WorldEntityRenderer implements Disposable {
                 pitchBounds.height
             );
 
-            // Plants are added before suns, therefore suns render on top.
             stage.addActor(plantLayer);
 
         } catch (RuntimeException e) {
@@ -106,6 +148,25 @@ public final class WorldEntityRenderer implements Disposable {
                 e
             );
         }
+    }
+
+    private void initialiseChapterForeground() {
+        if (chapterElementRenderer == null) {
+            return;
+        }
+
+        ChapterElementLayer foreground = new ChapterElementLayer(
+            controller,
+            chapterElementRenderer,
+            ChapterElementRenderer.Pass.FOREGROUND
+        );
+        foreground.setBounds(
+            pitchBounds.x,
+            pitchBounds.y,
+            pitchBounds.width,
+            pitchBounds.height
+        );
+        stage.addActor(foreground);
     }
 
     private void initialiseSuns(
@@ -136,6 +197,13 @@ public final class WorldEntityRenderer implements Disposable {
      * The caller must already have applied the world viewport/camera.
      */
     public void render(float delta) {
+        if (chapterElementRenderer != null) {
+            float animationDelta = controller.getGame().getState() == BaseGame.GameState.PLAYING
+                ? Math.max(0f, delta)
+                : 0f;
+            chapterElementRenderer.update(animationDelta);
+        }
+
         stage.act(delta);
         stage.draw();
     }
@@ -172,6 +240,11 @@ public final class WorldEntityRenderer implements Disposable {
     @Override
     public void dispose() {
         stage.dispose();
+
+        if (chapterElementRenderer != null) {
+            chapterElementRenderer.dispose();
+            chapterElementRenderer = null;
+        }
 
         if (plantRenderer != null) {
             plantRenderer.dispose();

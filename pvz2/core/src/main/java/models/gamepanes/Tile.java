@@ -1,8 +1,11 @@
 package models.gamepanes;
 
+import com.badlogic.gdx.math.Rectangle;
+
 public class Tile {
     private static float width = 82;
     private static float height = 97;
+    private Rectangle bounds;
     float x , y;
     private TileType tileType;
     private boolean plantable = true;
@@ -21,7 +24,14 @@ public class Tile {
         this.hp = tileType.hp;
         this.line = line;
         this.col = col;
+        this.x = this.col * width;
+        this.y = this.line * height;
 
+        bounds = new Rectangle(x , y , width, height);
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
     }
 
     public static float getHeight() {

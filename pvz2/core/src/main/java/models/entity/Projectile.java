@@ -1,4 +1,5 @@
 package models.entity;
+import com.badlogic.gdx.math.Rectangle;
 import models.factory.builder.PlantType;
 
 import models.Constants;
@@ -185,14 +186,15 @@ public class Projectile implements Cloneable {
     }
 
     private void block(BaseGame game){
+        Rectangle bounds = new Rectangle(x , y , width, height);
         for (int i = 0; i < 5; i++) {
             for (Tile tile : game.getField().getTiles().get(i)){
-                if(overlaps(tile)){
+                if(bounds.overlaps(tile.getBounds())) {
                     if(tile.getTileType() == TileType.FROZEN && this.tags.contains(Tag.FIRE)){
                         tile.setTileType(TileType.CAVE_TILE);
                         setPierce(pierce - 1);
                     }
-                    else if(tile.getHp() >= 0){
+                    else if(tile.getHp() > 0){
                         tile.setHp(tile.getHp() - this.damage);
                         setPierce(pierce - 1);
                     }
